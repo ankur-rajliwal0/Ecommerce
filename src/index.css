@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/google-sans');
+
+@theme {
+  --color-primary-teal: #dce0d9;
+  --color-secondary-teal: #fbf6ef;
+  --color-accent-orange: #ead7c3;
+  --color-bg-white: #FFFFFF;
+  --color-bg-light-gray: #F9FAFB;
+  --color-border-gray: #E5E7EB;
+
+  --font-sans: 'Google Sans', sans-serif;
+  --font-heading: 'Montserrat', sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-bg-light-gray text-gray-800 font-sans m-0 p-0;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
