@@ -5,6 +5,7 @@ import 'lenis/dist/lenis.css';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import WelcomeSplash from './components/WelcomeSplash';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -31,6 +32,7 @@ import Contact from './pages/Contact';
 import Returns from './pages/Returns';
 import Faq from './pages/Faq';
 import Shipping from './pages/Shipping';
+import NotFound from './pages/NotFound';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { LoaderProvider } from './context/LoaderContext';
@@ -68,29 +70,30 @@ const AppContent = () => {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: '#09090b', // Premium dark background
-            color: '#fafafa', // Clean white text
-            border: '1px solid #27272a', // Subtle border
-            borderRadius: '12px',
+            background: '#292923', // Soft Charcoal
+            color: '#F8F6F1', // Warm Cream
+            border: '1px solid #DCC6A8', // Warm Beige border
+            borderRadius: '16px',
             fontSize: '14px',
-            fontWeight: '500',
+            fontWeight: '600',
             padding: '16px 24px',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)',
+            boxShadow: '0 20px 25px -5px rgba(41, 41, 35, 0.25)',
           },
           success: {
             iconTheme: {
-              primary: '#10b981', // Emerald green
-              secondary: '#09090b',
+              primary: '#344B38', // Deep Forest Green
+              secondary: '#F8F6F1',
             },
           },
           error: {
             iconTheme: {
-              primary: '#ef4444', // Red
-              secondary: '#09090b',
+              primary: '#ef4444',
+              secondary: '#F8F6F1',
             },
           },
         }}
       />
+      {!isAdminRoute && <WelcomeSplash />}
       {!isAdminRoute && <Navbar />}
       <div className={isAdminRoute ? "w-full" : "flex-1"}>
         <Routes>
@@ -126,6 +129,9 @@ const AppContent = () => {
           <Route path="/returns" element={<Returns />} />
           <Route path="/faq" element={<Faq />} />
           <Route path="/shipping" element={<Shipping />} />
+          
+          {/* Catch-all 404 Route */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
       {!isAdminRoute && <Footer />}

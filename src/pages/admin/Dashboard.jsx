@@ -45,7 +45,7 @@ const Dashboard = () => {
   };
 
   const StatCard = ({ title, value, icon, trend, gradientFrom, gradientTo, delayClass }) => (
-    <div className={`relative overflow-hidden bg-gradient-to-br ${gradientFrom} ${gradientTo} p-6 rounded-xl shadow-lg group hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-500 text-white animate-in fade-in zoom-in-95 slide-in-from-bottom-8 ${delayClass} fill-mode-both`}>
+    <div className={`relative overflow-hidden bg-gradient-to-br ${gradientFrom} ${gradientTo} p-6 rounded-2xl shadow-lg group hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-500 text-white animate-in fade-in zoom-in-95 slide-in-from-bottom-8 ${delayClass} fill-mode-both`}>
       <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mt-10 transition-transform group-hover:scale-[1.8] group-hover:opacity-20 duration-700 ease-out"></div>
       <div className="absolute bottom-0 left-0 w-24 h-24 bg-black opacity-5 rounded-full -ml-8 -mb-8 transition-transform group-hover:scale-150 duration-700 ease-out"></div>
       
@@ -70,15 +70,23 @@ const Dashboard = () => {
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-10 flex justify-between items-end">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Dashboard Overview</h2>
-          <p className="text-gray-500 mt-2">Here's what's happening with your store today.</p>
+          <h2 className="text-3xl font-bold text-[#292923] tracking-tight">Dashboard Overview</h2>
+          <p className="text-[#829078] mt-2">Here's what's happening with your store today.</p>
         </div>
       </div>
       
       {loading ? (
-        <div className="py-20 text-center text-gray-400 animate-pulse flex flex-col items-center">
-           <div className="w-12 h-12 border-4 border-primary-teal border-t-transparent rounded-full animate-spin mb-4"></div>
-           <p>Loading your metrics...</p>
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="p-6 rounded-2xl bg-white border border-[#DCC6A8] shadow-sm flex flex-col gap-4">
+                <div className="h-4 skeleton-shimmer rounded-md w-28"></div>
+                <div className="h-8 skeleton-shimmer rounded-md w-36"></div>
+                <div className="h-4 skeleton-shimmer rounded-md w-20"></div>
+              </div>
+            ))}
+          </div>
+          <TableSkeleton rows={4} />
         </div>
       ) : (
         <>
@@ -87,8 +95,8 @@ const Dashboard = () => {
               title="Total Revenue" 
               value={`₹${stats.revenue.toFixed(2)}`} 
               icon={<DollarSign size={28} />} 
-              gradientFrom="from-emerald-500"
-              gradientTo="to-teal-700"
+              gradientFrom="from-[#344B38]"
+              gradientTo="to-[#202f23]"
               trend="+12% from last month"
               delayClass="delay-[0ms]"
             />
@@ -96,8 +104,8 @@ const Dashboard = () => {
               title="Total Orders" 
               value={stats.orders} 
               icon={<ShoppingBag size={28} />} 
-              gradientFrom="from-blue-500"
-              gradientTo="to-indigo-700"
+              gradientFrom="from-[#829078]"
+              gradientTo="to-[#5e6a56]"
               trend="+5% from last month"
               delayClass="delay-[150ms]"
             />
@@ -105,46 +113,46 @@ const Dashboard = () => {
               title="Active Products" 
               value={stats.products} 
               icon={<Package size={28} />} 
-              gradientFrom="from-purple-500"
-              gradientTo="to-fuchsia-700"
+              gradientFrom="from-[#292923]"
+              gradientTo="to-[#181814]"
               trend="Inventory looks good"
               delayClass="delay-[300ms]"
             />
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white">
-              <h3 className="font-bold text-gray-900 text-lg">Recent Transactions</h3>
-              <Link to="/store-control/orders" className="text-sm font-semibold text-gray-900 font-bold hover:text-gray-800 hover:underline transition-colors bg-primary-teal/5 px-4 py-2 rounded-xl">View All Orders</Link>
+          <div className="bg-white rounded-2xl shadow-sm border border-[#DCC6A8] overflow-hidden">
+            <div className="px-8 py-6 border-b border-[#E9E9E0] flex justify-between items-center bg-white">
+              <h3 className="font-bold text-[#292923] text-lg">Recent Transactions</h3>
+              <Link to="/store-control/orders" className="text-sm font-semibold text-[#344B38] hover:text-[#292923] transition-colors bg-[#E9E9E0] px-4 py-2 rounded-xl">View All Orders</Link>
             </div>
             
             {recentOrders.length === 0 ? (
-              <div className="p-12 text-center text-gray-400 bg-gray-50/50">
-                <ShoppingBag size={48} className="mx-auto mb-4 opacity-20" />
+              <div className="p-12 text-center text-[#829078] bg-[#F8F6F1]/50">
+                <ShoppingBag size={48} className="mx-auto mb-4 opacity-40 text-[#829078]" />
                 <p>No recent orders found.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="text-left text-xs font-extrabold text-gray-400 uppercase tracking-widest border-b border-gray-100 bg-gray-50/50">
+                    <tr className="text-left text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest border-b border-[#E9E9E0] bg-[#E9E9E0]/40">
                       <th className="px-4 md:px-8 py-5">Order ID</th>
                       <th className="px-4 md:px-8 py-5">Date</th>
                       <th className="px-4 md:px-8 py-5">Status</th>
                       <th className="px-4 md:px-8 py-5 text-right">Amount</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-[#E9E9E0]">
                     {recentOrders.map((order, idx) => (
                       <tr 
                         key={order.id} 
-                        className="hover:bg-white hover:scale-[1.01] hover:shadow-xl hover:shadow-gray-200/50 relative hover:z-10 transition-all duration-300 group cursor-pointer"
+                        className="hover:bg-[#F8F6F1] hover:scale-[1.01] hover:shadow-lg relative hover:z-10 transition-all duration-300 group cursor-pointer"
                         style={{ animationDelay: `${idx * 100 + 400}ms` }}
                       >
-                        <td className="px-4 md:px-8 py-5 text-sm font-bold text-gray-900 group-hover:text-gray-900 font-bold transition-colors md:rounded-l-xl whitespace-nowrap">
+                        <td className="px-4 md:px-8 py-5 text-sm font-bold text-[#292923] group-hover:text-[#344B38] transition-colors md:rounded-l-xl whitespace-nowrap">
                           #{order.id.split('-')[0].toUpperCase()}
                         </td>
-                        <td className="px-4 md:px-8 py-5 text-sm text-gray-500 font-medium group-hover:text-gray-700 transition-colors whitespace-nowrap">
+                        <td className="px-4 md:px-8 py-5 text-sm text-[#829078] font-medium group-hover:text-[#292923] transition-colors whitespace-nowrap">
                           {new Date(order.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                         </td>
                         <td className="px-4 md:px-8 py-5 whitespace-nowrap">
@@ -156,7 +164,7 @@ const Dashboard = () => {
                             {order.order_status}
                           </span>
                         </td>
-                        <td className="px-4 md:px-8 py-5 text-sm font-black text-gray-900 text-right md:rounded-r-xl group-hover:text-gray-900 font-bold transition-colors whitespace-nowrap">
+                        <td className="px-4 md:px-8 py-5 text-sm font-black text-[#344B38] text-right md:rounded-r-xl transition-colors whitespace-nowrap">
                           ₹{Number(order.total_amount).toFixed(2)}
                         </td>
                       </tr>

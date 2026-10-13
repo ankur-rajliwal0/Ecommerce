@@ -147,20 +147,20 @@ const ProductForm = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8 pb-4 border-b border-border-gray">
-        <h2 className="text-2xl font-bold text-gray-900 font-bold">{isEdit ? 'Edit Product' : 'Add New Product'}</h2>
-        <button onClick={() => navigate('/store-control/products')} className="text-gray-500 hover:text-gray-900 font-bold font-medium transition-colors">Cancel</button>
+      <div className="flex justify-between items-center mb-8 pb-4 border-b border-[#DCC6A8]">
+        <h2 className="text-2xl font-bold text-[#292923]">{isEdit ? 'Edit Product' : 'Add New Product'}</h2>
+        <button onClick={() => navigate('/store-control/products')} className="text-[#829078] hover:text-[#344B38] font-bold transition-colors">Cancel</button>
       </div>
 
-      <form onSubmit={handleSubmit} className="max-w-2xl bg-white p-8 rounded-xl border border-border-gray flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className="max-w-2xl bg-white p-8 rounded-2xl border border-[#DCC6A8] shadow-sm flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-semibold text-gray-700">Product Name</label>
-          <input required type="text" name="name" value={formData.name} onChange={handleChange} className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors" />
+          <label className="text-sm font-semibold text-[#292923]">Product Name</label>
+          <input required type="text" name="name" value={formData.name} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8] rounded-xl outline-none focus:border-[#344B38] text-[#292923] transition-colors" />
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-semibold text-gray-700">Category</label>
-          <select name="category_id" value={formData.category_id} onChange={handleChange} className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors bg-white">
+          <label className="text-sm font-semibold text-[#292923]">Category</label>
+          <select name="category_id" value={formData.category_id} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8] rounded-xl outline-none focus:border-[#344B38] transition-colors bg-white text-[#292923]">
             <option value="">Select Category</option>
             {categories.map(c => (
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -169,60 +169,60 @@ const ProductForm = () => {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-semibold text-gray-700">Description</label>
-          <textarea name="description" value={formData.description} onChange={handleChange} rows="4" className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors"></textarea>
+          <label className="text-sm font-semibold text-[#292923]">Description</label>
+          <textarea name="description" value={formData.description} onChange={handleChange} rows="4" className="w-full p-2.5 border border-[#DCC6A8] rounded-xl outline-none focus:border-[#344B38] text-[#292923] transition-colors"></textarea>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-semibold text-gray-700">Price (₹)</label>
-            <input required type="number" step="0.01" min="0" name="price" value={formData.price} onChange={handleChange} className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors" />
+            <label className="text-sm font-semibold text-[#292923]">Price (₹)</label>
+            <input required type="number" step="0.01" min="0" name="price" value={formData.price} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8] rounded-xl outline-none focus:border-[#344B38] text-[#292923] transition-colors" />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-semibold text-gray-700">Stock Quantity</label>
-            <input required type="number" min="0" name="stock" value={formData.stock} onChange={handleChange} className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors" />
+            <label className="text-sm font-semibold text-[#292923]">Stock Quantity</label>
+            <input required type="number" min="0" name="stock" value={formData.stock} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8] rounded-xl outline-none focus:border-[#344B38] text-[#292923] transition-colors" />
           </div>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-semibold text-gray-700">Product Images (Up to 5)</label>
+          <label className="text-sm font-semibold text-[#292923]">Product Images (Up to 5)</label>
           
           <div className="flex flex-wrap gap-4 mt-2">
             {existingImages.map((img, idx) => (
-              <div key={`existing-${idx}`} className="relative w-24 h-24 rounded-xl border border-border-gray bg-gray-50 overflow-hidden">
+              <div key={`existing-${idx}`} className="relative w-24 h-24 rounded-xl border border-[#DCC6A8] bg-[#F8F6F1] overflow-hidden">
                 <img src={img} alt="" className="w-full h-full object-cover" />
-                <button type="button" onClick={() => removeExisting(idx)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600 transition-colors">
+                <button type="button" onClick={() => removeExisting(idx)} className="absolute top-1 right-1 bg-rose-600 text-white rounded-full p-1 shadow-md hover:bg-rose-700 transition-colors">
                   <X size={14} />
                 </button>
               </div>
             ))}
             
             {filesToUpload.map((item, idx) => (
-              <div key={`upload-${idx}`} className="relative w-24 h-24 rounded-xl border border-border-gray bg-gray-50 overflow-hidden">
+              <div key={`upload-${idx}`} className="relative w-24 h-24 rounded-xl border border-[#DCC6A8] bg-[#F8F6F1] overflow-hidden">
                 <img src={item.previewUrl} alt="" className="w-full h-full object-cover opacity-80" />
-                <button type="button" onClick={() => removeUpload(idx)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600 transition-colors">
+                <button type="button" onClick={() => removeUpload(idx)} className="absolute top-1 right-1 bg-rose-600 text-white rounded-full p-1 shadow-md hover:bg-rose-700 transition-colors">
                   <X size={14} />
                 </button>
               </div>
             ))}
 
             {(existingImages.length + filesToUpload.length) < 5 && (
-              <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 cursor-pointer hover:border-primary-teal hover:text-gray-900 font-bold transition-colors bg-gray-50">
+              <label className="w-24 h-24 rounded-xl border-2 border-dashed border-[#DCC6A8] flex flex-col items-center justify-center text-[#829078] cursor-pointer hover:border-[#344B38] hover:text-[#344B38] transition-colors bg-[#F8F6F1]">
                 <Upload size={24} className="mb-1" />
                 <span className="text-xs font-semibold">Upload</span>
                 <input type="file" accept="image/*" multiple onChange={handleFileChange} className="hidden" />
               </label>
             )}
           </div>
-          <p className="text-xs text-gray-500 mt-1">Select files from your computer. First image will be the primary product image.</p>
+          <p className="text-xs text-[#829078] mt-1">Select files from your computer. First image will be the primary product image.</p>
         </div>
 
         <div className="flex items-center gap-2 mt-2">
-          <input type="checkbox" id="featured" name="featured" checked={formData.featured} onChange={handleChange} className="w-4 h-4 accent-primary-teal" />
-          <label htmlFor="featured" className="text-sm font-semibold text-gray-700 cursor-pointer">Feature this product on homepage</label>
+          <input type="checkbox" id="featured" name="featured" checked={formData.featured} onChange={handleChange} className="w-4 h-4 accent-[#344B38]" />
+          <label htmlFor="featured" className="text-sm font-semibold text-[#292923] cursor-pointer">Feature this product on homepage</label>
         </div>
 
-        <button type="submit" disabled={loading} className="w-full bg-primary-teal hover:bg-secondary-teal text-gray-900 font-bold py-3 px-4 rounded-xl mt-4 transition-colors disabled:opacity-70 flex items-center justify-center gap-2">
+        <button type="submit" disabled={loading} className="w-full bg-[#344B38] hover:bg-[#829078] text-white font-bold py-3.5 px-4 rounded-xl mt-4 transition-colors disabled:opacity-70 flex items-center justify-center gap-2 shadow-sm">
           {loading && <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
           {loading ? 'Saving & Uploading...' : 'Save Product'}
         </button>

@@ -31,18 +31,18 @@ const FaqItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
   
   return (
-    <div className={`border rounded-xl overflow-hidden mb-4 bg-white transition-all duration-300 ${isOpen ? 'border-primary-teal shadow-md shadow-primary-teal/5' : 'border-gray-200 hover:border-gray-300'}`}>
+    <div className={`border rounded-2xl overflow-hidden mb-4 bg-white transition-all duration-300 ${isOpen ? 'border-[#344B38] shadow-md shadow-[#344B38]/5' : 'border-[#DCC6A8]/60 hover:border-[#829078]'}`}>
       <button 
         onClick={() => setIsOpen(!isOpen)} 
         className="w-full text-left px-6 py-5 flex items-center justify-between focus:outline-none"
       >
-        <span className={`font-extrabold text-lg pr-4 ${isOpen ? 'text-gray-900 font-bold' : 'text-gray-900'}`}>{question}</span>
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? 'bg-primary-teal/10' : 'bg-gray-100'}`}>
-          <ChevronDown size={20} className={`transition-transform duration-300 ${isOpen ? 'rotate-180 text-gray-900 font-bold' : 'text-gray-500'}`} />
+        <span className={`font-extrabold text-lg pr-4 ${isOpen ? 'text-[#344B38]' : 'text-[#292923]'}`}>{question}</span>
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? 'bg-[#344B38]/10' : 'bg-[#E9E9E0]'}`}>
+          <ChevronDown size={20} className={`transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#344B38]' : 'text-[#829078]'}`} />
         </div>
       </button>
       <div className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}>
-        <p className="text-gray-600 leading-relaxed font-medium text-[15px]">{answer}</p>
+        <p className="text-[#292923]/70 leading-relaxed font-medium text-[15px]">{answer}</p>
       </div>
     </div>
   );
@@ -50,21 +50,21 @@ const FaqItem = ({ question, answer }) => {
 
 const Faq = () => {
   return (
-    <div className="bg-gray-50 min-h-[calc(100vh-80px)] py-16 md:py-24 relative">
+    <div className="bg-[#F8F6F1] min-h-[calc(100vh-80px)] py-16 md:py-24 relative">
       <div className="max-w-3xl mx-auto px-4 relative z-10">
         
         <div className="text-center mb-16">
-          <div className="w-20 h-20 bg-white shadow-sm border border-gray-100 text-gray-900 font-bold rounded-xl flex items-center justify-center mx-auto mb-8 rotate-3 hover:rotate-0 transition-transform">
+          <div className="w-20 h-20 bg-white shadow-sm border border-[#DCC6A8]/60 text-[#344B38] rounded-2xl flex items-center justify-center mx-auto mb-8 rotate-3 hover:rotate-0 transition-transform">
             <MessageCircleQuestion size={40} />
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">How can we help?</h1>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto font-medium">Browse our most frequently asked questions below. Can't find what you're looking for? <a href="/contact" className="text-gray-900 font-bold font-bold hover:underline">Contact our support team.</a></p>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#292923] mb-6 tracking-tight">How can we help?</h1>
+          <p className="text-lg text-[#829078] max-w-xl mx-auto font-medium">Browse our most frequently asked questions below. Can't find what you're looking for? <a href="/contact" className="text-[#344B38] font-bold hover:underline">Contact our support team.</a></p>
         </div>
 
         <div className="space-y-12">
           {faqs.map((group, index) => (
             <div key={index}>
-              <h2 className="text-2xl font-extrabold text-gray-900 mb-6 pl-4 border-l-4 border-primary-teal rounded-xl">{group.category}</h2>
+              <h2 className="text-2xl font-extrabold text-[#292923] mb-6 pl-4 border-l-4 border-[#344B38] rounded-xl">{group.category}</h2>
               <div className="pl-1">
                 {group.questions.map((faq, idx) => (
                   <FaqItem key={idx} question={faq.q} answer={faq.a} />

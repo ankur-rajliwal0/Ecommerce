@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { supabase } from '../lib/supabase';
+import { OrderCardSkeleton } from '../components/Skeletons';
 import { User, Mail, Shield, Save, Package, ShoppingCart, ArrowRight, Activity, LogOut, Phone, MapPin, Edit } from 'lucide-react';
 
 const Profile = () => {
@@ -139,55 +140,55 @@ const Profile = () => {
       <div className="max-w-7xl mx-auto px-4">
         
         {/* Header Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-border-gray p-6 md:p-8 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#DCC6A8]/60 p-6 md:p-8 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
           {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary-teal opacity-5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#344B38] opacity-5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
           
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6 z-10 w-full md:w-auto">
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden shadow-md border-4 border-white bg-gray-100 flex-shrink-0 flex items-center justify-center text-gray-400 mt-2 md:mt-0">
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden shadow-md border-4 border-white bg-[#E9E9E0] flex-shrink-0 flex items-center justify-center text-[#344B38] mt-2 md:mt-0">
               <User size={40} strokeWidth={1.5} />
             </div>
             
             {isEditing ? (
-              <form onSubmit={handleUpdateProfile} className="flex flex-col gap-3 w-full max-w-md bg-gray-50 p-4 rounded-xl border border-border-gray">
-                <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full p-2.5 text-sm border border-border-gray rounded-xl outline-none focus:border-primary-teal" placeholder="Full Name" />
-                <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-2.5 text-sm border border-border-gray rounded-xl outline-none focus:border-primary-teal" placeholder="Phone Number" />
+              <form onSubmit={handleUpdateProfile} className="flex flex-col gap-3 w-full max-w-md bg-[#F8F6F1] p-4 rounded-xl border border-[#DCC6A8]/60">
+                <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full p-2.5 text-sm border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] bg-white text-[#292923]" placeholder="Full Name" />
+                <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-2.5 text-sm border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] bg-white text-[#292923]" placeholder="Phone Number" />
                 
                 <div className="relative">
-                  <input type="text" value={zip} onChange={handlePincodeChange} className="w-full p-2.5 text-sm border border-border-gray rounded-xl outline-none focus:border-primary-teal" placeholder="6-Digit PIN Code" />
+                  <input type="text" value={zip} onChange={handlePincodeChange} className="w-full p-2.5 text-sm border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] bg-white text-[#292923]" placeholder="6-Digit PIN Code" />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-3">
-                  <input type="text" value={city} onChange={(e) => setCity(e.target.value)} className="w-full p-2.5 text-sm border border-border-gray rounded-xl outline-none focus:border-primary-teal bg-gray-50" placeholder="City" />
-                  <input type="text" value={stateValue} onChange={(e) => setStateValue(e.target.value)} className="w-full p-2.5 text-sm border border-border-gray rounded-xl outline-none focus:border-primary-teal bg-gray-50" placeholder="State" />
+                  <input type="text" value={city} onChange={(e) => setCity(e.target.value)} className="w-full p-2.5 text-sm border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] bg-white text-[#292923]" placeholder="City" />
+                  <input type="text" value={stateValue} onChange={(e) => setStateValue(e.target.value)} className="w-full p-2.5 text-sm border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] bg-white text-[#292923]" placeholder="State" />
                 </div>
                 
-                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full p-2.5 text-sm border border-border-gray rounded-xl outline-none focus:border-primary-teal" placeholder="Street Address, House No, Area" />
+                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full p-2.5 text-sm border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] bg-white text-[#292923]" placeholder="Street Address, House No, Area" />
                 <div className="flex gap-3 mt-2">
-                  <button type="submit" disabled={loading} className="flex-1 bg-primary-teal text-gray-900 py-2.5 rounded-xl font-bold text-sm hover:bg-secondary-teal transition-colors disabled:opacity-50">
+                  <button type="submit" disabled={loading} className="flex-1 bg-[#344B38] text-white py-2.5 rounded-xl font-bold text-sm hover:bg-[#829078] transition-colors disabled:opacity-50 shadow-md">
                     {loading ? 'Saving...' : 'Save'}
                   </button>
-                  <button type="button" onClick={() => setIsEditing(false)} className="flex-1 bg-gray-200 text-gray-800 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-300 transition-colors">
+                  <button type="button" onClick={() => setIsEditing(false)} className="flex-1 bg-[#E9E9E0] text-[#292923] py-2.5 rounded-xl font-bold text-sm hover:bg-[#DCC6A8]/50 transition-colors">
                     Cancel
                   </button>
                 </div>
               </form>
             ) : (
               <div className="flex-1">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Hello, {fullName || 'User'}!</h1>
+                <h1 className="text-2xl md:text-3xl font-bold text-[#292923] mb-3">Hello, {fullName || 'User'}!</h1>
                 <div className="flex flex-col gap-2">
-                  <p className="text-gray-600 flex items-center gap-2.5 text-sm"><Mail size={16} className="text-gray-400" /> {user.email}</p>
-                  {phone && <p className="text-gray-600 flex items-center gap-2.5 text-sm"><Phone size={16} className="text-gray-400" /> {phone}</p>}
+                  <p className="text-[#292923]/80 flex items-center gap-2.5 text-sm"><Mail size={16} className="text-[#829078]" /> {user.email}</p>
+                  {phone && <p className="text-[#292923]/80 flex items-center gap-2.5 text-sm"><Phone size={16} className="text-[#829078]" /> {phone}</p>}
                   {(address || city || stateValue || zip) ? (
-                    <p className="text-gray-600 flex items-start gap-2.5 text-sm mt-1">
-                      <MapPin size={16} className="text-gray-400 mt-0.5 shrink-0" /> 
+                    <p className="text-[#292923]/80 flex items-start gap-2.5 text-sm mt-1">
+                      <MapPin size={16} className="text-[#829078] mt-0.5 shrink-0" /> 
                       <span className="max-w-sm">{address}{address && ','} {city}{city && ','} {stateValue} {zip}</span>
                     </p>
                   ) : (
-                    <p className="text-gray-400 text-sm italic mt-1">No address provided</p>
+                    <p className="text-[#829078] text-sm italic mt-1">No address provided</p>
                   )}
                 </div>
-                <button onClick={() => setIsEditing(true)} className="mt-4 text-sm font-bold text-gray-900 font-bold flex items-center gap-1.5 hover:underline bg-primary-teal/5 px-3 py-1.5 rounded-xl w-fit">
+                <button onClick={() => setIsEditing(true)} className="mt-4 text-sm font-bold text-[#344B38] flex items-center gap-1.5 hover:underline bg-[#E9E9E0] px-3 py-1.5 rounded-xl w-fit">
                   <Edit size={16} /> Edit Details
                 </button>
               </div>
@@ -195,7 +196,7 @@ const Profile = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 z-10 w-full md:w-auto mt-4 md:mt-0 items-start self-start md:self-center">
             {profile?.role === 'admin' && (
-              <Link to="/store-control" className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-gray-900 text-white px-4 py-2.5 md:py-2 rounded-xl font-semibold text-sm hover:bg-gray-800 transition-colors w-full sm:w-auto">
+              <Link to="/store-control" className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-[#344B38] text-white px-4 py-2.5 md:py-2 rounded-xl font-semibold text-sm hover:bg-[#829078] transition-colors w-full sm:w-auto shadow-sm">
                 <Shield size={16} /> Admin Panel
               </Link>
             )}
@@ -212,21 +213,21 @@ const Profile = () => {
             
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-3 md:gap-4">
-              <div className="bg-white p-4 md:p-6 rounded-xl border border-border-gray shadow-sm flex flex-col items-center justify-center text-center">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-2 md:mb-3">
+              <div className="bg-white p-4 md:p-6 rounded-2xl border border-[#DCC6A8]/60 shadow-sm flex flex-col items-center justify-center text-center">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-[#829078]/20 text-[#344B38] rounded-full flex items-center justify-center mb-2 md:mb-3">
                   <Package size={20} className="md:w-6 md:h-6" />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{orders.length > 0 ? orders.length : '0'}</h3>
-                <p className="text-xs md:text-sm text-gray-500 font-medium">Orders Found</p>
+                <h3 className="text-2xl md:text-3xl font-bold text-[#344B38] mb-1">{orders.length > 0 ? orders.length : '0'}</h3>
+                <p className="text-xs md:text-sm text-[#829078] font-medium">Orders Found</p>
               </div>
-              <div className="bg-white p-4 md:p-6 rounded-xl border border-border-gray shadow-sm flex flex-col items-center justify-center text-center relative">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-50 text-gray-900 rounded-full flex items-center justify-center mb-2 md:mb-3">
+              <div className="bg-white p-4 md:p-6 rounded-2xl border border-[#DCC6A8]/60 shadow-sm flex flex-col items-center justify-center text-center relative">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-[#DCC6A8]/40 text-[#344B38] rounded-full flex items-center justify-center mb-2 md:mb-3">
                   <ShoppingCart size={20} className="md:w-6 md:h-6" />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{itemCount}</h3>
-                <p className="text-xs md:text-sm text-gray-500 font-medium">Items in Cart</p>
+                <h3 className="text-2xl md:text-3xl font-bold text-[#344B38] mb-1">{itemCount}</h3>
+                <p className="text-xs md:text-sm text-[#829078] font-medium">Items in Cart</p>
                 {itemCount > 0 && (
-                  <Link to="/cart" className="absolute inset-0 z-10 rounded-xl ring-2 ring-transparent hover:ring-primary-teal transition-all"></Link>
+                  <Link to="/cart" className="absolute inset-0 z-10 rounded-2xl ring-2 ring-transparent hover:ring-[#344B38] transition-all"></Link>
                 )}
               </div>
             </div>
@@ -237,29 +238,29 @@ const Profile = () => {
           <div className="flex flex-col gap-5 md:gap-8">
             
             {/* Recent Orders Overview */}
-            <div className="bg-white rounded-xl shadow-sm border border-border-gray p-4 md:p-6">
-              <div className="flex items-center justify-between mb-4 md:mb-6 pb-4 border-b border-border-gray">
-                <h2 className="text-lg md:text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <Activity size={20} className="text-gray-900 font-bold" /> Recent Orders
+            <div className="bg-white rounded-2xl shadow-sm border border-[#DCC6A8]/60 p-4 md:p-6">
+              <div className="flex items-center justify-between mb-4 md:mb-6 pb-4 border-b border-[#DCC6A8]/40">
+                <h2 className="text-lg md:text-xl font-bold text-[#292923] flex items-center gap-2">
+                  <Activity size={20} className="text-[#344B38]" /> Recent Orders
                 </h2>
-                <Link to="/my-orders" className="text-sm font-semibold text-gray-900 font-bold hover:underline flex items-center gap-1">
+                <Link to="/my-orders" className="text-sm font-semibold text-[#344B38] hover:text-[#829078] hover:underline flex items-center gap-1 transition-colors">
                   View All <ArrowRight size={16} />
                 </Link>
               </div>
 
               {ordersLoading ? (
-                <div className="py-10 text-center text-gray-500">Loading recent orders...</div>
+                <OrderCardSkeleton count={2} />
               ) : orders.length === 0 ? (
-                <div className="py-12 text-center flex flex-col items-center border-2 border-dashed border-border-gray rounded-xl bg-gray-50">
-                  <Package size={40} className="text-gray-400 mb-3" />
-                  <h3 className="text-lg font-bold text-gray-800 mb-1">No orders yet</h3>
-                  <p className="text-gray-500 text-sm mb-4">When you place orders, they will appear here.</p>
-                  <Link to="/" className="bg-primary-teal text-gray-900 px-6 py-2 rounded-xl font-medium hover:bg-secondary-teal transition-colors">Start Shopping</Link>
+                <div className="py-12 text-center flex flex-col items-center border-2 border-dashed border-[#DCC6A8] rounded-2xl bg-[#F8F6F1]">
+                  <Package size={40} className="text-[#829078] mb-3" />
+                  <h3 className="text-lg font-bold text-[#292923] mb-1">No orders yet</h3>
+                  <p className="text-[#829078] text-sm mb-4">When you place orders, they will appear here.</p>
+                  <Link to="/" className="bg-[#344B38] text-white px-6 py-2 rounded-xl font-bold hover:bg-[#829078] transition-colors shadow-md">Start Shopping</Link>
                 </div>
               ) : (
                 <div className="flex flex-col gap-4">
                   {orders.map((order) => (
-                    <div key={order.id} className="border border-border-gray rounded-xl p-4 md:p-5 hover:border-primary-teal transition-colors group relative bg-gray-50 hover:bg-white">
+                    <div key={order.id} className="border border-border-gray rounded-2xl p-4 md:p-5 hover:border-primary-teal transition-colors group relative bg-gray-50 hover:bg-white">
                       <Link to="/my-orders" className="absolute inset-0 z-10"></Link>
                       <div className="flex justify-between items-start mb-4">
                         <div>
@@ -290,7 +291,7 @@ const Profile = () => {
             </div>
 
             {/* Current Cart Overview */}
-            <div className="bg-white rounded-xl shadow-sm border border-border-gray p-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-border-gray p-6">
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-border-gray">
                 <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                   <ShoppingCart size={20} className="text-gray-900 font-bold" /> Currently in Cart
@@ -301,7 +302,7 @@ const Profile = () => {
               </div>
 
               {cartItems.length === 0 ? (
-                <div className="py-8 text-center text-gray-500 bg-gray-50 rounded-xl border border-border-gray">
+                <div className="py-8 text-center text-gray-500 bg-gray-50 rounded-2xl border border-border-gray">
                   Your cart is empty.
                 </div>
               ) : (
@@ -336,7 +337,7 @@ const Profile = () => {
       {/* Logout Confirmation Modal */}
       {showLogoutConfirm && (
         <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-xl max-w-[300px] md:max-w-sm w-full p-5 md:p-6 animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-2xl shadow-xl max-w-[300px] md:max-w-sm w-full p-5 md:p-6 animate-in fade-in zoom-in-95 duration-200">
             <div className="w-10 h-10 md:w-12 md:h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-3 md:mb-4 mx-auto">
               <LogOut size={20} className="md:w-6 md:h-6" />
             </div>

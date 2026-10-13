@@ -127,16 +127,16 @@ export const CartProvider = ({ children }) => {
       {/* Login Required Modal */}
       {showLoginModal && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden border border-[#DCC6A8] animate-in zoom-in-95 duration-200">
             <div className="p-8 text-center">
-              <div className="w-16 h-16 bg-primary-teal/10 rounded-full flex items-center justify-center mx-auto mb-5">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-900 font-bold"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <div className="w-16 h-16 bg-[#E9E9E0] rounded-full flex items-center justify-center mx-auto mb-5 border border-[#DCC6A8]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#344B38]"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               </div>
-              <h3 className="text-xl font-black text-gray-900 mb-2">Login Required</h3>
-              <p className="text-sm text-gray-500 mb-8 font-medium">You need to be logged in to add items to your cart. Please login or create a new account.</p>
+              <h3 className="text-xl font-black text-[#292923] mb-2">Login Required</h3>
+              <p className="text-sm text-[#829078] mb-8 font-medium">You need to be logged in to add items to your cart. Please login or create a new account.</p>
               <div className="flex gap-3">
-                <button onClick={() => setShowLoginModal(false)} className="flex-1 py-3 px-4 border-2 border-gray-100 rounded-xl text-gray-600 font-bold hover:bg-gray-50 hover:border-gray-200 transition-colors">Cancel</button>
-                <button onClick={() => { setShowLoginModal(false); window.location.href='/login'; }} className="flex-1 py-3 px-4 bg-primary-teal text-gray-900 rounded-xl font-bold hover:bg-secondary-teal shadow-lg hover:shadow-xl transition-all">Login Now</button>
+                <button onClick={() => setShowLoginModal(false)} className="flex-1 py-3 px-4 border-2 border-[#DCC6A8] rounded-xl text-[#292923] font-bold hover:bg-[#E9E9E0] transition-colors">Cancel</button>
+                <button onClick={() => { setShowLoginModal(false); window.location.href='/login'; }} className="flex-1 py-3 px-4 bg-[#344B38] text-white rounded-xl font-bold hover:bg-[#829078] shadow-md hover:shadow-lg transition-all">Login Now</button>
               </div>
             </div>
           </div>

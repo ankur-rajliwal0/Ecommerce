@@ -54,7 +54,7 @@ const Signup = () => {
       </button>
 
       {/* Signup Card */}
-      <div className="relative max-w-5xl w-full bg-white border border-border-gray rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse z-10 animate-fade-in-up">
+      <div className="relative max-w-5xl w-full bg-white border border-border-gray rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse z-10 animate-fade-in-up">
         
         {/* Close Button - Mobile */}
         <button 
@@ -81,44 +81,44 @@ const Signup = () => {
         {/* Left Side - Form */}
         <div className="md:w-1/2 p-8 md:p-14 flex flex-col justify-center bg-white">
           <div className="mb-10">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">Create Account</h2>
-            <p className="text-gray-500 font-medium">Join us today to start shopping.</p>
+            <h2 className="text-3xl font-extrabold text-[#292923] mb-2 tracking-tight">Create Account</h2>
+            <p className="text-[#829078] font-medium">Join us today to start shopping.</p>
           </div>
           
           {error && <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 text-sm border border-red-100 font-medium">{error}</div>}
           
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-gray-700">Full Name</label>
+              <label className="text-sm font-bold text-[#292923]">Full Name</label>
               <input 
                 type="text" 
                 required 
                 value={fullName} 
                 onChange={(e) => setFullName(e.target.value)} 
-                className="w-full p-3.5 bg-gray-50 border border-border-gray rounded-xl outline-none focus:border-primary-teal focus:ring-1 focus:ring-primary-teal transition-all" 
+                className="w-full p-3.5 bg-[#F8F6F1] border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] focus:ring-1 focus:ring-[#344B38] transition-all text-[#292923]" 
                 placeholder="Enter your full name"
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-gray-700">Email Address</label>
+              <label className="text-sm font-bold text-[#292923]">Email Address</label>
               <input 
                 type="email" 
                 required 
                 value={email} 
                 onChange={(e) => setEmail(e.target.value)} 
-                className="w-full p-3.5 bg-gray-50 border border-border-gray rounded-xl outline-none focus:border-primary-teal focus:ring-1 focus:ring-primary-teal transition-all" 
+                className="w-full p-3.5 bg-[#F8F6F1] border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] focus:ring-1 focus:ring-[#344B38] transition-all text-[#292923]" 
                 placeholder="Enter your email"
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-gray-700">Password</label>
+              <label className="text-sm font-bold text-[#292923]">Password</label>
               <div className="relative">
                 <input 
                   type={showPassword ? "text" : "password"} 
                   required 
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)} 
-                  className="w-full p-3.5 bg-gray-50 border border-border-gray rounded-xl outline-none focus:border-primary-teal focus:ring-1 focus:ring-primary-teal transition-all pr-12" 
+                  className="w-full p-3.5 bg-[#F8F6F1] border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] focus:ring-1 focus:ring-[#344B38] transition-all pr-12 text-[#292923]" 
                   placeholder="Create a password"
                 />
                 <button
@@ -133,14 +133,14 @@ const Signup = () => {
             <button 
               type="submit" 
               disabled={loading} 
-              className="w-full bg-primary-teal hover:bg-secondary-teal text-gray-900 font-bold py-4 px-4 rounded-xl mt-4 transition-colors disabled:opacity-70 shadow-lg shadow-primary-teal/20"
+              className="w-full bg-[#344B38] hover:bg-[#829078] text-white font-bold py-4 px-4 rounded-xl mt-4 transition-colors disabled:opacity-70 shadow-lg shadow-[#344B38]/20"
             >
               {loading ? 'Creating account...' : 'Sign Up'}
             </button>
           </form>
           
           <p className="text-center mt-8 text-sm font-medium text-gray-600">
-            Already have an account? <Link to="/login" className="text-gray-900 font-bold font-bold hover:underline">Sign in instead</Link>
+            Already have an account? <Link to="/login" className="text-[#344B38] font-bold hover:underline">Sign in instead</Link>
           </p>
         </div>
       </div>

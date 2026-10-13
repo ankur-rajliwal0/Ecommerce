@@ -74,77 +74,74 @@ const Products = () => {
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-10 gap-6">
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Manage Products</h2>
-          <p className="text-sm md:text-base text-gray-500 mt-1 md:mt-2">Add, edit or remove products from your store.</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-[#292923] tracking-tight">Manage Products</h2>
+          <p className="text-sm md:text-base text-[#829078] mt-1 md:mt-2">Add, edit or remove products from your store.</p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-          <div className="flex items-center justify-between sm:justify-start gap-4 bg-white px-4 py-2.5 rounded-xl border border-gray-200 shadow-sm">
-            <span className="text-sm font-semibold text-gray-700">Inventory Tracking</span>
+          <div className="flex items-center justify-between sm:justify-start gap-4 bg-white px-4 py-2.5 rounded-xl border border-[#DCC6A8] shadow-sm">
+            <span className="text-sm font-semibold text-[#292923]">Inventory Tracking</span>
             <button 
               onClick={toggleInventoryTracking}
-              className={`w-11 h-6 rounded-full transition-colors relative focus:outline-none flex-shrink-0 ${inventoryTracking ? 'bg-primary-teal' : 'bg-gray-300'}`}
+              className={`w-11 h-6 rounded-full transition-colors relative focus:outline-none flex-shrink-0 ${inventoryTracking ? 'bg-[#344B38]' : 'bg-gray-300'}`}
             >
               <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${inventoryTracking ? 'translate-x-5' : 'translate-x-0'}`}></span>
             </button>
           </div>
-          <Link to="/store-control/products/add" className="bg-primary-teal hover:bg-secondary-teal text-gray-900 font-bold py-2.5 px-5 rounded-xl shadow-sm hover:shadow-md transition-all whitespace-nowrap flex items-center justify-center gap-2">
+          <Link to="/store-control/products/add" className="bg-[#344B38] hover:bg-[#829078] text-white font-bold py-2.5 px-5 rounded-xl shadow-sm hover:shadow-md transition-all whitespace-nowrap flex items-center justify-center gap-2">
             <span>+</span> Add New Product
           </Link>
         </div>
       </div>
       
       {loading ? (
-        <div className="py-20 text-center text-gray-400 animate-pulse flex flex-col items-center">
-           <div className="w-10 h-10 border-4 border-slate-900 border-t-transparent rounded-full animate-spin mb-4"></div>
-           <p>Loading products...</p>
-        </div>
+        <TableSkeleton rows={5} />
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#DCC6A8] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-gray-50/50 border-b border-gray-100">
-                  <th className="text-left px-4 md:px-8 py-5 text-xs font-extrabold text-gray-400 uppercase tracking-widest">Product</th>
-                  <th className="text-left px-4 md:px-8 py-5 text-xs font-extrabold text-gray-400 uppercase tracking-widest">Price</th>
-                  <th className="text-left px-4 md:px-8 py-5 text-xs font-extrabold text-gray-400 uppercase tracking-widest">Stock</th>
-                  <th className="text-left px-4 md:px-8 py-5 text-xs font-extrabold text-gray-400 uppercase tracking-widest">Status</th>
-                  <th className="text-right px-4 md:px-8 py-5 text-xs font-extrabold text-gray-400 uppercase tracking-widest">Actions</th>
+                <tr className="bg-[#E9E9E0]/40 border-b border-[#E9E9E0]">
+                  <th className="text-left px-4 md:px-8 py-5 text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest">Product</th>
+                  <th className="text-left px-4 md:px-8 py-5 text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest">Price</th>
+                  <th className="text-left px-4 md:px-8 py-5 text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest">Stock</th>
+                  <th className="text-left px-4 md:px-8 py-5 text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest">Status</th>
+                  <th className="text-right px-4 md:px-8 py-5 text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest">Actions</th>
                 </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-[#E9E9E0]">
               {products.length === 0 ? (
-                <tr><td colSpan="5" className="p-12 text-center text-gray-400 italic">No products found. Start by adding one!</td></tr>
+                <tr><td colSpan="5" className="p-12 text-center text-[#829078] italic">No products found. Start by adding one!</td></tr>
               ) : (
                 products.map(p => (
-                  <tr key={p.id} className="hover:bg-blue-50/30 transition-colors group">
+                  <tr key={p.id} className="hover:bg-[#E9E9E0]/20 transition-colors group">
                     <td className="px-4 md:px-8 py-5 whitespace-nowrap md:whitespace-normal min-w-[250px]">
                       <div className="flex items-center gap-4">
                         {p.image_url ? (
-                          <div className="w-14 h-14 rounded-xl overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
+                          <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#DCC6A8] shadow-sm flex-shrink-0">
                             <img src={p.image_url.split(',')[0]} alt={p.name} className="w-full h-full object-cover" />
                           </div>
                         ) : (
                           <div className="w-14 h-14 flex items-center justify-center bg-gray-100 text-[10px] text-gray-400 rounded-xl border border-gray-200 shadow-sm uppercase font-bold">No Pic</div>
                         )}
                         <div>
-                          <p className="font-bold text-gray-900 group-hover:text-gray-900 font-bold transition-colors line-clamp-1">{p.name}</p>
-                          <p className="text-xs text-gray-500 truncate max-w-[200px]">{p.description || 'No description'}</p>
+                          <p className="font-bold text-[#292923] group-hover:text-[#344B38] transition-colors line-clamp-1">{p.name}</p>
+                          <p className="text-xs text-[#829078] truncate max-w-[200px]">{p.description || 'No description'}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 md:px-8 py-5 font-black text-gray-900 whitespace-nowrap">₹{Number(p.price).toFixed(2)}</td>
+                    <td className="px-4 md:px-8 py-5 font-black text-[#292923] whitespace-nowrap">₹{Number(p.price).toFixed(2)}</td>
                     <td className="px-4 md:px-8 py-5 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-bold ${p.stock > 10 ? 'bg-green-50 text-green-700 border border-green-200' : p.stock > 0 ? 'bg-yellow-50 text-yellow-700 border border-yellow-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
                         {p.stock > 0 ? `${p.stock} in stock` : 'Out of stock'}
                       </span>
                     </td>
                     <td className="px-4 md:px-8 py-5 whitespace-nowrap">
-                      {p.featured ? <span className="bg-primary-teal/10 text-gray-900 font-bold border border-primary-teal/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Featured</span> : <span className="text-gray-400 text-xs font-semibold uppercase">Standard</span>}
+                      {p.featured ? <span className="bg-[#E9E9E0] text-[#344B38] border border-[#DCC6A8] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Featured</span> : <span className="text-gray-400 text-xs font-semibold uppercase">Standard</span>}
                     </td>
                     <td className="px-4 md:px-8 py-5 whitespace-nowrap">
                       <div className="flex gap-3 justify-end items-center">
-                        <Link to={`/store-control/products/edit/${p.id}`} className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-bold transition-colors">Edit</Link>
+                        <Link to={`/store-control/products/edit/${p.id}`} className="px-4 py-2 bg-[#E9E9E0] hover:bg-[#DCC6A8] text-[#292923] rounded-xl text-sm font-bold transition-colors">Edit</Link>
                         <button onClick={() => handleDelete(p.id)} className="px-4 py-2 bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white rounded-xl text-sm font-bold transition-colors">Delete</button>
                       </div>
                     </td>
@@ -160,7 +157,7 @@ const Products = () => {
       {/* Delete Confirmation Modal */}
       {deleteConfirmId && (
         <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-xl max-w-[300px] md:max-w-sm w-full p-5 md:p-6 animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-2xl shadow-xl max-w-[300px] md:max-w-sm w-full p-5 md:p-6 animate-in fade-in zoom-in-95 duration-200">
             <h3 className="text-lg md:text-xl font-bold text-center text-gray-900 mb-2">Confirm Delete</h3>
             <p className="text-center text-gray-600 mb-5 md:mb-6 text-sm font-medium">Are you sure you want to delete this product? This action cannot be undone.</p>
             <div className="flex gap-2.5 md:gap-3">

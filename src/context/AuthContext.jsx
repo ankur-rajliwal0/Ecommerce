@@ -75,9 +75,9 @@ export const AuthProvider = ({ children }) => {
             'Authorization': `Bearer ${import.meta.env.VITE_RESEND_API_KEY}`
           },
           body: JSON.stringify({
-            from: 'Lovora <onboarding@resend.dev>',
+            from: 'Veltrix <onboarding@resend.dev>',
             to: [email],
-            subject: 'Welcome to Lovora!',
+            subject: 'Welcome to Veltrix!',
             template: {
               id: 'welcome-email',
               variables: {

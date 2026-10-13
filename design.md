@@ -19,6 +19,17 @@ The overall visual direction should feel:
 -   Promotional without looking cluttered
 -   Responsive across desktop, tablet, and mobile
 
+### 1.1 Official Brand Color System
+
+| Role | Color Name | Hex Code | Primary Usage |
+| :--- | :--- | :--- | :--- |
+| **Primary** | Deep Forest Green | `#344B38` | Buttons, important CTAs, brand accents, active states |
+| **Background** | Warm Cream | `#F8F6F1` | Main page background, hero sections, container backdrops |
+| **Secondary** | Sage Green | `#829078` | Feature icons, decorative details, subtle highlights |
+| **Accent** | Warm Beige | `#DCC6A8` | Card borders, gift cards, product background badges |
+| **Text** | Soft Charcoal | `#292923` | Headings, navigation, body copy |
+| **Surface** | Pale Sage | `#E9E9E0` | Category cards, promotional sections, dropdowns |
+
 ------------------------------------------------------------------------
 
 # 2. Overall Page Structure

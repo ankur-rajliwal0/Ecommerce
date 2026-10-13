@@ -133,7 +133,7 @@ const ProductDetails = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
         <div className="flex flex-col gap-4">
-          <div className="bg-gray-50 rounded-xl overflow-hidden border border-border-gray relative aspect-square">
+          <div className="bg-gray-50 rounded-2xl overflow-hidden border border-border-gray relative aspect-square">
             <img src={activeImage || 'https://via.placeholder.com/600'} alt={product.name} className="w-full h-full object-cover block" />
           </div>
           {images.length > 1 && (
@@ -142,7 +142,7 @@ const ProductDetails = () => {
                 <button 
                   key={idx} 
                   onClick={() => setActiveImage(img)}
-                  className={`aspect-square rounded-xl border-2 overflow-hidden transition-colors ${activeImage === img ? 'border-primary-teal' : 'border-transparent hover:border-gray-300 bg-gray-50'}`}
+                  className={`aspect-square rounded-xl border-2 overflow-hidden transition-colors ${activeImage === img ? 'border-[#344B38]' : 'border-transparent hover:border-[#829078] bg-[#F8F6F1]'}`}
                 >
                   <img src={img} alt={`${product.name} thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
                 </button>
@@ -152,8 +152,8 @@ const ProductDetails = () => {
         </div>
         
         <div className="flex flex-col">
-          <span className="text-gray-900 text-sm font-bold uppercase tracking-wider mb-3">{product.category?.name || 'Uncategorized'}</span>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 font-bold leading-tight mb-4">{product.name}</h1>
+          <span className="text-[#829078] text-sm font-bold uppercase tracking-wider mb-3">{product.category?.name || 'Uncategorized'}</span>
+          <h1 className="text-3xl md:text-4xl font-bold text-[#292923] leading-tight mb-4">{product.name}</h1>
           
           {/* Rating Summary */}
           <div className="flex items-center gap-2 mb-4">
@@ -162,13 +162,13 @@ const ProductDetails = () => {
                 <Star key={star} size={20} fill={star <= Math.round(calculateAverageRating()) ? "currentColor" : "none"} className={star <= Math.round(calculateAverageRating()) ? "text-yellow-400" : "text-gray-300"} />
               ))}
             </div>
-            <span className="font-bold text-gray-700">{calculateAverageRating()}</span>
-            <span className="text-sm text-gray-500">({reviews.length} reviews)</span>
+            <span className="font-bold text-[#292923]">{calculateAverageRating()}</span>
+            <span className="text-sm text-[#829078]">({reviews.length} reviews)</span>
           </div>
 
-          <div className="text-3xl font-bold text-gray-900 mb-6">₹{Number(product.price).toFixed(2)}</div>
+          <div className="text-3xl font-bold text-[#344B38] mb-6">₹{Number(product.price).toFixed(2)}</div>
           
-          <div className="text-gray-600 leading-relaxed mb-8 border-b border-border-gray pb-8 whitespace-pre-wrap">
+          <div className="text-[#292923]/70 leading-relaxed mb-8 border-b border-[#DCC6A8]/50 pb-8 whitespace-pre-wrap">
             {product.description || 'No description available for this product.'}
           </div>
           
@@ -178,16 +178,16 @@ const ProductDetails = () => {
 
           <div className="flex flex-col sm:flex-row gap-4">
             {!cartItems.some(item => item?.id === product.id) && (
-              <div className="flex items-center border border-border-gray rounded-xl bg-white">
-                <button className="p-4 text-gray-700 hover:bg-gray-50 transition-colors" onClick={decrement}><Minus size={16}/></button>
-                <span className="min-w-[40px] text-center font-semibold text-lg">{quantity}</span>
-                <button className="p-4 text-gray-700 hover:bg-gray-50 transition-colors" onClick={increment}><Plus size={16}/></button>
+              <div className="flex items-center border border-[#DCC6A8] rounded-xl bg-white">
+                <button className="p-4 text-[#292923] hover:bg-[#F8F6F1] transition-colors" onClick={decrement}><Minus size={16}/></button>
+                <span className="min-w-[40px] text-center font-semibold text-lg text-[#292923]">{quantity}</span>
+                <button className="p-4 text-[#292923] hover:bg-[#F8F6F1] transition-colors" onClick={increment}><Plus size={16}/></button>
               </div>
             )}
             
             {cartItems.some(item => item?.id === product.id) ? (
               <button 
-                className="flex-1 flex justify-center items-center gap-3 bg-secondary-teal text-gray-900 font-bold text-lg rounded-xl px-6 py-4 hover:bg-primary-teal transition-all"
+                className="flex-1 flex justify-center items-center gap-3 bg-[#829078] text-white font-bold text-lg rounded-xl px-6 py-4 hover:bg-[#344B38] transition-all shadow-md"
                 onClick={() => navigate('/cart')}
               >
                 <ShoppingCart size={20} />
@@ -195,7 +195,7 @@ const ProductDetails = () => {
               </button>
             ) : (
               <button 
-                className={`flex-1 flex justify-center items-center gap-3 bg-primary-teal text-gray-900 font-bold text-lg rounded-xl px-6 py-4 hover:bg-secondary-teal transition-all disabled:opacity-50 disabled:cursor-not-allowed ${isAdding ? 'opacity-80' : ''}`}
+                className={`flex-1 flex justify-center items-center gap-3 bg-[#344B38] text-white font-bold text-lg rounded-xl px-6 py-4 hover:bg-[#829078] transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed ${isAdding ? 'opacity-80' : ''}`}
                 onClick={handleAddToCart}
                 disabled={product.stock <= 0}
               >
@@ -208,31 +208,31 @@ const ProductDetails = () => {
       </div>
 
       {/* Reviews Section */}
-      <div className="mt-20 border-t border-border-gray pt-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-8">Customer Reviews</h2>
+      <div className="mt-20 border-t border-[#DCC6A8]/50 pt-12">
+        <h2 className="text-2xl font-bold text-[#292923] mb-8">Customer Reviews</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Reviews List */}
           <div>
             {reviews.length === 0 ? (
-              <p className="text-gray-500 italic">No reviews yet. Be the first to review this product!</p>
+              <p className="text-[#829078] italic">No reviews yet. Be the first to review this product!</p>
             ) : (
               <div className="flex flex-col gap-6">
                 {reviews.map(review => (
-                  <div key={review.id} className="border-b border-border-gray pb-6">
+                  <div key={review.id} className="border-b border-[#DCC6A8]/40 pb-6">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-600 text-sm">
+                      <div className="w-8 h-8 rounded-full bg-[#E9E9E0] flex items-center justify-center font-bold text-[#344B38] text-sm">
                         {review.profile?.full_name?.charAt(0) || 'U'}
                       </div>
-                      <span className="font-bold text-gray-900">{review.profile?.full_name || 'Anonymous User'}</span>
-                      <span className="text-xs text-gray-400 ml-auto">{new Date(review.created_at).toLocaleDateString()}</span>
+                      <span className="font-bold text-[#292923]">{review.profile?.full_name || 'Anonymous User'}</span>
+                      <span className="text-xs text-[#829078] ml-auto">{new Date(review.created_at).toLocaleDateString()}</span>
                     </div>
                     <div className="flex items-center gap-1 mb-2">
                       {[1, 2, 3, 4, 5].map(star => (
                          <Star key={star} size={14} fill={star <= review.rating ? "currentColor" : "none"} className={star <= review.rating ? "text-yellow-400" : "text-gray-300"} />
                       ))}
                     </div>
-                    <p className="text-gray-700 text-sm">{review.review_text}</p>
+                    <p className="text-[#292923]/80 text-sm">{review.review_text}</p>
                   </div>
                 ))}
               </div>
@@ -241,17 +241,17 @@ const ProductDetails = () => {
 
           {/* Write a Review Form */}
           <div>
-            <div className="bg-gray-50 rounded-xl p-6 border border-border-gray">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Write a Review</h3>
+            <div className="bg-white rounded-2xl p-6 border border-[#DCC6A8]/60 shadow-sm">
+              <h3 className="text-lg font-bold text-[#292923] mb-4">Write a Review</h3>
               {!user ? (
                 <div className="text-center py-6">
-                  <p className="text-gray-500 mb-4">You must be logged in to write a review.</p>
-                  <button onClick={() => navigate('/login')} className="bg-primary-teal text-gray-900 px-6 py-2 rounded-xl font-medium hover:bg-secondary-teal">Log In</button>
+                  <p className="text-[#829078] mb-4">You must be logged in to write a review.</p>
+                  <button onClick={() => navigate('/login')} className="bg-[#344B38] text-white px-6 py-2 rounded-xl font-bold hover:bg-[#829078] transition-colors">Log In</button>
                 </div>
               ) : (
                 <form onSubmit={submitReview} className="flex flex-col gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Rating</label>
+                    <label className="block text-sm font-semibold text-[#292923] mb-2">Rating</label>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map(star => (
                         <button type="button" key={star} onClick={() => setRating(star)} className="focus:outline-none">
@@ -261,17 +261,17 @@ const ProductDetails = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Review</label>
+                    <label className="block text-sm font-semibold text-[#292923] mb-2">Review</label>
                     <textarea 
                       required
                       rows="4" 
                       value={reviewText}
                       onChange={(e) => setReviewText(e.target.value)}
                       placeholder="What did you like or dislike about this product?"
-                      className="w-full p-3 border border-border-gray rounded-xl outline-none focus:border-primary-teal resize-none"
+                      className="w-full p-3 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] resize-none bg-[#F8F6F1] text-[#292923]"
                     ></textarea>
                   </div>
-                  <button type="submit" disabled={submittingReview} className="bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-gray-800 disabled:opacity-50">
+                  <button type="submit" disabled={submittingReview} className="bg-[#344B38] text-white font-bold py-3 rounded-xl hover:bg-[#829078] transition-colors disabled:opacity-50 shadow-md">
                     {submittingReview ? 'Submitting...' : 'Submit Review'}
                   </button>
                 </form>
@@ -284,7 +284,7 @@ const ProductDetails = () => {
       {/* Google Review Prompt Modal */}
       {showGooglePrompt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white p-8 rounded-xl max-w-md w-full text-center shadow-2xl">
+          <div className="bg-white p-8 rounded-2xl max-w-md w-full text-center shadow-2xl">
             <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <Star size={32} fill="currentColor" />
             </div>

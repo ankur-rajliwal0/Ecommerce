@@ -135,7 +135,7 @@ const Checkout = () => {
         key: razorpayKeyId,
         amount: rzpOrder.amount, // in paise
         currency: "INR",
-        name: "Gift & Flower",
+        name: "Veltrix",
         description: "Order Payment",
         order_id: rzpOrder.id,
         handler: async function (response) {
@@ -245,7 +245,7 @@ const Checkout = () => {
           contact: formData.phone
         },
         theme: {
-          color: "#0d9488" // primary-teal
+          color: "#344B38" // Primary — Deep Forest Green
         }
       };
 
@@ -268,10 +268,10 @@ const Checkout = () => {
   if (!user) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-10 min-h-[calc(100vh-140px)]">
-        <div className="max-w-md mx-auto mt-20 text-center p-10 bg-white border border-border-gray rounded-xl">
-          <h2 className="text-2xl font-bold text-gray-900 font-bold mb-4">Sign in required</h2>
-          <p className="text-gray-500 mb-6">Please log in to your account to securely complete your purchase.</p>
-          <button onClick={() => navigate('/login')} className="bg-primary-teal text-gray-900 px-6 py-2 rounded-xl font-medium hover:bg-secondary-teal transition-colors">Log In to Checkout</button>
+        <div className="max-w-md mx-auto mt-20 text-center p-10 bg-white border border-[#DCC6A8] rounded-2xl shadow-sm">
+          <h2 className="text-2xl font-bold text-[#292923] mb-4">Sign in required</h2>
+          <p className="text-[#829078] mb-6 font-medium">Please log in to your account to securely complete your purchase.</p>
+          <button onClick={() => navigate('/login')} className="bg-[#344B38] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#829078] transition-colors shadow-md">Log In to Checkout</button>
         </div>
       </div>
     );
@@ -280,9 +280,9 @@ const Checkout = () => {
   if (cartItems.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-10 min-h-[calc(100vh-140px)]">
-        <div className="max-w-md mx-auto mt-20 text-center p-10 bg-white border border-border-gray rounded-xl">
-          <h2 className="text-2xl font-bold text-gray-900 font-bold mb-4">Your cart is empty</h2>
-          <button onClick={() => navigate('/')} className="bg-primary-teal text-gray-900 px-6 py-2 rounded-xl font-medium hover:bg-secondary-teal transition-colors">Continue Shopping</button>
+        <div className="max-w-md mx-auto mt-20 text-center p-10 bg-white border border-[#DCC6A8] rounded-2xl shadow-sm">
+          <h2 className="text-2xl font-bold text-[#292923] mb-4">Your cart is empty</h2>
+          <button onClick={() => navigate('/')} className="bg-[#344B38] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#829078] transition-colors shadow-md">Continue Shopping</button>
         </div>
       </div>
     );
@@ -290,110 +290,110 @@ const Checkout = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10 min-h-[calc(100vh-140px)]">
-      <h1 className="text-3xl font-bold text-gray-900 font-bold mb-8">Secure Checkout</h1>
+      <h1 className="text-3xl font-bold text-[#292923] mb-8">Secure Checkout</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 items-start">
         <div className="w-full">
           <form onSubmit={handleCheckout}>
-            <div className="bg-white border border-border-gray rounded-xl p-8 mb-6">
-              <h3 className="text-xl font-bold text-gray-900 font-bold mb-6 pb-3 border-b border-border-gray">Shipping Information</h3>
+            <div className="bg-white border border-[#DCC6A8]/60 rounded-2xl p-8 mb-6 shadow-sm">
+              <h3 className="text-xl font-bold text-[#292923] mb-6 pb-3 border-b border-[#DCC6A8]/40">Shipping Information</h3>
               
               {savedAddresses.length > 0 && (
                 <div className="mb-6 space-y-3">
-                  <label className="text-sm font-semibold text-gray-700 block mb-2">Select Address</label>
+                  <label className="text-sm font-semibold text-[#292923] block mb-2">Select Address</label>
                   {savedAddresses.map((addr, idx) => (
-                    <label key={idx} className={`flex items-start p-4 border rounded-xl cursor-pointer transition-colors ${selectedAddressIndex === idx ? 'border-primary-teal bg-primary-teal/5' : 'border-border-gray hover:border-gray-300'}`}>
-                      <input type="radio" name="addressSelect" checked={selectedAddressIndex === idx} onChange={() => handleAddressSelect(idx)} className="mt-1 mr-3 text-primary-teal focus:ring-primary-teal" />
+                    <label key={idx} className={`flex items-start p-4 border rounded-xl cursor-pointer transition-colors ${selectedAddressIndex === idx ? 'border-[#344B38] bg-[#E9E9E0]/40' : 'border-[#DCC6A8]/60 hover:border-[#829078]'}`}>
+                      <input type="radio" name="addressSelect" checked={selectedAddressIndex === idx} onChange={() => handleAddressSelect(idx)} className="mt-1 mr-3 text-[#344B38] focus:ring-[#344B38]" />
                       <div>
-                        <p className="font-semibold text-gray-900">{addr.fullName} <span className="font-normal text-gray-500 text-sm ml-2">{addr.phone}</span></p>
-                        <p className="text-gray-600 text-sm mt-1">{addr.address}, {addr.city}, {addr.state} - {addr.zip}</p>
+                        <p className="font-semibold text-[#292923]">{addr.fullName} <span className="font-normal text-[#829078] text-sm ml-2">{addr.phone}</span></p>
+                        <p className="text-[#292923]/70 text-sm mt-1">{addr.address}, {addr.city}, {addr.state} - {addr.zip}</p>
                       </div>
                     </label>
                   ))}
-                  <label className={`flex items-start p-4 border rounded-xl cursor-pointer transition-colors ${selectedAddressIndex === -1 ? 'border-primary-teal bg-primary-teal/5' : 'border-border-gray hover:border-gray-300'}`}>
-                    <input type="radio" name="addressSelect" checked={selectedAddressIndex === -1} onChange={() => handleAddressSelect(-1)} className="mt-1 mr-3 text-primary-teal focus:ring-primary-teal" />
-                    <span className="font-semibold text-gray-900">Add a new address</span>
+                  <label className={`flex items-start p-4 border rounded-xl cursor-pointer transition-colors ${selectedAddressIndex === -1 ? 'border-[#344B38] bg-[#E9E9E0]/40' : 'border-[#DCC6A8]/60 hover:border-[#829078]'}`}>
+                    <input type="radio" name="addressSelect" checked={selectedAddressIndex === -1} onChange={() => handleAddressSelect(-1)} className="mt-1 mr-3 text-[#344B38] focus:ring-[#344B38]" />
+                    <span className="font-semibold text-[#292923]">Add a new address</span>
                   </label>
                 </div>
               )}
 
               <div className={`grid grid-cols-1 md:grid-cols-2 gap-5 ${selectedAddressIndex !== -1 && savedAddresses.length > 0 ? 'hidden' : ''}`}>
                 <div className="md:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-gray-700">Full Name</label>
-                  <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors" />
+                  <label className="text-sm font-semibold text-[#292923]">Full Name</label>
+                  <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
                 </div>
                 <div className="md:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-gray-700">Email Address</label>
-                  <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors" />
+                  <label className="text-sm font-semibold text-[#292923]">Email Address</label>
+                  <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
                 </div>
                 <div className="md:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-gray-700">Phone Number</label>
-                  <input required type="text" name="phone" value={formData.phone} onChange={handleChange} className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors" />
+                  <label className="text-sm font-semibold text-[#292923]">Phone Number</label>
+                  <input required type="text" name="phone" value={formData.phone} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-gray-700">
+                  <label className="text-sm font-semibold text-[#292923]">
                     ZIP / Postal Code
                   </label>
-                  <input required type="text" name="zip" value={formData.zip} onChange={handlePincodeChange} placeholder="Enter 6-digit PIN" className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors" />
+                  <input required type="text" name="zip" value={formData.zip} onChange={handlePincodeChange} placeholder="Enter 6-digit PIN" className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-gray-700">City</label>
-                  <input required type="text" name="city" value={formData.city} onChange={handleChange} className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors bg-gray-50" />
+                  <label className="text-sm font-semibold text-[#292923]">City</label>
+                  <input required type="text" name="city" value={formData.city} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-white text-[#292923]" />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-gray-700">State</label>
-                  <input required type="text" name="state" value={formData.state} onChange={handleChange} className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors bg-gray-50" />
+                  <label className="text-sm font-semibold text-[#292923]">State</label>
+                  <input required type="text" name="state" value={formData.state} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-white text-[#292923]" />
                 </div>
                 <div className="md:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-gray-700">Street Address</label>
-                  <input required={selectedAddressIndex === -1} type="text" name="address" value={formData.address} onChange={handleChange} placeholder="House No, Building, Street, Area" className="w-full p-2.5 border border-border-gray rounded-xl outline-none focus:border-primary-teal transition-colors" />
+                  <label className="text-sm font-semibold text-[#292923]">Street Address</label>
+                  <input required={selectedAddressIndex === -1} type="text" name="address" value={formData.address} onChange={handleChange} placeholder="House No, Building, Street, Area" className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
                 </div>
                 {selectedAddressIndex === -1 && savedAddresses.length > 0 && (
                   <div className="md:col-span-2 mt-2">
                     <label className="flex items-center cursor-pointer">
-                      <input type="checkbox" checked={saveNewAddress} onChange={(e) => setSaveNewAddress(e.target.checked)} className="mr-2 rounded border-gray-300 text-primary-teal focus:ring-primary-teal" />
-                      <span className="text-sm font-medium text-gray-700">Save this address for future orders</span>
+                      <input type="checkbox" checked={saveNewAddress} onChange={(e) => setSaveNewAddress(e.target.checked)} className="mr-2 rounded border-[#DCC6A8] text-[#344B38] focus:ring-[#344B38]" />
+                      <span className="text-sm font-medium text-[#292923]">Save this address for future orders</span>
                     </label>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="bg-white border border-border-gray rounded-xl p-8 mb-6">
-              <h3 className="text-xl font-bold text-gray-900 font-bold mb-6 pb-3 border-b border-border-gray">Payment</h3>
-              <div className="border border-border-gray rounded-xl bg-blue-50 p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="bg-white border border-[#DCC6A8]/60 rounded-2xl p-8 mb-6 shadow-sm">
+              <h3 className="text-xl font-bold text-[#292923] mb-6 pb-3 border-b border-[#DCC6A8]/40">Payment</h3>
+              <div className="border border-[#DCC6A8]/60 rounded-xl bg-[#E9E9E0]/40 p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <strong className="text-gray-900 block">Razorpay Secure Payment</strong>
-                  <p className="text-sm text-gray-500 mt-1">Pay via UPI, Cards, Netbanking, or Wallets</p>
+                  <strong className="text-[#292923] block">Razorpay Secure Payment</strong>
+                  <p className="text-sm text-[#829078] mt-1 font-medium">Pay via UPI, Cards, Netbanking, or Wallets</p>
                 </div>
                 <div className="flex gap-3">
-                  <div className="flex items-center justify-center px-3 py-1.5 bg-white border border-border-gray rounded-xl shadow-sm h-10 w-16">
+                  <div className="flex items-center justify-center px-3 py-1.5 bg-white border border-[#DCC6A8]/60 rounded-xl shadow-sm h-10 w-16">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" className="h-4 object-cover" />
                   </div>
-                  <div className="flex items-center justify-center gap-2 px-3 py-1.5 bg-white border border-border-gray rounded-xl shadow-sm h-10">
+                  <div className="flex items-center justify-center gap-2 px-3 py-1.5 bg-white border border-[#DCC6A8]/60 rounded-xl shadow-sm h-10">
                     <img src={paymentImage} alt="Visa" className="h-4 object-cover" />
                     <div className="w-[1px] h-4 bg-gray-200"></div>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-4 object-cover" />
                   </div>
                 </div>
               </div>
-              <button type="submit" disabled={loading} className="w-full bg-primary-teal hover:bg-secondary-teal text-gray-900 font-bold py-4 px-4 rounded-xl transition-colors disabled:opacity-70">
+              <button type="submit" disabled={loading} className="w-full bg-[#344B38] hover:bg-[#829078] text-white font-bold py-4 px-4 rounded-xl transition-colors disabled:opacity-70 shadow-lg shadow-[#344B38]/20">
                 {loading ? 'Processing...' : 'Confirm Order & Pay'}
               </button>
             </div>
           </form>
         </div>
 
-        <div className="bg-gray-50 border border-border-gray rounded-xl p-8 sticky top-24">
-          <h3 className="text-xl font-bold text-gray-900 font-bold mb-6">In your bag</h3>
+        <div className="bg-white border border-[#DCC6A8]/60 rounded-2xl p-8 sticky top-24 shadow-sm">
+          <h3 className="text-xl font-bold text-[#292923] mb-6">In your bag</h3>
           <div className="flex flex-col gap-4 mb-6 max-h-[40vh] overflow-y-auto pr-2">
             {cartItems.map(item => (
-              <div key={item.id} className="flex gap-4 items-center relative group bg-white p-2 rounded-xl border border-transparent hover:border-gray-200 transition-colors">
-                <img src={item.image_url ? item.image_url.split(',')[0] : 'https://via.placeholder.com/100'} alt={item.name} className="w-16 h-16 object-cover rounded-xl border border-border-gray bg-white shrink-0" />
+              <div key={item.id} className="flex gap-4 items-center relative group bg-[#F8F6F1] p-2.5 rounded-xl border border-transparent hover:border-[#DCC6A8] transition-colors">
+                <img src={item.image_url ? item.image_url.split(',')[0] : 'https://via.placeholder.com/100'} alt={item.name} className="w-16 h-16 object-cover rounded-xl border border-[#DCC6A8]/50 bg-white shrink-0" />
                 <div className="flex flex-col gap-1 flex-1">
-                  <h4 className="text-sm font-semibold text-gray-900 line-clamp-2 pr-6">{item.name}</h4>
-                  <span className="text-xs text-gray-500">Qty: {item.quantity}</span>
-                  <strong className="text-gray-900">₹{(item.price * item.quantity).toFixed(2)}</strong>
+                  <h4 className="text-sm font-semibold text-[#292923] line-clamp-2 pr-6">{item.name}</h4>
+                  <span className="text-xs text-[#829078]">Qty: {item.quantity}</span>
+                  <strong className="text-[#344B38]">₹{(item.price * item.quantity).toFixed(2)}</strong>
                 </div>
                 <button 
                   onClick={() => removeFromCart(item.id)}
@@ -407,16 +407,16 @@ const Checkout = () => {
             ))}
           </div>
 
-          <div className="border-t border-border-gray pt-6">
-            <div className="flex justify-between mb-3 text-sm text-gray-800 font-medium">
+          <div className="border-t border-[#DCC6A8]/50 pt-6">
+            <div className="flex justify-between mb-3 text-sm text-[#292923]/80 font-medium">
               <span>Subtotal</span>
               <span>₹{cartTotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between mb-3 text-sm text-gray-800 font-medium">
+            <div className="flex justify-between mb-3 text-sm text-[#292923]/80 font-medium">
               <span>Shipping</span>
-              <span className="text-green-600 font-bold">Free</span>
+              <span className="text-[#344B38] font-bold">Free</span>
             </div>
-            <div className="flex justify-between mt-4 pt-4 border-t border-border-gray font-bold text-lg text-gray-900 font-bold">
+            <div className="flex justify-between mt-4 pt-4 border-t border-[#DCC6A8]/50 font-bold text-lg text-[#344B38]">
               <span>Total</span>
               <span>₹{cartTotal.toFixed(2)}</span>
             </div>
