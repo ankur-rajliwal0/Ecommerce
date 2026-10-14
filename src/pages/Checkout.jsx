@@ -111,11 +111,21 @@ const Checkout = () => {
 
   const handleCheckout = async (e) => {
     e.preventDefault();
-    if (cartItems.length === 0) return toast.error('Cart is empty');
+    if (!user) {
+      toast.error('Please sign in to complete your acquisition');
+      navigate('/login?redirect=/checkout');
+      return;
+    }
+    if (cartItems.length === 0) return toast.error('Folio is empty');
 
     const razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
     if (!razorpayKeyId) {
       toast.error('Razorpay Key ID is missing in .env file!');
+      return;
+    }
+
+    if (typeof window.Razorpay === 'undefined') {
+      toast.error('Payment gateway is initializing. Please wait a moment and try again.');
       return;
     }
 
@@ -245,7 +255,7 @@ const Checkout = () => {
           contact: formData.phone
         },
         theme: {
-          color: "#344B38" // Primary — Deep Forest Green
+          color: "#000000" // Ink
         }
       };
 
@@ -267,11 +277,19 @@ const Checkout = () => {
 
   if (!user) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-10 min-h-[calc(100vh-140px)]">
-        <div className="max-w-md mx-auto mt-20 text-center p-10 bg-white border border-[#DCC6A8] rounded-2xl shadow-sm">
-          <h2 className="text-2xl font-bold text-[#292923] mb-4">Sign in required</h2>
-          <p className="text-[#829078] mb-6 font-medium">Please log in to your account to securely complete your purchase.</p>
-          <button onClick={() => navigate('/login')} className="bg-[#344B38] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#829078] transition-colors shadow-md">Log In to Checkout</button>
+      <div className="w-full bg-[#c4c3b6] min-h-[calc(100vh-140px)] py-16 px-4 sm:px-6 font-helvetica">
+        <div className="max-w-md mx-auto text-center p-8 bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px]">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-2">
+            AUTHENTICATION REQUIRED
+          </span>
+          <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-3">Collector Sign In Required</h2>
+          <p className="text-xs text-[#595855] mb-6">Please sign in to your folio to confirm dispatch and complete acquisition.</p>
+          <button 
+            onClick={() => navigate('/login?redirect=/checkout')} 
+            className="btn-pill-action py-3 px-8 text-xs uppercase tracking-wider"
+          >
+            Sign In to Checkout
+          </button>
         </div>
       </div>
     );
@@ -279,148 +297,209 @@ const Checkout = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-10 min-h-[calc(100vh-140px)]">
-        <div className="max-w-md mx-auto mt-20 text-center p-10 bg-white border border-[#DCC6A8] rounded-2xl shadow-sm">
-          <h2 className="text-2xl font-bold text-[#292923] mb-4">Your cart is empty</h2>
-          <button onClick={() => navigate('/')} className="bg-[#344B38] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#829078] transition-colors shadow-md">Continue Shopping</button>
+      <div className="w-full bg-[#c4c3b6] min-h-[calc(100vh-140px)] py-16 px-4 sm:px-6 font-helvetica">
+        <div className="max-w-md mx-auto text-center p-8 bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px]">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-2">
+            EMPTY FOLIO
+          </span>
+          <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-3">Your Bag is Empty</h2>
+          <p className="text-xs text-[#595855] mb-6">Select pieces from our catalog before proceeding to dispatch.</p>
+          <button 
+            onClick={() => navigate('/')} 
+            className="btn-pill-action py-3 px-8 text-xs uppercase tracking-wider"
+          >
+            Explore Gallery
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 min-h-[calc(100vh-140px)]">
-      <h1 className="text-3xl font-bold text-[#292923] mb-8">Secure Checkout</h1>
+    <div className="w-full bg-[#c4c3b6] text-[#000000] min-h-[calc(100vh-140px)] py-10 px-4 sm:px-6 font-helvetica">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8 border-b border-[#dfdcd5] pb-4">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
+            FINAL DISPATCH
+          </span>
+          <h1 className="font-davinci text-3xl sm:text-4xl font-medium text-[#000000]">
+            White Glove Checkout
+          </h1>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 items-start">
-        <div className="w-full">
-          <form onSubmit={handleCheckout}>
-            <div className="bg-white border border-[#DCC6A8]/60 rounded-2xl p-8 mb-6 shadow-sm">
-              <h3 className="text-xl font-bold text-[#292923] mb-6 pb-3 border-b border-[#DCC6A8]/40">Shipping Information</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 items-start">
+          <div className="w-full">
+            <form onSubmit={handleCheckout}>
               
-              {savedAddresses.length > 0 && (
-                <div className="mb-6 space-y-3">
-                  <label className="text-sm font-semibold text-[#292923] block mb-2">Select Address</label>
-                  {savedAddresses.map((addr, idx) => (
-                    <label key={idx} className={`flex items-start p-4 border rounded-xl cursor-pointer transition-colors ${selectedAddressIndex === idx ? 'border-[#344B38] bg-[#E9E9E0]/40' : 'border-[#DCC6A8]/60 hover:border-[#829078]'}`}>
-                      <input type="radio" name="addressSelect" checked={selectedAddressIndex === idx} onChange={() => handleAddressSelect(idx)} className="mt-1 mr-3 text-[#344B38] focus:ring-[#344B38]" />
-                      <div>
-                        <p className="font-semibold text-[#292923]">{addr.fullName} <span className="font-normal text-[#829078] text-sm ml-2">{addr.phone}</span></p>
-                        <p className="text-[#292923]/70 text-sm mt-1">{addr.address}, {addr.city}, {addr.state} - {addr.zip}</p>
-                      </div>
-                    </label>
-                  ))}
-                  <label className={`flex items-start p-4 border rounded-xl cursor-pointer transition-colors ${selectedAddressIndex === -1 ? 'border-[#344B38] bg-[#E9E9E0]/40' : 'border-[#DCC6A8]/60 hover:border-[#829078]'}`}>
-                    <input type="radio" name="addressSelect" checked={selectedAddressIndex === -1} onChange={() => handleAddressSelect(-1)} className="mt-1 mr-3 text-[#344B38] focus:ring-[#344B38]" />
-                    <span className="font-semibold text-[#292923]">Add a new address</span>
-                  </label>
-                </div>
-              )}
-
-              <div className={`grid grid-cols-1 md:grid-cols-2 gap-5 ${selectedAddressIndex !== -1 && savedAddresses.length > 0 ? 'hidden' : ''}`}>
-                <div className="md:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-[#292923]">Full Name</label>
-                  <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
-                </div>
-                <div className="md:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-[#292923]">Email Address</label>
-                  <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
-                </div>
-                <div className="md:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-[#292923]">Phone Number</label>
-                  <input required type="text" name="phone" value={formData.phone} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-[#292923]">
-                    ZIP / Postal Code
-                  </label>
-                  <input required type="text" name="zip" value={formData.zip} onChange={handlePincodeChange} placeholder="Enter 6-digit PIN" className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-[#292923]">City</label>
-                  <input required type="text" name="city" value={formData.city} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-white text-[#292923]" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-[#292923]">State</label>
-                  <input required type="text" name="state" value={formData.state} onChange={handleChange} className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-white text-[#292923]" />
-                </div>
-                <div className="md:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-[#292923]">Street Address</label>
-                  <input required={selectedAddressIndex === -1} type="text" name="address" value={formData.address} onChange={handleChange} placeholder="House No, Building, Street, Area" className="w-full p-2.5 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] transition-colors bg-[#F8F6F1] text-[#292923]" />
-                </div>
-                {selectedAddressIndex === -1 && savedAddresses.length > 0 && (
-                  <div className="md:col-span-2 mt-2">
-                    <label className="flex items-center cursor-pointer">
-                      <input type="checkbox" checked={saveNewAddress} onChange={(e) => setSaveNewAddress(e.target.checked)} className="mr-2 rounded border-[#DCC6A8] text-[#344B38] focus:ring-[#344B38]" />
-                      <span className="text-sm font-medium text-[#292923]">Save this address for future orders</span>
+              {/* Shipping Address Card */}
+              <div className="bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] p-6 sm:p-8 mb-6">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
+                  DESTINATION
+                </span>
+                <h3 className="font-davinci text-2xl font-medium text-[#000000] mb-5 pb-3 border-b border-[#dfdcd5]">
+                  Recipient & Delivery Address
+                </h3>
+                
+                {savedAddresses.length > 0 && (
+                  <div className="mb-6 space-y-2.5">
+                    <label className="text-[11px] uppercase tracking-wider text-[#595855] block mb-2">Saved Addresses</label>
+                    {savedAddresses.map((addr, idx) => (
+                      <label 
+                        key={idx} 
+                        className={`flex items-start p-3.5 border rounded-[9px] cursor-pointer transition-colors ${
+                          selectedAddressIndex === idx 
+                            ? 'border-[#000000] bg-[#ffffff]' 
+                            : 'border-[#dfdcd5] hover:border-[#000000] bg-[#e7e5e4]'
+                        }`}
+                      >
+                        <input 
+                          type="radio" 
+                          name="addressSelect" 
+                          checked={selectedAddressIndex === idx} 
+                          onChange={() => handleAddressSelect(idx)} 
+                          className="mt-1 mr-3 text-[#000000]" 
+                        />
+                        <div className="text-xs">
+                          <p className="font-medium text-[#000000]">{addr.fullName} <span className="text-[#595855] ml-2">{addr.phone}</span></p>
+                          <p className="text-[#595855] mt-0.5">{addr.address}, {addr.city}, {addr.state} - {addr.zip}</p>
+                        </div>
+                      </label>
+                    ))}
+                    <label 
+                      className={`flex items-start p-3.5 border rounded-[9px] cursor-pointer transition-colors ${
+                        selectedAddressIndex === -1 
+                          ? 'border-[#000000] bg-[#ffffff]' 
+                          : 'border-[#dfdcd5] hover:border-[#000000] bg-[#e7e5e4]'
+                      }`}
+                    >
+                      <input 
+                        type="radio" 
+                        name="addressSelect" 
+                        checked={selectedAddressIndex === -1} 
+                        onChange={() => handleAddressSelect(-1)} 
+                        className="mt-1 mr-3 text-[#000000]" 
+                      />
+                      <span className="text-xs font-medium text-[#000000]">Dispatch to a different address</span>
                     </label>
                   </div>
                 )}
-              </div>
-            </div>
 
-            <div className="bg-white border border-[#DCC6A8]/60 rounded-2xl p-8 mb-6 shadow-sm">
-              <h3 className="text-xl font-bold text-[#292923] mb-6 pb-3 border-b border-[#DCC6A8]/40">Payment</h3>
-              <div className="border border-[#DCC6A8]/60 rounded-xl bg-[#E9E9E0]/40 p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <strong className="text-[#292923] block">Razorpay Secure Payment</strong>
-                  <p className="text-sm text-[#829078] mt-1 font-medium">Pay via UPI, Cards, Netbanking, or Wallets</p>
-                </div>
-                <div className="flex gap-3">
-                  <div className="flex items-center justify-center px-3 py-1.5 bg-white border border-[#DCC6A8]/60 rounded-xl shadow-sm h-10 w-16">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" className="h-4 object-cover" />
+                <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${selectedAddressIndex !== -1 && savedAddresses.length > 0 ? 'hidden' : ''}`}>
+                  <div className="md:col-span-2 flex flex-col gap-1">
+                    <label className="text-[11px] uppercase tracking-wider text-[#595855]">Full Name</label>
+                    <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full px-3 py-2 border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] transition-colors bg-[#ffffff] text-xs text-[#000000]" />
                   </div>
-                  <div className="flex items-center justify-center gap-2 px-3 py-1.5 bg-white border border-[#DCC6A8]/60 rounded-xl shadow-sm h-10">
-                    <img src={paymentImage} alt="Visa" className="h-4 object-cover" />
-                    <div className="w-[1px] h-4 bg-gray-200"></div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-4 object-cover" />
+                  <div className="md:col-span-2 flex flex-col gap-1">
+                    <label className="text-[11px] uppercase tracking-wider text-[#595855]">Email Address</label>
+                    <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full px-3 py-2 border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] transition-colors bg-[#ffffff] text-xs text-[#000000]" />
                   </div>
+                  <div className="md:col-span-2 flex flex-col gap-1">
+                    <label className="text-[11px] uppercase tracking-wider text-[#595855]">Phone Number</label>
+                    <input required type="text" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-3 py-2 border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] transition-colors bg-[#ffffff] text-xs text-[#000000]" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[11px] uppercase tracking-wider text-[#595855]">PIN Code</label>
+                    <input required type="text" name="zip" value={formData.zip} onChange={handlePincodeChange} placeholder="6-digit PIN" className="w-full px-3 py-2 border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] transition-colors bg-[#ffffff] text-xs text-[#000000]" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[11px] uppercase tracking-wider text-[#595855]">City</label>
+                    <input required type="text" name="city" value={formData.city} onChange={handleChange} className="w-full px-3 py-2 border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] transition-colors bg-[#ffffff] text-xs text-[#000000]" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[11px] uppercase tracking-wider text-[#595855]">State</label>
+                    <input required type="text" name="state" value={formData.state} onChange={handleChange} className="w-full px-3 py-2 border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] transition-colors bg-[#ffffff] text-xs text-[#000000]" />
+                  </div>
+                  <div className="md:col-span-2 flex flex-col gap-1">
+                    <label className="text-[11px] uppercase tracking-wider text-[#595855]">Street Address & Landmark</label>
+                    <input required={selectedAddressIndex === -1} type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Apartment, Studio, Street name" className="w-full px-3 py-2 border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] transition-colors bg-[#ffffff] text-xs text-[#000000]" />
+                  </div>
+                  {selectedAddressIndex === -1 && savedAddresses.length > 0 && (
+                    <div className="md:col-span-2 mt-2">
+                      <label className="flex items-center cursor-pointer text-xs text-[#595855]">
+                        <input type="checkbox" checked={saveNewAddress} onChange={(e) => setSaveNewAddress(e.target.checked)} className="mr-2 text-[#000000]" />
+                        <span>Preserve this address in your collector folio</span>
+                      </label>
+                    </div>
+                  )}
                 </div>
               </div>
-              <button type="submit" disabled={loading} className="w-full bg-[#344B38] hover:bg-[#829078] text-white font-bold py-4 px-4 rounded-xl transition-colors disabled:opacity-70 shadow-lg shadow-[#344B38]/20">
-                {loading ? 'Processing...' : 'Confirm Order & Pay'}
-              </button>
-            </div>
-          </form>
-        </div>
 
-        <div className="bg-white border border-[#DCC6A8]/60 rounded-2xl p-8 sticky top-24 shadow-sm">
-          <h3 className="text-xl font-bold text-[#292923] mb-6">In your bag</h3>
-          <div className="flex flex-col gap-4 mb-6 max-h-[40vh] overflow-y-auto pr-2">
-            {cartItems.map(item => (
-              <div key={item.id} className="flex gap-4 items-center relative group bg-[#F8F6F1] p-2.5 rounded-xl border border-transparent hover:border-[#DCC6A8] transition-colors">
-                <img src={item.image_url ? item.image_url.split(',')[0] : 'https://via.placeholder.com/100'} alt={item.name} className="w-16 h-16 object-cover rounded-xl border border-[#DCC6A8]/50 bg-white shrink-0" />
-                <div className="flex flex-col gap-1 flex-1">
-                  <h4 className="text-sm font-semibold text-[#292923] line-clamp-2 pr-6">{item.name}</h4>
-                  <span className="text-xs text-[#829078]">Qty: {item.quantity}</span>
-                  <strong className="text-[#344B38]">₹{(item.price * item.quantity).toFixed(2)}</strong>
+              {/* Payment Method Card */}
+              <div className="bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] p-6 sm:p-8 mb-6">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
+                  PAYMENT CLEARING
+                </span>
+                <h3 className="font-davinci text-2xl font-medium text-[#000000] mb-5 pb-3 border-b border-[#dfdcd5]">
+                  Instant & Encrypted Clearance
+                </h3>
+                <div className="border border-[#dfdcd5] rounded-[9px] bg-[#ffffff] p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <strong className="text-xs font-medium text-[#000000] block">Razorpay Encrypted Gateway</strong>
+                    <p className="text-[11px] text-[#595855] mt-0.5">UPI (Google Pay, PhonePe, Paytm), Netbanking, Credit & Debit Cards</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="flex items-center justify-center px-3 py-1 bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] h-8">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" className="h-3.5 object-contain" />
+                    </div>
+                  </div>
                 </div>
+                
                 <button 
-                  onClick={() => removeFromCart(item.id)}
-                  className="absolute top-2 right-2 text-gray-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-xl transition-colors"
-                  title="Remove item"
-                  type="button"
+                  type="submit" 
+                  disabled={loading} 
+                  className="btn-pill-action w-full py-4 text-xs uppercase tracking-widest disabled:opacity-50"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  {loading ? 'Clearing Acquisition...' : `Authorize & Acquire — ₹${Number(cartTotal || 0).toFixed(2)}`}
                 </button>
               </div>
-            ))}
+
+            </form>
           </div>
 
-          <div className="border-t border-[#DCC6A8]/50 pt-6">
-            <div className="flex justify-between mb-3 text-sm text-[#292923]/80 font-medium">
-              <span>Subtotal</span>
-              <span>₹{cartTotal.toFixed(2)}</span>
+          {/* Right: In Your Bag Summary */}
+          <div className="bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] p-6 sticky top-24">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
+              FOLIO SUMMARY
+            </span>
+            <h3 className="font-davinci text-2xl font-medium text-[#000000] mb-4 pb-3 border-b border-[#dfdcd5]">
+              Acquisitions ({cartItems.length})
+            </h3>
+            
+            <div className="flex flex-col gap-3 mb-6 max-h-[38vh] overflow-y-auto pr-1">
+              {cartItems.map(item => (
+                <div key={item.id} className="flex gap-3 items-center bg-[#ffffff] p-2.5 rounded-[9px] border border-[#dfdcd5]">
+                  <img 
+                    src={item.image_url ? item.image_url.split(',')[0] : '/favicon.png'} 
+                    alt={item.name} 
+                    className="w-12 h-12 object-cover rounded-[9px] border border-[#dfdcd5] bg-[#c4c3b6] shrink-0" 
+                  />
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <h4 className="font-davinci text-sm font-medium text-[#000000] truncate">{item.name}</h4>
+                    <div className="flex justify-between items-center text-xs mt-0.5">
+                      <span className="text-[11px] text-[#595855]">Qty: {item.quantity}</span>
+                      <strong className="text-xs text-[#000000]">₹{((Number(item.price) || 0) * (item.quantity || 1)).toFixed(2)}</strong>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="flex justify-between mb-3 text-sm text-[#292923]/80 font-medium">
-              <span>Shipping</span>
-              <span className="text-[#344B38] font-bold">Free</span>
-            </div>
-            <div className="flex justify-between mt-4 pt-4 border-t border-[#DCC6A8]/50 font-bold text-lg text-[#344B38]">
-              <span>Total</span>
-              <span>₹{cartTotal.toFixed(2)}</span>
+
+            <div className="border-t border-[#dfdcd5] pt-4 space-y-2 text-xs">
+              <div className="flex justify-between text-[#595855]">
+                <span>Subtotal</span>
+                <span className="text-[#000000] font-medium">₹{Number(cartTotal || 0).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-[#595855]">
+                <span>Delivery</span>
+                <span className="text-[#000000] font-medium uppercase tracking-wider text-[11px]">Free White Glove</span>
+              </div>
+              <div className="flex justify-between pt-3 border-t border-[#dfdcd5] font-medium text-sm text-[#000000]">
+                <span>Total Due</span>
+                <span className="text-base font-semibold">₹{Number(cartTotal || 0).toFixed(2)}</span>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Minus, Plus, Trash2, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const CartPage = () => {
@@ -9,108 +9,171 @@ const CartPage = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-10 min-h-[calc(100vh-140px)]">
-        <div className="max-w-md mx-auto mt-20 text-center p-10 bg-white border border-[#DCC6A8] rounded-2xl shadow-sm">
-          <h2 className="text-2xl font-bold text-[#292923] mb-4">Your cart is empty</h2>
-          <p className="text-[#829078] mb-6 font-medium">Looks like you haven't added anything to your cart yet.</p>
-          <button className="bg-[#344B38] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#829078] transition-colors shadow-md" onClick={() => navigate('/')}>Start Shopping</button>
+      <div className="w-full bg-[#c4c3b6] min-h-[calc(100vh-140px)] py-16 px-4 sm:px-6">
+        <div className="max-w-md mx-auto text-center p-8 bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px]">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] font-helvetica block mb-2">
+            EMPTY FOLIO
+          </span>
+          <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-3">Your Bag is Empty</h2>
+          <p className="text-xs text-[#595855] font-helvetica mb-6">
+            You have not selected any floral or artisanal acquisitions yet.
+          </p>
+          <button 
+            className="btn-pill-action py-3 px-6 text-xs uppercase tracking-wider" 
+            onClick={() => navigate('/products')}
+          >
+            <span>Explore Collection</span>
+            <ArrowRight size={13} />
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 min-h-[calc(100vh-140px)]">
-      <h1 className="text-3xl font-bold text-[#292923] mb-8">Shopping Cart</h1>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-10 items-start">
-        <div className="w-full">
-          <table className="w-full border-collapse hidden md:table">
-            <thead>
-              <tr className="border-b-2 border-[#DCC6A8]/60">
-                <th className="text-left py-4 text-sm font-semibold text-[#829078] uppercase">Product</th>
-                <th className="text-left py-4 text-sm font-semibold text-[#829078] uppercase">Price</th>
-                <th className="text-left py-4 text-sm font-semibold text-[#829078] uppercase">Quantity</th>
-                <th className="text-left py-4 text-sm font-semibold text-[#829078] uppercase">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cartItems.map((item) => (
-                <tr key={item.id} className="border-b border-[#DCC6A8]/40">
-                  <td className="py-6 pr-4">
-                    <div className="flex gap-5 items-center">
-                      <img src={item.image_url ? item.image_url.split(',')[0] : 'https://via.placeholder.com/100'} alt={item.name} className="w-24 h-24 object-cover rounded-xl border border-[#DCC6A8]/50 bg-[#F8F6F1]" />
-                      <div className="flex flex-col gap-1">
-                        <Link to={`/product/${item.id}`} className="font-semibold text-[#292923] hover:text-[#344B38] transition-colors">{item.name}</Link>
-                        <span className="text-sm text-[#829078]">{item.category?.name || 'Category'}</span>
-                        <button className="flex items-center gap-1 text-sm text-red-600 hover:underline mt-1 w-max p-0" onClick={() => removeFromCart(item.id)}>
-                          <Trash2 size={14} /> Remove
-                        </button>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-6 pr-4 font-semibold text-[#292923]">₹{Number(item.price).toFixed(2)}</td>
-                  <td className="py-6 pr-4">
-                    <div className="inline-flex items-center border border-[#DCC6A8] rounded-xl bg-white">
-                      <button className="p-2 hover:bg-[#F8F6F1] transition-colors" onClick={() => updateQuantity(item.id, item.quantity - 1)}><Minus size={14}/></button>
-                      <span className="min-w-[30px] text-center font-semibold text-[#292923]">{item.quantity}</span>
-                      <button 
-                        className={`p-2 hover:bg-[#F8F6F1] transition-colors ${item.quantity >= item.stock ? 'opacity-50 cursor-not-allowed' : ''}`} 
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        disabled={item.quantity >= item.stock}
-                        title={item.quantity >= item.stock ? "Maximum stock reached" : ""}
-                      ><Plus size={14}/></button>
-                    </div>
-                  </td>
-                  <td className="py-6 font-bold text-[#344B38]"> ₹{(item.price * item.quantity).toFixed(2)}
-                  </td>
+    <div className="w-full bg-[#c4c3b6] text-[#000000] min-h-[calc(100vh-140px)] py-12 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Header */}
+        <div className="mb-8 border-b border-[#dfdcd5] pb-4">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] font-helvetica block mb-1">
+            BAG REVIEW
+          </span>
+          <h1 className="font-davinci text-3xl sm:text-4xl font-medium text-[#000000]">
+            Acquisition Folio ({cartItems.length} items)
+          </h1>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
+          
+          {/* Items Table / List */}
+          <div className="bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] p-5 sm:p-6 font-helvetica">
+            
+            {/* Desktop Table View */}
+            <table className="w-full border-collapse hidden md:table">
+              <thead>
+                <tr className="border-b border-[#dfdcd5] text-[10px] uppercase tracking-wider text-[#595855]">
+                  <th className="text-left py-3 font-medium">Acquisition</th>
+                  <th className="text-left py-3 font-medium">Unit Valuation</th>
+                  <th className="text-left py-3 font-medium">Quantity</th>
+                  <th className="text-right py-3 font-medium">Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-
-          {/* Mobile view */}
-          <div className="md:hidden flex flex-col gap-4">
-             {cartItems.map((item) => (
-               <div key={item.id} className="border border-[#DCC6A8]/50 rounded-2xl bg-white p-4 flex gap-4">
-                  <img src={item.image_url ? item.image_url.split(',')[0] : 'https://via.placeholder.com/100'} alt={item.name} className="w-20 h-20 object-cover rounded-xl border border-[#DCC6A8]/50" />
-                  <div className="flex-1 flex flex-col">
-                    <Link to={`/product/${item.id}`} className="font-semibold text-[#292923] hover:text-[#344B38] line-clamp-1">{item.name}</Link>
-                    <div className="font-bold text-[#344B38] my-1">₹{Number(item.price).toFixed(2)}</div>
-                    <div className="mt-auto flex items-center justify-between">
-                      <div className="inline-flex items-center border border-[#DCC6A8] rounded-xl bg-white">
-                        <button className="p-1.5 hover:bg-[#F8F6F1]" onClick={() => updateQuantity(item.id, item.quantity - 1)}><Minus size={14}/></button>
-                        <span className="min-w-[24px] text-center font-medium text-sm text-[#292923]">{item.quantity}</span>
+              </thead>
+              <tbody>
+                {cartItems.map((item) => (
+                  <tr key={item.id} className="border-b border-[#dfdcd5]/60 last:border-0">
+                    <td className="py-4 pr-4">
+                      <div className="flex gap-4 items-center">
+                        <img 
+                          src={item.image_url ? item.image_url.split(',')[0] : '/favicon.png'} 
+                          alt={item.name} 
+                          className="w-16 h-16 object-cover rounded-[9px] border border-[#dfdcd5] bg-[#c4c3b6]" 
+                        />
+                        <div className="flex flex-col">
+                          <Link to={`/product/${item.id}`} className="font-davinci text-lg font-medium text-[#000000] hover:underline">
+                            {item.name}
+                          </Link>
+                          <span className="text-[11px] text-[#595855]">{item.category?.name || 'Artifact'}</span>
+                          <button 
+                            className="flex items-center gap-1 text-[11px] text-[#595855] hover:text-red-700 mt-1 w-max" 
+                            onClick={() => removeFromCart(item.id)}
+                          >
+                            <Trash2 size={12} /> Remove
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-4 pr-4 text-xs font-medium text-[#000000]">
+                      <span>₹{Number(item.price).toFixed(2)}</span>
+                    </td>
+                    <td className="py-4 pr-4">
+                      <div className="inline-flex items-center border border-[#dfdcd5] rounded-[28.8px] bg-[#ffffff]">
+                        <button className="px-2.5 py-1 text-[#000000] hover:bg-[#e7e5e4] transition-colors rounded-l-[28.8px]" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                          <Minus size={11}/>
+                        </button>
+                        <span className="min-w-[28px] text-center text-xs font-medium text-[#000000]">{item.quantity}</span>
                         <button 
-                          className={`p-1.5 hover:bg-[#F8F6F1] ${item.quantity >= item.stock ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                          className={`px-2.5 py-1 text-[#000000] hover:bg-[#e7e5e4] transition-colors rounded-r-[28.8px] ${item.quantity >= item.stock ? 'opacity-40 cursor-not-allowed' : ''}`} 
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           disabled={item.quantity >= item.stock}
-                          title={item.quantity >= item.stock ? "Maximum stock reached" : ""}
-                        ><Plus size={14}/></button>
+                        >
+                          <Plus size={11}/>
+                        </button>
                       </div>
-                      <button className="text-red-600 p-1" onClick={() => removeFromCart(item.id)}><Trash2 size={16}/></button>
+                    </td>
+                    <td className="py-4 text-right text-xs font-medium text-[#000000]">
+                      ₹{((Number(item.price) || 0) * (item.quantity || 1)).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Mobile View */}
+            <div className="md:hidden flex flex-col gap-4">
+              {cartItems.map((item) => (
+                <div key={item.id} className="border-b border-[#dfdcd5] pb-4 last:border-0 flex gap-3">
+                  <img 
+                    src={item.image_url ? item.image_url.split(',')[0] : '/favicon.png'} 
+                    alt={item.name} 
+                    className="w-16 h-16 object-cover rounded-[9px] border border-[#dfdcd5]" 
+                  />
+                  <div className="flex-1 flex flex-col">
+                    <Link to={`/product/${item.id}`} className="font-davinci text-base font-medium text-[#000000] line-clamp-1 hover:underline">
+                      {item.name}
+                    </Link>
+                    <span className="text-xs font-medium text-[#000000] my-0.5">₹{Number(item.price).toFixed(2)}</span>
+                    <div className="mt-2 flex items-center justify-between">
+                      <div className="inline-flex items-center border border-[#dfdcd5] rounded-[28.8px] bg-[#ffffff]">
+                        <button className="px-2 py-0.5" onClick={() => updateQuantity(item.id, item.quantity - 1)}><Minus size={10}/></button>
+                        <span className="min-w-[22px] text-center text-xs font-medium">{item.quantity}</span>
+                        <button className="px-2 py-0.5" onClick={() => updateQuantity(item.id, item.quantity + 1)} disabled={item.quantity >= item.stock}><Plus size={10}/></button>
+                      </div>
+                      <button className="text-[#595855] hover:text-red-700 p-1" onClick={() => removeFromCart(item.id)}><Trash2 size={13}/></button>
                     </div>
                   </div>
-               </div>
-             ))}
-          </div>
-        </div>
+                </div>
+              ))}
+            </div>
 
-        <div className="bg-white p-8 rounded-2xl border border-[#DCC6A8]/60 shadow-sm sticky top-24">
-          <h2 className="text-xl font-bold text-[#292923] mb-6 pb-4 border-b border-[#DCC6A8]/40">Order Summary</h2>
-          <div className="flex justify-between mb-4 text-[#292923]/80 font-medium">
-            <span>Subtotal</span>
-            <span>₹{cartTotal.toFixed(2)}</span>
           </div>
-          <div className="flex justify-between mb-4 text-[#292923]/80 font-medium">
-            <span>Shipping</span>
-            <span className="text-[#344B38] font-bold">Free</span>
+
+          {/* Folio Summary Card */}
+          <div className="bg-[#e7e5e4] p-6 rounded-[9px] border border-[#dfdcd5] font-helvetica sticky top-24">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
+              ESTIMATE
+            </span>
+            <h2 className="font-davinci text-2xl font-medium text-[#000000] mb-5 pb-3 border-b border-[#dfdcd5]">
+              Summary & Courier
+            </h2>
+            <div className="flex justify-between mb-3 text-xs text-[#595855]">
+              <span>Subtotal</span>
+              <span className="text-[#000000] font-medium">₹{Number(cartTotal || 0).toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between mb-3 text-xs text-[#595855]">
+              <span>Florentine White Glove Delivery</span>
+              <span className="text-[#000000] font-medium uppercase tracking-wider text-[11px]">Complimentary</span>
+            </div>
+            <div className="flex justify-between mb-3 text-xs text-[#595855]">
+              <span>Deckle-Edge Wax Sealed Card</span>
+              <span className="text-[#000000] font-medium uppercase tracking-wider text-[11px]">Included</span>
+            </div>
+            <div className="flex justify-between mt-5 pt-4 border-t border-[#dfdcd5] font-medium text-sm text-[#000000]">
+              <span>Grand Total</span>
+              <span className="text-base">₹{Number(cartTotal || 0).toFixed(2)}</span>
+            </div>
+            <button 
+              className="btn-pill-action w-full py-3.5 text-xs uppercase tracking-widest mt-6" 
+              onClick={() => navigate('/checkout')}
+            >
+              <span>Proceed to Checkout</span>
+              <ArrowRight size={13} />
+            </button>
+            <p className="text-[10px] text-center text-[#595855] mt-3">
+              Secure payment via Razorpay • 100% Guaranteed Freshness
+            </p>
           </div>
-          <div className="flex justify-between mt-4 pt-4 border-t border-[#DCC6A8]/50 font-bold text-lg text-[#344B38]">
-            <span>Total</span>
-            <span>₹{cartTotal.toFixed(2)}</span>
-          </div>
-          <button className="w-full bg-[#344B38] text-white py-3.5 rounded-xl font-bold mt-6 hover:bg-[#829078] transition-colors shadow-md" onClick={() => navigate('/checkout')}>Proceed to Checkout</button>
+
         </div>
       </div>
     </div>

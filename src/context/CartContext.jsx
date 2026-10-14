@@ -15,26 +15,60 @@ export const CartProvider = ({ children }) => {
   // Load cart from DB and LocalStorage on mount/user change
   useEffect(() => {
     const fetchCart = async () => {
-      if (user) {
-        // Quick load from local storage
-        const saved = localStorage.getItem(`cart_${user.id}`);
-        if (saved) {
-          setCartItems(JSON.parse(saved));
-        }
+      try {
+        if (user) {
+          const userKey = `cart_${user.id}`;
+          const saved = localStorage.getItem(userKey);
+          let initialItems = saved ? JSON.parse(saved) : [];
 
-        // Fetch latest from DB
-        const { data, error } = await supabase
-          .from('user_carts')
-          .select('cart_items')
-          .eq('user_id', user.id)
-          .single();
+          // Also check for guest cart items to merge
+          const guestSaved = localStorage.getItem('cart_guest');
+          if (guestSaved) {
+            try {
+              const guestItems = JSON.parse(guestSaved);
+              if (Array.isArray(guestItems) && guestItems.length > 0) {
+                guestItems.forEach(gItem => {
+                  if (gItem && gItem.id) {
+                    const match = initialItems.find(i => i.id === gItem.id);
+                    if (match) {
+                      match.quantity += (gItem.quantity || 1);
+                    } else {
+                      initialItems.push(gItem);
+                    }
+                  }
+                });
+                localStorage.removeItem('cart_guest');
+              }
+            } catch (err) {}
+          }
 
-        if (data && data.cart_items) {
-          setCartItems(data.cart_items);
-          localStorage.setItem(`cart_${user.id}`, JSON.stringify(data.cart_items));
+          if (initialItems.length > 0) {
+            setCartItems(initialItems.filter(i => i && i.id));
+          }
+
+          // Fetch latest from DB
+          const { data } = await supabase
+            .from('user_carts')
+            .select('cart_items')
+            .eq('user_id', user.id)
+            .single();
+
+          if (data && Array.isArray(data.cart_items) && data.cart_items.length > 0) {
+            setCartItems(data.cart_items.filter(i => i && i.id));
+            localStorage.setItem(userKey, JSON.stringify(data.cart_items));
+          }
+        } else {
+          // Guest mode: load from localStorage
+          const guestSaved = localStorage.getItem('cart_guest');
+          if (guestSaved) {
+            const parsed = JSON.parse(guestSaved);
+            if (Array.isArray(parsed)) {
+              setCartItems(parsed.filter(i => i && i.id));
+            }
+          }
         }
-      } else {
-        setCartItems([]);
+      } catch (err) {
+        console.warn('Error loading cart:', err);
       }
       setIsInitialLoad(false);
     };
@@ -45,22 +79,23 @@ export const CartProvider = ({ children }) => {
   // Save cart to DB and LocalStorage when cartItems change
   useEffect(() => {
     const saveCart = async () => {
-      if (user && !isInitialLoad) {
-        localStorage.setItem(`cart_${user.id}`, JSON.stringify(cartItems));
+      if (isInitialLoad) return;
+      const cleanItems = cartItems.filter(i => i && i.id);
 
-        const { error } = await supabase
+      if (user) {
+        localStorage.setItem(`cart_${user.id}`, JSON.stringify(cleanItems));
+
+        await supabase
           .from('user_carts')
           .upsert({
             user_id: user.id,
-            cart_items: cartItems,
+            cart_items: cleanItems,
             updated_at: new Date().toISOString(),
           }, {
             onConflict: 'user_id'
           });
-
-        if (error) {
-          console.error('Error saving cart to DB:', error);
-        }
+      } else {
+        localStorage.setItem('cart_guest', JSON.stringify(cleanItems));
       }
     };
 
@@ -68,34 +103,48 @@ export const CartProvider = ({ children }) => {
   }, [cartItems, user, isInitialLoad]);
 
   const addToCart = (product, quantity = 1) => {
-    if (!user) {
-      setShowLoginModal(true);
+    if (!product || !product.id) {
+      console.warn('Invalid product passed to addToCart:', product);
+      return;
+    }
+
+    const existingItem = cartItems.find(item => item && item.id === product.id);
+    if (existingItem) {
+      setIsCartOpen(true);
+      toast('Item already in your bag', {
+        icon: '🛍️',
+        style: {
+          background: '#000000',
+          color: '#ffffff',
+          borderRadius: '28.8px',
+          fontSize: '12px',
+          fontFamily: 'Inter, sans-serif'
+        },
+      });
       return;
     }
 
     setCartItems(prev => {
-      const existing = prev.find(item => item.id === product.id);
-      if (existing) {
-        return prev.map(item => 
-          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
-        );
-      }
-      return [...prev, { ...product, quantity }];
+      const cleanPrev = Array.isArray(prev) ? prev.filter(i => i && i.id) : [];
+      return [...cleanPrev, { ...product, quantity }];
     });
-    setIsCartOpen(true);
-    toast.success('Added to cart!', {
+
+    toast.success('Acquisition added to bag', {
       style: {
-        background: '#003F3B',
-        color: '#fff',
+        background: '#000000',
+        color: '#ffffff',
+        borderRadius: '28.8px',
+        fontSize: '12px',
+        fontFamily: 'Inter, sans-serif'
       },
     });
   };
 
   const removeFromCart = (id) => {
     setCartItems(prev => prev.filter(item => item.id !== id));
-    toast('Item removed from cart', {
+    toast('Item removed from bag', {
       icon: '🗑️',
-      style: { background: '#333', color: '#fff' }
+      style: { background: '#000000', color: '#ffffff', borderRadius: '28.8px', fontSize: '12px', fontFamily: 'Inter, sans-serif' }
     });
   };
 
@@ -108,9 +157,9 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
-    toast('Cart cleared', {
+    toast('Bag cleared', {
       icon: '🗑️',
-      style: { background: '#333', color: '#fff' }
+      style: { background: '#000000', color: '#ffffff', borderRadius: '28.8px', fontSize: '12px', fontFamily: 'Inter, sans-serif' }
     });
   };
 

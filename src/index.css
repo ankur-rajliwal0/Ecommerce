@@ -1,65 +1,196 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
-@import url('https://fonts.cdnfonts.com/css/google-sans');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* Brand Palette Tokens */
-  --color-primary-forest: #344B38;
-  --color-primary-hover: #263829;
-  --color-background-cream: #F8F6F1;
-  --color-secondary-sage: #829078;
-  --color-accent-beige: #DCC6A8;
-  --color-text-charcoal: #292923;
-  --color-surface-sage: #E9E9E0;
+  /* Structured / Renaissance Gallery on Putty Paper Palette */
+  --color-putty: #c4c3b6;
+  --color-ink: #000000;
+  --color-bone: #e7e5e4;
+  --color-chalk: #ebebeb;
+  --color-vellum: #dfdcd5;
+  --color-graphite: #595855;
+  --color-ash: #808080;
+  --color-paper: #ffffff;
 
-  /* Aliased tokens for full application consistency */
-  --color-primary-teal: #344B38;
-  --color-secondary-teal: #829078;
-  --color-accent-orange: #DCC6A8;
-  --color-surface: #E9E9E0;
-  --color-bg-white: #FFFFFF;
-  --color-bg-light-gray: #F8F6F1;
-  --color-border-gray: #DCC6A8;
+  /* Aliases for backwards compatibility with existing UI components */
+  --color-primary-forest: #000000;
+  --color-primary-hover: #1f1f1d;
+  --color-background-cream: #c4c3b6;
+  --color-secondary-sage: #595855;
+  --color-accent-beige: #dfdcd5;
+  --color-text-charcoal: #000000;
+  --color-surface-sage: #e7e5e4;
 
-  --font-sans: 'Google Sans', sans-serif;
-  --font-heading: 'Montserrat', sans-serif;
+  --color-primary-teal: #000000;
+  --color-secondary-teal: #595855;
+  --color-accent-orange: #dfdcd5;
+  --color-surface: #e7e5e4;
+  --color-bg-white: #ffffff;
+  --color-bg-light-gray: #e7e5e4;
+  --color-border-gray: #dfdcd5;
+
+  /* Typography */
+  --font-davinci: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-helvetica: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-helvetica);
+  --font-heading: var(--font-davinci);
+  --font-serif: var(--font-davinci);
+
+  /* Typography Scale */
+  --text-body-sm: 15px;
+  --text-subheading: 22px;
+  --text-heading-sm: 26px;
+  --text-heading: 43px;
+  --text-heading-lg: 52px;
+  --text-display: 374px;
+
+
+  /* Border Radii */
+  --radius-sm: 2px;
+  --radius-lg: 9px;
+  --radius-3xl: 28.8px;
+  --radius-cards: 9px;
+  --radius-links: 2px;
+  --radius-buttons: 28.8px;
 }
 
 :root {
-  --primary-forest: #344B38;
-  --background-cream: #F8F6F1;
-  --secondary-sage: #829078;
-  --accent-beige: #DCC6A8;
-  --text-charcoal: #292923;
-  --surface-sage: #E9E9E0;
+  --color-putty: #c4c3b6;
+  --color-ink: #000000;
+  --color-bone: #e7e5e4;
+  --color-chalk: #ebebeb;
+  --color-vellum: #dfdcd5;
+  --color-graphite: #595855;
+  --color-ash: #808080;
+  --color-paper: #ffffff;
 
-  /* Official Border Radius Hierarchy */
-  --radius-card: 1rem;       /* 16px - rounded-2xl */
-  --radius-control: 0.75rem;  /* 12px - rounded-xl */
-  --radius-pill: 9999px;     /* rounded-full */
+  --font-davinci: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-helvetica: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --radius-cards: 9px;
+  --radius-links: 2px;
+  --radius-buttons: 28.8px;
+
+  /* Legacy mappings */
+  --primary-forest: #000000;
+  --background-cream: #c4c3b6;
+  --secondary-sage: #595855;
+  --accent-beige: #dfdcd5;
+  --text-charcoal: #000000;
+  --surface-sage: #e7e5e4;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: #F8F6F1;
-    color: #292923;
+    background-color: #c4c3b6;
+    color: #000000;
   }
   body {
-    background-color: #F8F6F1;
-    color: #292923;
-    font-family: var(--font-sans);
+    background-color: #c4c3b6;
+    color: #000000;
+    font-family: var(--font-helvetica);
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-    color: #292923;
+    font-family: var(--font-davinci);
+    color: #000000;
+    font-weight: 500;
+    letter-spacing: -0.02em;
   }
 }
 
-@keyframes skeletonShimmer {
+/* Gallery & Editorial Utility Classes */
+.font-davinci {
+  font-family: var(--font-davinci);
+}
+
+.font-helvetica {
+  font-family: var(--font-helvetica);
+}
+
+/* Hairline borders as specified: mid-tone warm gray that reads as printed page edge */
+.border-vellum {
+  border-color: #dfdcd5;
+}
+
+.border-hairline {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #dfdcd5;
+}
+
+/* Pill Action Button: Filled black pill with white text */
+.btn-pill-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: var(--font-helvetica);
+  font-size: 12px;
+  font-weight: 400;
+  padding: 9px 17px;
+  border-radius: 28.8px;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.btn-pill-action:hover {
+  opacity: 0.85;
+}
+
+.btn-pill-action:active {
+  transform: scale(0.98);
+}
+
+/* Ghost Text Link: Text only, no background, underline on hover */
+.ghost-link {
+  color: #000000;
+  font-family: var(--font-helvetica);
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.ghost-link:hover {
+  text-decoration: underline;
+}
+
+/* Notched corner product card geometry */
+.notched-card {
+  clip-path: polygon(
+    14px 0%, 
+    calc(100% - 14px) 0%, 
+    100% 14px, 
+    100% calc(100% - 14px), 
+    calc(100% - 14px) 100%, 
+    14px 100%, 
+    0% calc(100% - 14px), 
+    0% 14px
+  );
+}
+
+/* Hexagonal Nav Indicator Icon (12px stroke) */
+.hex-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border: 1px solid currentColor;
+}
+
+/* Subtle Shimmer for skeletons on bone surface */
+@keyframes skeletonShimmerGallery {
   0% {
     background-position: -200% 0;
   }
@@ -71,101 +202,41 @@
 .skeleton-shimmer {
   background: linear-gradient(
     90deg,
-    #E9E9E0 0%,
-    #F4F3ED 50%,
-    #E9E9E0 100%
+    #dfdcd5 0%,
+    #e7e5e4 50%,
+    #dfdcd5 100%
   );
   background-size: 200% 100%;
-  animation: skeletonShimmer 1.8s ease-in-out infinite;
+  animation: skeletonShimmerGallery 1.8s ease-in-out infinite;
 }
 
-
-/* ========================================================
-   3D Paper Folding Navbar Effect (Origami Fold Physics)
-   ======================================================== */
-.navbar-paper-wrapper {
-  perspective: 1200px;
-  perspective-origin: 50% 0%;
-}
-
-.navbar-paper-fold {
-  transform-origin: top center;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  will-change: transform, opacity, filter, box-shadow;
-}
-
-.navbar-paper-fold.is-folded {
-  transform: rotateX(-86deg) translateY(-28px) scale(0.96);
-  opacity: 0;
-  pointer-events: none;
-  filter: brightness(0.88);
-  box-shadow: 0 32px 45px -12px rgba(41, 41, 35, 0.45);
-  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-              opacity 0.55s cubic-bezier(0.5, 0, 0.9, 0.3) 0.15s,
-              filter 0.75s ease,
-              box-shadow 0.75s ease;
-}
-
-.navbar-paper-fold.is-unfolded {
-  transform: rotateX(0deg) translateY(0) scale(1);
-  opacity: 1;
-  pointer-events: auto;
-  filter: brightness(1);
-  box-shadow: none;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.45s ease-out,
-              filter 0.65s ease;
-}
-
-/* ========================================================
-   Theme Sweep Fill Button (Shop the Collection)
-   ======================================================== */
+/* Button sweep theme adapted to gallery black/vellum */
 .btn-sweep-theme {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.375rem;
-  padding: 0.55rem 0.95rem;
-  text-align: center;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  text-decoration: none;
-  color: #344B38;
+  gap: 0.5rem;
+  padding: 9px 17px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-helvetica);
+  letter-spacing: 0.02em;
+  color: #000000;
   background: transparent;
   cursor: pointer;
-  border: 1.5px solid #344B38;
-  border-radius: 0.75rem;
-  box-shadow: inset 0 0 0 0 #344B38;
-  transition: color 0.5s ease-out, box-shadow 0.5s ease-out, transform 0.2s ease-out;
+  border: 1px solid #000000;
+  border-radius: 28.8px;
+  box-shadow: inset 0 0 0 0 #000000;
+  transition: color 0.4s ease, box-shadow 0.4s ease, transform 0.2s ease;
   white-space: nowrap;
-}
-
-@media (min-width: 640px) {
-  .btn-sweep-theme {
-    gap: 0.625rem;
-    padding: 0.875rem 1.75rem;
-    font-size: 0.9375rem;
-    letter-spacing: 0.5px;
-    border-width: 2px;
-  }
 }
 
 .btn-sweep-theme:hover {
   color: #ffffff;
-  box-shadow: inset 0 -100px 0 0 #344B38;
-}
-
-.btn-sweep-theme:hover svg {
-  color: #ffffff;
-  transform: translateX(3px);
+  box-shadow: inset 0 -60px 0 0 #000000;
 }
 
 .btn-sweep-theme:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
 }
-
-
-

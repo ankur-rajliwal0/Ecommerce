@@ -4,13 +4,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Minus, Plus, ShoppingCart, ArrowLeft, Star, StarHalf } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, ArrowLeft, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { getProductPriceInfo } from '../lib/productUtils';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart, cartItems } = useCart();
+  const { addToCart, cartItems, setIsCartOpen } = useCart();
   const { user } = useAuth();
   
   const [product, setProduct] = useState(null);
@@ -25,7 +26,6 @@ const ProductDetails = () => {
   const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState(5);
   const [submittingReview, setSubmittingReview] = useState(false);
-  const [showGooglePrompt, setShowGooglePrompt] = useState(false);
 
   useEffect(() => {
     const fetchProductAndReviews = async () => {
@@ -79,7 +79,6 @@ const ProductDetails = () => {
     });
 
     if (!error) {
-      // Re-fetch reviews to show the new one
       const { data: newReviews } = await supabase
         .from('reviews')
         .select('id, rating, review_text, created_at, profile:profiles(full_name)')
@@ -88,15 +87,8 @@ const ProductDetails = () => {
       if (newReviews) setReviews(newReviews);
       
       setReviewText('');
-      
-      // If positive review, prompt for Google
-      if (rating >= 4) {
-        setShowGooglePrompt(true);
-      } else {
-        toast.success("Thank you for your review!");
-      }
+      toast.success("Thank you for your appraisal.");
     } else {
-      console.error("Review Insert Error:", error);
       toast.error("Error submitting review: " + (error?.message || "Unknown error"));
     }
     setSubmittingReview(false);
@@ -110,197 +102,267 @@ const ProductDetails = () => {
 
   const handleAddToCart = () => {
     setIsAdding(true);
-    // Create a copy of the product but force image_url to only be the first image so the cart thumbnail is clean
-    const cartProduct = { ...product, image_url: images[0] || product.image_url };
+    const priceInfo = getProductPriceInfo(product);
+    const cartProduct = { 
+      ...product, 
+      price: priceInfo.price,
+      original_price: priceInfo.originalPrice,
+      is_discounted: priceInfo.isDiscounted,
+      image_url: images[0] || product.image_url 
+    };
     addToCart(cartProduct, quantity);
     setTimeout(() => {
       setIsAdding(false);
       navigate('/cart');
-    }, 400);
+    }, 350);
   };
 
   const increment = () => setQuantity(prev => (prev < product.stock ? prev + 1 : prev));
   const decrement = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
   if (loading) return <DetailSkeleton />;
-  if (!product) return <div className="max-w-7xl mx-auto px-4 py-20 text-center text-gray-500 font-medium">Product not found</div>;
+  if (!product) return <div className="max-w-7xl mx-auto px-4 py-20 text-center font-helvetica text-sm text-[#595855]">Acquisition not found in archive.</div>;
+
+  const priceInfo = getProductPriceInfo(product);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 min-h-[80vh]">
-      <button className="flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold font-medium mb-6 transition-colors" onClick={() => navigate(-1)}>
-        <ArrowLeft size={16} /> Back
-      </button>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
-        <div className="flex flex-col gap-4">
-          <div className="bg-gray-50 rounded-2xl overflow-hidden border border-border-gray relative aspect-square">
-            <img src={activeImage || 'https://via.placeholder.com/600'} alt={product.name} className="w-full h-full object-cover block" />
-          </div>
-          {images.length > 1 && (
-            <div className="grid grid-cols-5 gap-3">
-              {images.map((img, idx) => (
-                <button 
-                  key={idx} 
-                  onClick={() => setActiveImage(img)}
-                  className={`aspect-square rounded-xl border-2 overflow-hidden transition-colors ${activeImage === img ? 'border-[#344B38]' : 'border-transparent hover:border-[#829078] bg-[#F8F6F1]'}`}
-                >
-                  <img src={img} alt={`${product.name} thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+    <div className="w-full bg-[#c4c3b6] text-[#000000] min-h-[calc(100vh-120px)] py-10 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
         
-        <div className="flex flex-col">
-          <span className="text-[#829078] text-sm font-bold uppercase tracking-wider mb-3">{product.category?.name || 'Uncategorized'}</span>
-          <h1 className="text-3xl md:text-4xl font-bold text-[#292923] leading-tight mb-4">{product.name}</h1>
+        {/* Back Link */}
+        <button 
+          className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#595855] hover:text-[#000000] font-helvetica mb-8 transition-colors" 
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft size={14} />
+          <span>Return to Archive</span>
+        </button>
+        
+        {/* Product Showcase Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
           
-          {/* Rating Summary */}
-          <div className="flex items-center gap-2 mb-4">
-            <div className="flex items-center text-yellow-400">
-              {[1, 2, 3, 4, 5].map(star => (
-                <Star key={star} size={20} fill={star <= Math.round(calculateAverageRating()) ? "currentColor" : "none"} className={star <= Math.round(calculateAverageRating()) ? "text-yellow-400" : "text-gray-300"} />
-              ))}
+          {/* Left: Classical Framing & Thumbnail Row */}
+          <div className="flex flex-col gap-4">
+            <div className="bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] overflow-hidden relative aspect-square">
+              {priceInfo.discountPercent > 0 && (
+                <span className="absolute top-3 left-3 bg-[#000000] text-[#ffffff] text-[10px] font-helvetica px-2.5 py-1 rounded-[28.8px] uppercase tracking-wider z-10">
+                  -{priceInfo.discountPercent}% Folio Offer
+                </span>
+              )}
+              <img 
+                src={activeImage || '/favicon.png'} 
+                alt={product.name} 
+                onError={(e) => { e.target.src = '/favicon.png'; }}
+                className="w-full h-full object-cover block" 
+              />
             </div>
-            <span className="font-bold text-[#292923]">{calculateAverageRating()}</span>
-            <span className="text-sm text-[#829078]">({reviews.length} reviews)</span>
-          </div>
-
-          <div className="text-3xl font-bold text-[#344B38] mb-6">₹{Number(product.price).toFixed(2)}</div>
-          
-          <div className="text-[#292923]/70 leading-relaxed mb-8 border-b border-[#DCC6A8]/50 pb-8 whitespace-pre-wrap">
-            {product.description || 'No description available for this product.'}
-          </div>
-          
-          <div className="mb-6 font-semibold text-sm">
-             {product.stock > 0 ? <span className="text-green-600">In Stock ({product.stock} available)</span> : <span className="text-red-600">Out of Stock</span>}
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            {!cartItems.some(item => item?.id === product.id) && (
-              <div className="flex items-center border border-[#DCC6A8] rounded-xl bg-white">
-                <button className="p-4 text-[#292923] hover:bg-[#F8F6F1] transition-colors" onClick={decrement}><Minus size={16}/></button>
-                <span className="min-w-[40px] text-center font-semibold text-lg text-[#292923]">{quantity}</span>
-                <button className="p-4 text-[#292923] hover:bg-[#F8F6F1] transition-colors" onClick={increment}><Plus size={16}/></button>
-              </div>
-            )}
             
-            {cartItems.some(item => item?.id === product.id) ? (
-              <button 
-                className="flex-1 flex justify-center items-center gap-3 bg-[#829078] text-white font-bold text-lg rounded-xl px-6 py-4 hover:bg-[#344B38] transition-all shadow-md"
-                onClick={() => navigate('/cart')}
-              >
-                <ShoppingCart size={20} />
-                Go to Cart
-              </button>
-            ) : (
-              <button 
-                className={`flex-1 flex justify-center items-center gap-3 bg-[#344B38] text-white font-bold text-lg rounded-xl px-6 py-4 hover:bg-[#829078] transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed ${isAdding ? 'opacity-80' : ''}`}
-                onClick={handleAddToCart}
-                disabled={product.stock <= 0}
-              >
-                <ShoppingCart size={20} />
-                {isAdding ? 'Adding...' : 'Add to Cart'}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Reviews Section */}
-      <div className="mt-20 border-t border-[#DCC6A8]/50 pt-12">
-        <h2 className="text-2xl font-bold text-[#292923] mb-8">Customer Reviews</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Reviews List */}
-          <div>
-            {reviews.length === 0 ? (
-              <p className="text-[#829078] italic">No reviews yet. Be the first to review this product!</p>
-            ) : (
-              <div className="flex flex-col gap-6">
-                {reviews.map(review => (
-                  <div key={review.id} className="border-b border-[#DCC6A8]/40 pb-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-8 h-8 rounded-full bg-[#E9E9E0] flex items-center justify-center font-bold text-[#344B38] text-sm">
-                        {review.profile?.full_name?.charAt(0) || 'U'}
-                      </div>
-                      <span className="font-bold text-[#292923]">{review.profile?.full_name || 'Anonymous User'}</span>
-                      <span className="text-xs text-[#829078] ml-auto">{new Date(review.created_at).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex items-center gap-1 mb-2">
-                      {[1, 2, 3, 4, 5].map(star => (
-                         <Star key={star} size={14} fill={star <= review.rating ? "currentColor" : "none"} className={star <= review.rating ? "text-yellow-400" : "text-gray-300"} />
-                      ))}
-                    </div>
-                    <p className="text-[#292923]/80 text-sm">{review.review_text}</p>
-                  </div>
+            {images.length > 1 && (
+              <div className="grid grid-cols-5 gap-3">
+                {images.map((img, idx) => (
+                  <button 
+                    key={idx} 
+                    onClick={() => setActiveImage(img)}
+                    className={`aspect-square rounded-[9px] border overflow-hidden transition-all ${
+                      activeImage === img ? 'border-[#000000] opacity-100' : 'border-[#dfdcd5] opacity-60 hover:opacity-100 bg-[#e7e5e4]'
+                    }`}
+                  >
+                    <img src={img} alt={`${product.name} vignette ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
                 ))}
               </div>
             )}
           </div>
+          
+          {/* Right: Curatorial Metadata & Acquisiton Action */}
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] font-helvetica block mb-2">
+              DISCIPLINE: {product.category?.name || 'ARTIFACT'}
+            </span>
+            <h1 className="font-davinci text-3xl sm:text-4xl md:text-5xl font-medium text-[#000000] leading-tight mb-4 tracking-tight">
+              {product.name}
+            </h1>
+            
+            {/* Rating Summary */}
+            <div className="flex items-center gap-2 mb-6 font-helvetica text-xs">
+              <div className="flex items-center text-[#000000]">
+                {[1, 2, 3, 4, 5].map(star => (
+                  <Star 
+                    key={star} 
+                    size={14} 
+                    fill={star <= Math.round(calculateAverageRating()) ? "currentColor" : "none"} 
+                    className={star <= Math.round(calculateAverageRating()) ? "text-[#000000]" : "text-[#dfdcd5]"} 
+                  />
+                ))}
+              </div>
+              <span className="font-medium text-[#000000]">{calculateAverageRating()}</span>
+              <span className="text-[#595855]">({reviews.length} appraisals)</span>
+            </div>
 
-          {/* Write a Review Form */}
-          <div>
-            <div className="bg-white rounded-2xl p-6 border border-[#DCC6A8]/60 shadow-sm">
-              <h3 className="text-lg font-bold text-[#292923] mb-4">Write a Review</h3>
-              {!user ? (
-                <div className="text-center py-6">
-                  <p className="text-[#829078] mb-4">You must be logged in to write a review.</p>
-                  <button onClick={() => navigate('/login')} className="bg-[#344B38] text-white px-6 py-2 rounded-xl font-bold hover:bg-[#829078] transition-colors">Log In</button>
-                </div>
-              ) : (
-                <form onSubmit={submitReview} className="flex flex-col gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-[#292923] mb-2">Rating</label>
-                    <div className="flex gap-2">
-                      {[1, 2, 3, 4, 5].map(star => (
-                        <button type="button" key={star} onClick={() => setRating(star)} className="focus:outline-none">
-                          <Star size={24} fill={star <= rating ? "currentColor" : "none"} className={star <= rating ? "text-yellow-400 hover:scale-110 transition-transform" : "text-gray-300 hover:text-gray-400 transition-colors"} />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-[#292923] mb-2">Review</label>
-                    <textarea 
-                      required
-                      rows="4" 
-                      value={reviewText}
-                      onChange={(e) => setReviewText(e.target.value)}
-                      placeholder="What did you like or dislike about this product?"
-                      className="w-full p-3 border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] resize-none bg-[#F8F6F1] text-[#292923]"
-                    ></textarea>
-                  </div>
-                  <button type="submit" disabled={submittingReview} className="bg-[#344B38] text-white font-bold py-3 rounded-xl hover:bg-[#829078] transition-colors disabled:opacity-50 shadow-md">
-                    {submittingReview ? 'Submitting...' : 'Submit Review'}
+            {/* Pricing */}
+            <div className="flex items-baseline gap-3 mb-6 flex-wrap border-y border-[#dfdcd5] py-4">
+              <span className="text-3xl font-helvetica font-medium text-[#000000]">
+                ₹{Number(priceInfo.price || product.price || 0).toFixed(2)}
+              </span>
+              {priceInfo.originalPrice && priceInfo.isDiscounted && (
+                <>
+                  <span className="text-sm text-[#808080] line-through font-helvetica">
+                    ₹{Number(priceInfo.originalPrice).toFixed(2)}
+                  </span>
+                  <span className="text-[10px] uppercase tracking-wider text-[#595855] font-helvetica border border-[#dfdcd5] px-2 py-0.5 rounded-[28.8px]">
+                    Save ₹{Number(priceInfo.originalPrice - (priceInfo.price || 0)).toFixed(2)}
+                  </span>
+                </>
+              )}
+            </div>
+            
+            {/* Description */}
+            <div className="text-xs sm:text-sm text-[#595855] leading-relaxed mb-6 font-helvetica whitespace-pre-wrap">
+              {priceInfo.cleanDescription || 'Florentine handcrafted piece selected for museum-grade botanical or confectionary preservation.'}
+            </div>
+            
+            <div className="mb-6 font-helvetica text-xs uppercase tracking-wider">
+               {product.stock > 0 ? (
+                 <span className="text-[#000000] font-medium">● Available in Vault ({product.stock} items)</span>
+               ) : (
+                 <span className="text-[#808080]">○ Archived / Out of Season</span>
+               )}
+            </div>
+
+            {/* Quantity Stepper & Pill Action Button */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              {!cartItems.some(item => item?.id === product.id) && (
+                <div className="flex items-center border border-[#dfdcd5] rounded-[28.8px] bg-[#ffffff] self-start sm:self-auto">
+                  <button className="px-3 py-2 text-[#000000] hover:bg-[#e7e5e4] transition-colors rounded-l-[28.8px]" onClick={decrement}>
+                    <Minus size={13}/>
                   </button>
-                </form>
+                  <span className="min-w-[36px] text-center font-helvetica text-xs font-medium text-[#000000]">
+                    {quantity}
+                  </span>
+                  <button className="px-3 py-2 text-[#000000] hover:bg-[#e7e5e4] transition-colors rounded-r-[28.8px]" onClick={increment}>
+                    <Plus size={13}/>
+                  </button>
+                </div>
+              )}
+              
+              {cartItems.some(item => item?.id === product.id) ? (
+                <button 
+                  className="btn-pill-action py-3 px-6 text-xs uppercase tracking-widest"
+                  onClick={() => setIsCartOpen(true)}
+                >
+                  <ShoppingBag size={13} />
+                  <span>Go to Bag</span>
+                </button>
+              ) : (
+                <button 
+                  className={`btn-pill-action py-3 px-8 text-xs uppercase tracking-widest disabled:opacity-40 disabled:cursor-not-allowed ${isAdding ? 'opacity-70' : ''}`}
+                  onClick={handleAddToCart}
+                  disabled={product.stock <= 0}
+                >
+                  <ShoppingBag size={13} />
+                  <span>{isAdding ? 'Adding to Bag...' : 'Add to Bag'}</span>
+                </button>
               )}
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Google Review Prompt Modal */}
-      {showGooglePrompt && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white p-8 rounded-2xl max-w-md w-full text-center shadow-2xl">
-            <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Star size={32} fill="currentColor" />
+        {/* Reviews / Appraisals Section */}
+        <div className="mt-20 border-t border-[#dfdcd5] pt-12">
+          <div className="mb-8">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] font-helvetica block mb-1">
+              PROVENANCE CRITIQUE
+            </span>
+            <h2 className="font-davinci text-3xl sm:text-4xl font-medium text-[#000000]">
+              Client Appraisals ({reviews.length})
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Reviews List */}
+            <div>
+              {reviews.length === 0 ? (
+                <p className="text-xs text-[#595855] italic font-helvetica">
+                  No public appraisals recorded yet. Be the first to appraise this piece.
+                </p>
+              ) : (
+                <div className="flex flex-col gap-5">
+                  {reviews.map(review => (
+                    <div key={review.id} className="bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium text-xs text-[#000000] font-helvetica">
+                          {review.profile?.full_name || 'Anonymous Collector'}
+                        </span>
+                        <span className="text-[10px] text-[#595855] font-helvetica">
+                          {new Date(review.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 mb-2 text-[#000000]">
+                        {[1, 2, 3, 4, 5].map(star => (
+                           <Star key={star} size={11} fill={star <= review.rating ? "currentColor" : "none"} className={star <= review.rating ? "text-[#000000]" : "text-[#dfdcd5]"} />
+                        ))}
+                      </div>
+                      <p className="text-xs text-[#595855] font-helvetica leading-relaxed">{review.review_text}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">We're glad you loved it!</h3>
-            <p className="text-gray-600 mb-6">Thank you for your 5-star rating! As a small business, reviews on Google help us grow immensely. Could you take a moment to share your experience on Google?</p>
-            <div className="flex flex-col gap-3">
-              <a href="https://g.page/r/YOUR_GOOGLE_BUSINESS_ID/review" target="_blank" rel="noreferrer" onClick={() => setShowGooglePrompt(false)} className="bg-blue-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-blue-700 transition-colors">
-                Share on Google
-              </a>
-              <button onClick={() => setShowGooglePrompt(false)} className="text-gray-500 font-medium py-2 hover:text-gray-800 transition-colors">
-                No thanks, maybe later
-              </button>
+
+            {/* Write a Review Form */}
+            <div>
+              <div className="bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] p-6 font-helvetica">
+                <h3 className="font-davinci text-2xl font-medium text-[#000000] mb-4">
+                  Submit an Appraisal
+                </h3>
+                {!user ? (
+                  <div className="py-4">
+                    <p className="text-xs text-[#595855] mb-4">You must be signed in to submit an appraisal.</p>
+                    <button 
+                      onClick={() => navigate('/login')} 
+                      className="btn-pill-action py-2 px-5 text-xs"
+                    >
+                      Sign In
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={submitReview} className="flex flex-col gap-4">
+                    <div>
+                      <label className="block text-[11px] uppercase tracking-wider text-[#595855] mb-1.5">Rating</label>
+                      <div className="flex gap-1.5 text-[#000000]">
+                        {[1, 2, 3, 4, 5].map(star => (
+                          <button type="button" key={star} onClick={() => setRating(star)} className="focus:outline-none">
+                            <Star size={18} fill={star <= rating ? "currentColor" : "none"} className={star <= rating ? "text-[#000000]" : "text-[#dfdcd5]"} />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-[11px] uppercase tracking-wider text-[#595855] mb-1.5">Your Critique</label>
+                      <textarea 
+                        required
+                        rows="3" 
+                        value={reviewText}
+                        onChange={(e) => setReviewText(e.target.value)}
+                        placeholder="Detail the botanical freshness, scent, or presentation craft..."
+                        className="w-full p-3 border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] resize-none bg-[#ffffff] text-xs text-[#000000]"
+                      ></textarea>
+                    </div>
+                    <button 
+                      type="submit" 
+                      disabled={submittingReview} 
+                      className="btn-pill-action py-2.5 px-6 text-xs uppercase tracking-wider self-start disabled:opacity-40"
+                    >
+                      {submittingReview ? 'Submitting...' : 'Post Appraisal'}
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      )}
+
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TableSkeleton } from '../../components/Skeletons';
 import { supabase } from '../../lib/supabase';
-import { ChevronDown, ChevronUp, Package } from 'lucide-react';
+import { ChevronDown, Package, UserX } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Orders = () => {
@@ -147,7 +147,10 @@ const Orders = () => {
               <p className="text-[#829078] text-lg font-medium">No {filterStatus !== 'all' ? filterStatus : ''} orders found.</p>
             </div>
           ) : (
-            filteredOrders.map(order => (
+            filteredOrders.map(order => {
+              const isUserDeleted = Boolean(order.user_id && !profiles[order.user_id]);
+
+              return (
               <div key={order.id} className="bg-white border border-[#DCC6A8] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
                 
                 <div 
@@ -159,11 +162,20 @@ const Orders = () => {
                   <div className="flex flex-wrap gap-10 items-center flex-1">
                     <div>
                       <p className="text-xs text-[#829078] font-bold uppercase tracking-wider mb-1.5">Order ID</p>
-                      <p className="text-base font-black text-[#292923]">#{order.id.split('-')[0].toUpperCase()}</p>
+                      <p className="text-base font-black text-[#292923]">#{String(order?.id || '').split('-')[0].toUpperCase()}</p>
                     </div>
                     <div>
                       <p className="text-xs text-[#829078] font-bold uppercase tracking-wider mb-1.5">Customer</p>
-                      <p className="text-sm font-semibold text-[#292923]">{order.customer_name || profiles[order.user_id] || 'Unknown'}</p>
+                      {isUserDeleted ? (
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-semibold text-[#292923]">{order.customer_name || 'Customer'}</span>
+                          <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200/90 px-2.5 py-0.5 rounded-full shadow-2xs">
+                            <UserX size={11} className="text-rose-600" /> User Deleted
+                          </span>
+                        </div>
+                      ) : (
+                        <p className="text-sm font-semibold text-[#292923]">{order.customer_name || profiles[order.user_id] || 'Guest Customer'}</p>
+                      )}
                     </div>
                     <div>
                       <p className="text-xs text-[#829078] font-bold uppercase tracking-wider mb-1.5">Date</p>
@@ -171,7 +183,7 @@ const Orders = () => {
                     </div>
                     <div>
                       <p className="text-xs text-[#829078] font-bold uppercase tracking-wider mb-1.5">Total</p>
-                      <p className="text-base font-black text-[#344B38]">₹{Number(order.total_amount).toFixed(2)}</p>
+                      <p className="text-base font-black text-[#344B38]">₹{Number(order.total_amount || 0).toFixed(2)}</p>
                     </div>
                   </div>
                   
@@ -204,10 +216,38 @@ const Orders = () => {
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-1">
                           <h4 className="text-sm font-extrabold text-[#292923] mb-4 flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-[#344B38]"></span> Shipping Details
+                            <span className="w-2 h-2 rounded-full bg-[#344B38]"></span> Customer & Shipping
                           </h4>
-                          <div className="bg-white p-5 rounded-xl border border-[#DCC6A8] shadow-sm">
-                            <p className="text-sm text-[#292923]/80 font-medium leading-relaxed whitespace-pre-wrap">{order.address}</p>
+                          <div className="bg-white p-5 rounded-xl border border-[#DCC6A8] shadow-sm space-y-3">
+                            {isUserDeleted && (
+                              <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-2.5 text-rose-800 text-xs font-semibold leading-relaxed">
+                                <UserX size={16} className="text-rose-600 shrink-0 mt-0.5" />
+                                <div>
+                                  <p className="font-bold text-rose-700">Account Deleted</p>
+                                  <p className="text-[11px] text-rose-600/90 font-medium mt-0.5">This user account was removed. Order details remain preserved in store history.</p>
+                                </div>
+                              </div>
+                            )}
+                            <div>
+                              <p className="text-xs font-bold text-[#829078] uppercase">Customer Name</p>
+                              <p className="text-sm font-bold text-[#292923]">{order.customer_name || 'N/A'}</p>
+                            </div>
+                            {order.email && (
+                              <div>
+                                <p className="text-xs font-bold text-[#829078] uppercase">Email</p>
+                                <p className="text-sm text-[#292923] font-medium">{order.email}</p>
+                              </div>
+                            )}
+                            {order.phone && (
+                              <div>
+                                <p className="text-xs font-bold text-[#829078] uppercase">Phone</p>
+                                <p className="text-sm text-[#292923] font-medium">{order.phone}</p>
+                              </div>
+                            )}
+                            <div>
+                              <p className="text-xs font-bold text-[#829078] uppercase">Delivery Address</p>
+                              <p className="text-sm text-[#292923]/80 font-medium leading-relaxed whitespace-pre-wrap">{order.address}</p>
+                            </div>
                           </div>
                         </div>
 
@@ -226,8 +266,9 @@ const Orders = () => {
                                     <div className="flex items-center gap-4">
                                       <div className="w-14 h-14 bg-[#F8F6F1] rounded-xl overflow-hidden border border-[#DCC6A8] flex-shrink-0">
                                         <img 
-                                          src={item.product?.image_url ? item.product.image_url.split(',')[0] : 'https://via.placeholder.com/60'} 
+                                          src={item.product?.image_url ? item.product.image_url.split(',')[0] : '/favicon.png'} 
                                           alt={item.product?.name} 
+                                          onError={(e) => { e.target.src = '/favicon.png'; }}
                                           className="w-full h-full object-cover"
                                         />
                                       </div>
@@ -236,7 +277,7 @@ const Orders = () => {
                                         <p className="text-xs font-semibold text-[#292923] bg-[#E9E9E0] px-2 py-0.5 rounded-xl inline-block">Qty: {item.quantity}</p>
                                       </div>
                                     </div>
-                                    <p className="text-base font-black text-[#292923]">₹{(Number(item.price) * item.quantity).toFixed(2)}</p>
+                                    <p className="text-base font-black text-[#292923]">₹{((Number(item.price) || 0) * (item.quantity || 1)).toFixed(2)}</p>
                                   </div>
                                 ))}
                               </div>
@@ -249,7 +290,8 @@ const Orders = () => {
                 </div>
                 
               </div>
-            ))
+              );
+            })
           )}
         </div>
       )}

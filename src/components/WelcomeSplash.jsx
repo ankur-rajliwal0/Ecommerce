@@ -49,8 +49,8 @@ const WelcomeSplash = () => {
           phase === 'exiting' ? '-translate-y-full' : 'translate-y-0'
         }`}
         style={{
-          background: 'linear-gradient(180deg, #121c14 0%, #1c2b1e 80%, #243628 100%)',
-          borderBottom: '1px solid rgba(220, 198, 168, 0.25)',
+          background: '#000000',
+          borderBottom: '1px solid #dfdcd5',
         }}
       />
 
@@ -60,8 +60,8 @@ const WelcomeSplash = () => {
           phase === 'exiting' ? 'translate-y-full' : 'translate-y-0'
         }`}
         style={{
-          background: 'linear-gradient(0deg, #121c14 0%, #1c2b1e 80%, #243628 100%)',
-          borderTop: '1px solid rgba(220, 198, 168, 0.25)',
+          background: '#000000',
+          borderTop: '1px solid #dfdcd5',
         }}
       />
 
@@ -71,31 +71,25 @@ const WelcomeSplash = () => {
           phase === 'exiting' ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
         }`}
       >
-        {/* Soft Golden Ambient Halo */}
-        <div
-          className="absolute w-[360px] h-[360px] sm:w-[480px] sm:h-[480px] rounded-full pointer-events-none blur-3xl opacity-30 animate-pulse"
-          style={{ background: 'radial-gradient(circle, #DCC6A8 0%, rgba(52,75,56,0) 70%)' }}
-        />
-
-        {/* High-Resolution Veltrix Logo Emblem */}
-        <div className="relative mb-5 transform transition-transform duration-700 hover:scale-105">
-          <img
-            src={logo}
-            alt="Veltrix"
-            className="h-16 sm:h-22 md:h-24 w-auto object-contain filter drop-shadow-[0_12px_30px_rgba(0,0,0,0.6)]"
-          />
+        {/* Circled Monogram Mark */}
+        <div className="w-16 h-16 rounded-full border-[1.5px] border-[#ffffff] flex items-center justify-center font-davinci text-3xl font-medium text-[#ffffff] mb-5">
+          V
         </div>
 
-        {/* Delicate Gold Expanding Hairline */}
-        <div className="w-28 sm:w-36 h-[1.5px] bg-gradient-to-r from-transparent via-[#DCC6A8] to-transparent my-3 shadow-[0_0_8px_rgba(220,198,168,0.6)]" />
+        <h1 className="font-davinci text-4xl sm:text-5xl font-medium tracking-tight text-[#ffffff] mb-2 uppercase">
+          Veltrix
+        </h1>
+
+        {/* Delicate Vellum Hairline */}
+        <div className="w-24 h-[1px] bg-[#dfdcd5] my-2" />
 
         {/* Editorial Subtitle */}
-        <p className="text-[11px] sm:text-xs md:text-sm font-semibold tracking-[0.35em] uppercase text-[#DCC6A8]/90 font-heading">
-          Handcrafted Florals • Bespoke Hampers
+        <p className="text-[11px] sm:text-xs font-medium tracking-[0.25em] uppercase text-[#808080] font-helvetica">
+          Curated Botanicals • Living Artifacts
         </p>
 
-        <p className="text-[10px] text-[#829078]/80 font-medium tracking-widest uppercase mt-4">
-          Click anywhere to enter
+        <p className="text-[10px] text-[#595855] font-helvetica tracking-widest uppercase mt-4">
+          Click anywhere to enter the exhibition
         </p>
       </div>
 
@@ -104,11 +98,11 @@ const WelcomeSplash = () => {
         <button
           onClick={handleDismiss}
           type="button"
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-[#F8F6F1] hover:text-[#DCC6A8] text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-white/15 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-[28.8px] bg-[#000000] text-[#ffffff] text-xs font-helvetica uppercase tracking-wider border border-[#dfdcd5] transition-all hover:bg-[#dfdcd5] hover:text-[#000000] cursor-pointer"
           aria-label="Skip Intro"
         >
-          <span>Skip</span>
-          <ArrowRight size={13} />
+          <span>Enter</span>
+          <ArrowRight size={12} />
         </button>
       </div>
     </div>

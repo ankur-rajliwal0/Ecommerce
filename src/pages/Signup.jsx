@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import toast from 'react-hot-toast';
-
 import { X, Eye, EyeOff } from 'lucide-react';
 
 const Signup = () => {
@@ -13,8 +12,20 @@ const Signup = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { signUp } = useAuth();
+  const { signUp, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = new URLSearchParams(location.search).get('redirect') || '/';
+
+  React.useEffect(() => {
+    if (!authLoading && user) {
+      navigate(redirectPath, { replace: true });
+    }
+  }, [user, authLoading, navigate, redirectPath]);
+
+  if (!authLoading && user) {
+    return null;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,10 +36,10 @@ const Signup = () => {
       if (data?.user) {
         await supabase.from('profiles').upsert({ id: data.user.id, full_name: fullName, role: 'customer' });
       }
-      toast.success('Account created successfully! Welcome!');
-      navigate('/');
+      toast.success('Account enrolled successfully. Welcome to Veltrix.');
+      navigate(redirectPath, { replace: true });
     } catch (err) {
-      toast.error('Signup failed: ' + err.message);
+      toast.error('Enrollment failed: ' + err.message);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -36,113 +47,133 @@ const Signup = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Blurred Background */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 font-helvetica">
+      {/* Dimmed Canvas Background */}
       <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1950&auto=format&fit=crop')" }}
-      >
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
-      </div>
+        className="absolute inset-0 bg-[#c4c3b6]/90 backdrop-blur-sm"
+        onClick={() => navigate(redirectPath !== '/' ? redirectPath : '/')}
+      />
 
-      {/* Close Button - Desktop */}
+      {/* Close Button */}
       <button 
-        onClick={() => navigate('/')}
-        className="absolute top-6 right-6 z-50 hidden md:flex bg-white/20 hover:bg-white/40 text-white rounded-full p-3 backdrop-blur-md transition-all shadow-lg"
+        onClick={() => navigate(redirectPath !== '/' ? redirectPath : '/')}
+        className="absolute top-6 right-6 z-50 bg-[#e7e5e4] hover:bg-[#dfdcd5] text-[#000000] border border-[#dfdcd5] rounded-full p-2.5 transition-colors"
       >
-        <X size={24} />
+        <X size={18} />
       </button>
 
       {/* Signup Card */}
-      <div className="relative max-w-5xl w-full bg-white border border-border-gray rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse z-10 animate-fade-in-up">
+      <div className="relative max-w-4xl w-full bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] overflow-hidden flex flex-col md:flex-row-reverse z-10 shadow-2xl">
         
-        {/* Close Button - Mobile */}
-        <button 
-          onClick={() => navigate('/')}
-          className="absolute top-4 right-4 z-50 md:hidden bg-gray-50 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-full p-2 transition-colors"
-        >
-          <X size={20} />
-        </button>
-
-        {/* Right Side - Image/Branding (Reversed for variation) */}
-        <div className="md:w-1/2 bg-gray-900 relative hidden md:block">
+        {/* Visual Panel */}
+        <div className="md:w-1/2 bg-[#000000] relative hidden md:block">
           <img 
-            src="https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=1950&auto=format&fit=crop" 
-            alt="Gift Boxes" 
-            className="absolute inset-0 w-full h-full object-cover opacity-60"
+            src="https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=1200&q=85" 
+            alt="Renaissance Museum Classical Art" 
+            className="absolute inset-0 w-full h-full object-cover filter brightness-[0.85] contrast-[1.05]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
-          <div className="relative h-full flex flex-col justify-end p-12 text-white">
-            <h3 className="text-3xl font-bold mb-3 leading-tight">Join the community.</h3>
-            <p className="text-gray-300 font-medium">Create an account to track your orders, save your favorite gifts, and checkout faster.</p>
+          <div className="relative h-full flex flex-col justify-between p-10 text-[#ffffff] z-10 bg-gradient-to-t from-[#000000]/80 via-transparent to-transparent">
+            <div className="w-8 h-8 rounded-full border border-[#ffffff] flex items-center justify-center font-davinci text-base">
+              V
+            </div>
+            <div>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-[#808080] block mb-2 font-helvetica">
+                CLIENT PRIVILEGES
+              </span>
+              <h3 className="font-davinci text-3xl font-medium mb-2 leading-tight">
+                Enroll as a Patron of the Arts.
+              </h3>
+              <p className="text-xs text-[#808080] font-helvetica leading-relaxed">
+                Enjoy priority reservation on rare seasonal botanicals, custom wax seals, and express white glove deliveries.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Left Side - Form */}
-        <div className="md:w-1/2 p-8 md:p-14 flex flex-col justify-center bg-white">
-          <div className="mb-10">
-            <h2 className="text-3xl font-extrabold text-[#292923] mb-2 tracking-tight">Create Account</h2>
-            <p className="text-[#829078] font-medium">Join us today to start shopping.</p>
+        {/* Form Panel */}
+        <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-[#e7e5e4]">
+          <div className="mb-6">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
+              REGISTRATION
+            </span>
+            <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-1">
+              Create Patron Account
+            </h2>
+            <p className="text-xs text-[#595855]">Enter your identity to join our private salon.</p>
           </div>
           
-          {error && <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 text-sm border border-red-100 font-medium">{error}</div>}
+          {error && (
+            <div className="bg-[#dfdcd5]/60 text-red-800 p-3 rounded-[9px] mb-4 text-xs border border-red-200">
+              {error}
+            </div>
+          )}
           
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-[#292923]">Full Name</label>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] uppercase tracking-wider text-[#595855]">Full Legal Name</label>
               <input 
                 type="text" 
                 required 
                 value={fullName} 
                 onChange={(e) => setFullName(e.target.value)} 
-                className="w-full p-3.5 bg-[#F8F6F1] border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] focus:ring-1 focus:ring-[#344B38] transition-all text-[#292923]" 
-                placeholder="Enter your full name"
+                className="w-full px-3.5 py-2.5 bg-[#ffffff] border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] text-xs text-[#000000] placeholder:text-[#808080]" 
+                placeholder="Eleanor Vance"
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-[#292923]">Email Address</label>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] uppercase tracking-wider text-[#595855]">Email Address</label>
               <input 
                 type="email" 
                 required 
                 value={email} 
                 onChange={(e) => setEmail(e.target.value)} 
-                className="w-full p-3.5 bg-[#F8F6F1] border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] focus:ring-1 focus:ring-[#344B38] transition-all text-[#292923]" 
-                placeholder="Enter your email"
+                className="w-full px-3.5 py-2.5 bg-[#ffffff] border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] text-xs text-[#000000] placeholder:text-[#808080]" 
+                placeholder="eleanor@domain.com"
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-[#292923]">Password</label>
+            
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] uppercase tracking-wider text-[#595855]">Password</label>
               <div className="relative">
                 <input 
                   type={showPassword ? "text" : "password"} 
                   required 
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)} 
-                  className="w-full p-3.5 bg-[#F8F6F1] border border-[#DCC6A8]/60 rounded-xl outline-none focus:border-[#344B38] focus:ring-1 focus:ring-[#344B38] transition-all pr-12 text-[#292923]" 
-                  placeholder="Create a password"
+                  className="w-full px-3.5 py-2.5 bg-[#ffffff] border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] pr-10 text-xs text-[#000000] placeholder:text-[#808080]" 
+                  placeholder="Minimum 6 characters"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#595855] hover:text-[#000000]"
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
             </div>
+
             <button 
               type="submit" 
               disabled={loading} 
-              className="w-full bg-[#344B38] hover:bg-[#829078] text-white font-bold py-4 px-4 rounded-xl mt-4 transition-colors disabled:opacity-70 shadow-lg shadow-[#344B38]/20"
+              className="btn-pill-action w-full py-3 text-xs uppercase tracking-widest mt-2 disabled:opacity-50"
             >
-              {loading ? 'Creating account...' : 'Sign Up'}
+              {loading ? 'Registering...' : 'Complete Enrollment'}
             </button>
           </form>
           
-          <p className="text-center mt-8 text-sm font-medium text-gray-600">
-            Already have an account? <Link to="/login" className="text-[#344B38] font-bold hover:underline">Sign in instead</Link>
+          <p className="text-center mt-5 text-xs text-[#595855]">
+            Already enrolled?{' '}
+            <Link 
+              to={redirectPath !== '/' ? `/login?redirect=${encodeURIComponent(redirectPath)}` : '/login'} 
+              className="text-[#000000] underline font-medium"
+            >
+              Sign in to your folio
+            </Link>
           </p>
         </div>
+
       </div>
     </div>
   );

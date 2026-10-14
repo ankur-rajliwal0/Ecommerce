@@ -1,69 +1,53 @@
 import React from 'react';
-import { FileText } from 'lucide-react';
 
 const TermsOfService = () => {
   return (
-    <div className="bg-[#F8F6F1] min-h-[calc(100vh-80px)] py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="bg-[#c4c3b6] min-h-[calc(100vh-80px)] py-16 px-4 sm:px-6 font-helvetica text-[#000000]">
+      <div className="max-w-4xl mx-auto">
         
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-6">
-            <FileText className="text-[#344B38]" size={32} />
-            <h1 className="text-4xl md:text-5xl font-extrabold text-[#292923] tracking-tight">Terms of Service</h1>
-          </div>
-          <div className="inline-block bg-[#E9E9E0] text-[#344B38] font-bold px-4 py-2 rounded-full text-sm border border-[#DCC6A8]">
-            Effective Date: {new Date().toLocaleDateString()}
-          </div>
+        <div className="mb-10">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#595855] block mb-2 font-mono">
+            LEGAL ARCHIVE • COVENANT
+          </span>
+          <h1 className="font-davinci text-4xl sm:text-5xl font-medium tracking-tight text-[#000000] mb-2">
+            Client Terms & Salon Covenant
+          </h1>
+          <p className="text-xs text-[#595855]">Effective Date: October 2026</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#DCC6A8] p-8 md:p-14 text-[#292923]/80 leading-relaxed font-medium">
-          
-          <p className="text-lg mb-10 text-[#292923]">
-            Welcome to Veltrix. By accessing or using our website, you agree to be bound by the following terms and conditions. Please read them carefully before making any purchases or using our services.
+        <div className="bg-[#e7e5e4] rounded-[9px] border border-[#dfdcd5] p-8 sm:p-12 text-xs leading-relaxed text-[#595855] space-y-8">
+          <p className="text-sm text-[#000000] font-medium leading-relaxed">
+            Welcome to Veltrix Gallery. By acquiring floral pieces or artisanal gifts through our atelier, you agree to the covenants set forth below.
           </p>
 
-          <div className="space-y-12">
-            <section>
-              <h2 className="text-2xl font-extrabold text-[#292923] mb-4 pb-2 border-b border-[#E9E9E0]">1. Acceptance of Terms</h2>
-              <p className="mb-4">
-                By accessing, browsing, or using this website, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our website.
-              </p>
-            </section>
+          <section>
+            <h2 className="font-davinci text-xl sm:text-2xl font-medium text-[#000000] mb-2 pb-2 border-b border-[#dfdcd5]">
+              1. Commission Nature of Botanical Pieces
+            </h2>
+            <p>
+              Due to natural horticultural seasonal variance, individual stems, shades, and blossom sizes may vary slightly from displayed catalog imagery. Each arrangement represents a unique, commissioned floral composition.
+            </p>
+          </section>
 
-            <section>
-              <h2 className="text-2xl font-extrabold text-[#292923] mb-4 pb-2 border-b border-[#E9E9E0]">2. User Accounts</h2>
-              <p className="mb-4">
-                To access certain features of the site, you may be required to create an account. You are responsible for:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-[#829078]">
-                <li>Maintaining the confidentiality of your account password.</li>
-                <li>All activities that occur under your account.</li>
-                <li>Providing accurate and up-to-date information during registration.</li>
-              </ul>
-            </section>
+          <section>
+            <h2 className="font-davinci text-xl sm:text-2xl font-medium text-[#000000] mb-2 pb-2 border-b border-[#dfdcd5]">
+              2. Delivery Acceptance
+            </h2>
+            <p>
+              Given the perishable nature of fresh botanicals, recipients or designated agents must be available to accept the hand-delivery. Couriers will not leave fresh flowers unattended under direct sunlight or extreme temperature exposure.
+            </p>
+          </section>
 
-            <section>
-              <h2 className="text-2xl font-extrabold text-[#292923] mb-4 pb-2 border-b border-[#E9E9E0]">3. Intellectual Property</h2>
-              <p className="mb-4">
-                All content included on this site, such as text, graphics, logos, button icons, images, audio clips, digital downloads, and software, is the property of Veltrix or its content suppliers and protected by international copyright laws.
-              </p>
-            </section>
-            
-            <section>
-              <h2 className="text-2xl font-extrabold text-[#292923] mb-4 pb-2 border-b border-[#E9E9E0]">4. Prohibited Conduct</h2>
-              <p className="mb-4">
-                You agree not to use the site to:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-[#829078]">
-                <li>Upload or transmit viruses or any other type of malicious code.</li>
-                <li>Attempt to gain unauthorized access to our systems or networks.</li>
-                <li>Engage in any activity that interferes with or disrupts the website.</li>
-                <li>Reproduce, duplicate, copy, sell, or resell any part of the service without written permission.</li>
-              </ul>
-            </section>
-          </div>
-
+          <section>
+            <h2 className="font-davinci text-xl sm:text-2xl font-medium text-[#000000] mb-2 pb-2 border-b border-[#dfdcd5]">
+              3. Intellectual Property
+            </h2>
+            <p>
+              All imagery, typographic layouts, branding marks, and floral curation compositions are protected under copyright by Veltrix Gallery Inc.
+            </p>
+          </section>
         </div>
+
       </div>
     </div>
   );

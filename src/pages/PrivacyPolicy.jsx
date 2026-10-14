@@ -1,66 +1,56 @@
 import React from 'react';
-import { Shield } from 'lucide-react';
 
 const PrivacyPolicy = () => {
   return (
-    <div className="bg-[#F8F6F1] min-h-[calc(100vh-80px)] py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="bg-[#c4c3b6] min-h-[calc(100vh-80px)] py-16 px-4 sm:px-6 font-helvetica text-[#000000]">
+      <div className="max-w-4xl mx-auto">
         
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-6">
-            <Shield className="text-[#344B38]" size={32} />
-            <h1 className="text-4xl md:text-5xl font-extrabold text-[#292923] tracking-tight">Privacy Policy</h1>
-          </div>
-          <div className="inline-block bg-[#E9E9E0] text-[#344B38] font-bold px-4 py-2 rounded-full text-sm border border-[#DCC6A8]">
-            Effective Date: {new Date().toLocaleDateString()}
-          </div>
+        <div className="mb-10">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#595855] block mb-2 font-mono">
+            LEGAL ARCHIVE • COVENANT
+          </span>
+          <h1 className="font-davinci text-4xl sm:text-5xl font-medium tracking-tight text-[#000000] mb-2">
+            Data Ethics & Privacy Covenant
+          </h1>
+          <p className="text-xs text-[#595855]">Effective Date: October 2026</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#DCC6A8] p-8 md:p-14 text-[#292923]/80 leading-relaxed font-medium">
-          
-          <p className="text-lg mb-10 text-[#292923]">
-            At Veltrix, we are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This Privacy Policy outlines how we collect, use, and protect your data.
+        <div className="bg-[#e7e5e4] rounded-[9px] border border-[#dfdcd5] p-8 sm:p-12 text-xs leading-relaxed text-[#595855] space-y-8">
+          <p className="text-sm text-[#000000] font-medium leading-relaxed">
+            At Veltrix, we treat collector data with the same reverence and discretion applied to rare artworks. We collect only what is strictly necessary to arrange white glove botanical dispatch.
           </p>
 
-          <div className="space-y-12">
-            <section>
-              <h2 className="text-2xl font-extrabold text-[#292923] mb-4 pb-2 border-b border-[#E9E9E0]">1. Information We Collect</h2>
-              <p className="mb-4">We collect information that you provide directly to us, including when you:</p>
-              <ul className="list-disc pl-6 space-y-2 text-[#829078]">
-                <li>Create an account or complete a profile.</li>
-                <li>Make a purchase or place an order.</li>
-                <li>Subscribe to our newsletters or marketing emails.</li>
-                <li>Contact our customer support team.</li>
-              </ul>
-            </section>
+          <section>
+            <h2 className="font-davinci text-xl sm:text-2xl font-medium text-[#000000] mb-2 pb-2 border-b border-[#dfdcd5]">
+              1. Information Recorded in Folios
+            </h2>
+            <p className="mb-2">We record identity data provided directly during acquisitions:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Recipient and collector names, contact details, and physical addresses.</li>
+              <li>Encrypted transaction tokens processed via Razorpay.</li>
+              <li>Handwritten message card inscriptions and delivery instructions.</li>
+            </ul>
+          </section>
 
-            <section>
-              <h2 className="text-2xl font-extrabold text-[#292923] mb-4 pb-2 border-b border-[#E9E9E0]">2. How We Use Your Information</h2>
-              <p className="mb-4">We use the information we collect to provide, maintain, and improve our services, such as to:</p>
-              <ul className="list-disc pl-6 space-y-2 text-[#829078]">
-                <li>Process transactions and send related information, including confirmations and receipts.</li>
-                <li>Send you technical notices, updates, security alerts, and support messages.</li>
-                <li>Respond to your comments, questions, and requests.</li>
-                <li>Communicate with you about products, services, offers, and events offered by Veltrix.</li>
-              </ul>
-            </section>
+          <section>
+            <h2 className="font-davinci text-xl sm:text-2xl font-medium text-[#000000] mb-2 pb-2 border-b border-[#dfdcd5]">
+              2. Data Protection Standards
+            </h2>
+            <p>
+              We implement strict cryptographic protection. We never sell, lease, or monetize collector details with commercial brokers. Data is accessible solely to authorized couriers and curators executing your specific order.
+            </p>
+          </section>
 
-            <section>
-              <h2 className="text-2xl font-extrabold text-[#292923] mb-4 pb-2 border-b border-[#E9E9E0]">3. Data Security</h2>
-              <p className="mb-4">
-                We implement highly secure, industry-standard measures to protect your personal information from unauthorized access, loss, misuse, or alteration. All payment data is encrypted via Secure Socket Layer (SSL) technology and processed through secure payment gateways.
-              </p>
-            </section>
-            
-            <section>
-              <h2 className="text-2xl font-extrabold text-[#292923] mb-4 pb-2 border-b border-[#E9E9E0]">4. Sharing Your Information</h2>
-              <p className="mb-4">
-                We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties. This does not include trusted third parties who assist us in operating our website, conducting our business, or servicing you, so long as those parties agree to keep this information confidential.
-              </p>
-            </section>
-          </div>
-
+          <section>
+            <h2 className="font-davinci text-xl sm:text-2xl font-medium text-[#000000] mb-2 pb-2 border-b border-[#dfdcd5]">
+              3. Right of Erasure
+            </h2>
+            <p>
+              Patrons may request the complete deletion of their account profile and historic dispatch address data at any time by contacting our Curatorial Desk at concierge@veltrix.com.
+            </p>
+          </section>
         </div>
+
       </div>
     </div>
   );

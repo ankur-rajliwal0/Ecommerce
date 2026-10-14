@@ -1,109 +1,91 @@
 import React from 'react';
-import { Truck, Globe, Clock, ShieldCheck } from 'lucide-react';
+import { Truck, Globe, Clock, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Shipping = () => {
   return (
-    <div className="bg-[#F8F6F1] min-h-[calc(100vh-80px)] py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="bg-[#c4c3b6] min-h-[calc(100vh-80px)] py-16 px-4 sm:px-6 font-helvetica text-[#000000]">
+      <div className="max-w-4xl mx-auto">
         
-        <div className="text-center mb-16">
-          <div className="w-20 h-20 bg-[#E9E9E0] shadow-sm border border-[#DCC6A8] text-[#344B38] font-bold rounded-2xl flex items-center justify-center mx-auto mb-8 rotate-3 hover:rotate-0 transition-transform">
-            <Truck size={40} />
+        <div className="text-center mb-14">
+          <div className="w-12 h-12 rounded-full border-[1.5px] border-[#000000] flex items-center justify-center font-davinci text-xl font-medium text-[#000000] mx-auto mb-5">
+            V
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#292923] mb-6 tracking-tight">Shipping Information</h1>
-          <p className="text-lg text-[#829078] max-w-2xl mx-auto font-medium">Fast, reliable, and transparent shipping so you know exactly when your package will arrive.</p>
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#595855] block mb-2 font-mono">
+            LOGISTICS & DISPATCH COVENANT
+          </span>
+          <h1 className="font-davinci text-4xl sm:text-5xl font-medium text-[#000000] mb-3">
+            White Glove Delivery
+          </h1>
+          <p className="text-xs sm:text-sm text-[#595855] max-w-xl mx-auto leading-relaxed">
+            Every arrangement is transported in temperature-regulated vaults with museum-grade preservation packaging to safeguard pristine dewy freshness.
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-12">
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#DCC6A8] hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-14 h-14 bg-[#E9E9E0] text-[#344B38] font-bold rounded-xl flex items-center justify-center">
-                <Truck size={28} />
-              </div>
-              <h2 className="text-2xl font-bold text-[#292923]">Domestic</h2>
-            </div>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center pb-4 border-b border-[#E9E9E0]">
+          
+          <div className="bg-[#e7e5e4] p-6 sm:p-8 rounded-[9px] border border-[#dfdcd5]">
+            <span className="text-[10px] uppercase tracking-wider text-[#595855] block mb-1">DISPATCH TIER 01</span>
+            <h2 className="font-davinci text-2xl font-medium text-[#000000] mb-6 pb-2 border-b border-[#dfdcd5]">
+              Domestic Courier
+            </h2>
+            <div className="space-y-4 text-xs">
+              <div className="flex justify-between items-center pb-3 border-b border-[#dfdcd5]/60">
                 <div>
-                  <p className="font-bold text-[#292923]">Standard Shipping</p>
-                  <p className="text-sm text-[#829078] font-medium">5-7 business days</p>
+                  <p className="font-medium text-[#000000]">Complimentary White Glove</p>
+                  <p className="text-[11px] text-[#595855]">Delivered within 2–4 business days</p>
                 </div>
-                <p className="font-bold text-[#344B38]">Free over ₹999</p>
+                <p className="font-medium text-[#000000]">Complimentary</p>
               </div>
-              <div className="flex justify-between items-center pb-4 border-b border-[#E9E9E0]">
+              <div className="flex justify-between items-center pb-3 border-b border-[#dfdcd5]/60">
                 <div>
-                  <p className="font-bold text-[#292923]">Express Shipping</p>
-                  <p className="text-sm text-[#829078] font-medium">2-3 business days</p>
+                  <p className="font-medium text-[#000000]">Morning Dew Express</p>
+                  <p className="text-[11px] text-[#595855]">Next-day delivery before 11:00 AM</p>
                 </div>
-                <p className="font-bold text-[#292923]">₹150</p>
+                <p className="font-medium text-[#000000]">₹250</p>
               </div>
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="font-bold text-[#292923]">Next Day Delivery</p>
-                  <p className="text-sm text-[#829078] font-medium">Order before 2 PM</p>
+                  <p className="font-medium text-[#000000]">Florentine Courier Handover</p>
+                  <p className="text-[11px] text-[#595855]">Same-day bespoke courier delivery</p>
                 </div>
-                <p className="font-bold text-[#292923]">₹300</p>
+                <p className="font-medium text-[#000000]">₹450</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#DCC6A8] hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-14 h-14 bg-[#E9E9E0] text-[#344B38] font-bold rounded-xl flex items-center justify-center">
-                <Globe size={28} />
-              </div>
-              <h2 className="text-2xl font-bold text-[#292923]">International</h2>
-            </div>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center pb-4 border-b border-[#E9E9E0]">
+          <div className="bg-[#e7e5e4] p-6 sm:p-8 rounded-[9px] border border-[#dfdcd5]">
+            <span className="text-[10px] uppercase tracking-wider text-[#595855] block mb-1">DISPATCH TIER 02</span>
+            <h2 className="font-davinci text-2xl font-medium text-[#000000] mb-6 pb-2 border-b border-[#dfdcd5]">
+              International Salon
+            </h2>
+            <div className="space-y-4 text-xs">
+              <div className="flex justify-between items-center pb-3 border-b border-[#dfdcd5]/60">
                 <div>
-                  <p className="font-bold text-[#292923]">Standard Global</p>
-                  <p className="text-sm text-[#829078] font-medium">7-14 business days</p>
+                  <p className="font-medium text-[#000000]">Global Confectionery Transit</p>
+                  <p className="text-[11px] text-[#595855]">Air dispatch for artisan hampers</p>
                 </div>
-                <p className="font-bold text-[#292923] text-sm">Calculated at Checkout</p>
+                <p className="font-medium text-[#000000]">₹1,200</p>
               </div>
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="font-bold text-[#292923]">Priority Global</p>
-                  <p className="text-sm text-[#829078] font-medium">3-5 business days</p>
+                  <p className="font-medium text-[#000000]">Customs & Duty Clearance</p>
+                  <p className="text-[11px] text-[#595855]">White glove handling through clearance</p>
                 </div>
-                <p className="font-bold text-[#292923] text-sm">Calculated at Checkout</p>
+                <p className="font-medium text-[#000000]">Included</p>
               </div>
             </div>
-            <div className="mt-6 p-4 bg-[#E9E9E0] rounded-xl">
-              <p className="text-xs text-[#292923]/80 font-medium leading-relaxed">
-                * International customers are responsible for all customs duties and import taxes.
-              </p>
-            </div>
           </div>
+
         </div>
 
-        <div className="bg-[#292923] text-[#F8F6F1] rounded-2xl p-8 md:p-12 relative overflow-hidden border border-[#DCC6A8]/20">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#829078] opacity-20 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-          
-          <h2 className="text-2xl font-bold mb-8 relative z-10 text-[#F8F6F1]">Our Shipping Promise</h2>
-          
-          <div className="grid md:grid-cols-2 gap-8 relative z-10">
-            <div className="flex gap-5">
-              <div className="w-12 h-12 bg-[#344B38] rounded-full flex items-center justify-center shrink-0 text-[#F8F6F1]">
-                <Clock size={20} />
-              </div>
-              <div>
-                <h3 className="font-bold text-lg mb-2 text-[#F8F6F1]">Same Day Dispatch</h3>
-                <p className="text-[#E9E9E0]/80 text-sm leading-relaxed">Orders placed before 2 PM local time on business days are packed and handed to our carriers the exact same day.</p>
-              </div>
-            </div>
-            <div className="flex gap-5">
-              <div className="w-12 h-12 bg-[#344B38] rounded-full flex items-center justify-center shrink-0 text-[#F8F6F1]">
-                <ShieldCheck size={20} />
-              </div>
-              <div>
-                <h3 className="font-bold text-lg mb-2 text-[#F8F6F1]">Insured Delivery</h3>
-                <p className="text-[#E9E9E0]/80 text-sm leading-relaxed">Every package we send out is fully insured. If it gets lost in transit, we'll replace your entire order at zero cost.</p>
-              </div>
-            </div>
-          </div>
+        <div className="text-center">
+          <Link to="/products" className="btn-pill-action py-3 px-8 text-xs uppercase tracking-widest">
+            <span>Explore Curated Archive</span>
+            <ArrowRight size={13} />
+          </Link>
         </div>
+
       </div>
     </div>
   );

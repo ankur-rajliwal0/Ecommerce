@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import WelcomeSplash from './components/WelcomeSplash';
+import CartSidebar from './components/CartSidebar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -41,7 +42,7 @@ import './index.css';
 
 const AppContent = () => {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/store-control');
+  const isAdminRoute = location.pathname.startsWith('/store-control') || location.pathname.startsWith('/control-shop');
 
   useEffect(() => {
     if ('scrollRestoration' in history) {
@@ -70,31 +71,33 @@ const AppContent = () => {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: '#292923', // Soft Charcoal
-            color: '#F8F6F1', // Warm Cream
-            border: '1px solid #DCC6A8', // Warm Beige border
-            borderRadius: '16px',
-            fontSize: '14px',
-            fontWeight: '600',
-            padding: '16px 24px',
-            boxShadow: '0 20px 25px -5px rgba(41, 41, 35, 0.25)',
+            background: '#000000', // Ink
+            color: '#ffffff', // Paper
+            border: '1px solid #dfdcd5', // Vellum
+            borderRadius: '9px', // Cards radius
+            fontSize: '12px',
+            fontFamily: 'var(--font-helvetica)',
+            fontWeight: '400',
+            padding: '12px 20px',
+            boxShadow: 'none',
           },
           success: {
             iconTheme: {
-              primary: '#344B38', // Deep Forest Green
-              secondary: '#F8F6F1',
+              primary: '#ffffff',
+              secondary: '#000000',
             },
           },
           error: {
             iconTheme: {
               primary: '#ef4444',
-              secondary: '#F8F6F1',
+              secondary: '#ffffff',
             },
           },
         }}
       />
       {!isAdminRoute && <WelcomeSplash />}
       {!isAdminRoute && <Navbar />}
+      {!isAdminRoute && <CartSidebar />}
       <div className={isAdminRoute ? "w-full" : "flex-1"}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -108,7 +111,9 @@ const AppContent = () => {
           <Route path="/my-orders" element={<MyOrders />} />
           <Route path="/profile" element={<Profile />} />
           
-          {/* Admin Routes */}
+          {/* Admin Routes & Aliases */}
+          <Route path="/control-shop" element={<Navigate to="/store-control" replace />} />
+          <Route path="/control-shop/*" element={<Navigate to="/store-control" replace />} />
           <Route path="/store-control/login" element={<AdminLogin />} />
           <Route element={<AdminRoute />}>
             <Route element={<AdminLayout />}>

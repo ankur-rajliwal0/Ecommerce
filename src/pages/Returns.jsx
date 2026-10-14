@@ -1,70 +1,64 @@
 import React from 'react';
-import { RefreshCcw, Truck, CreditCard, HelpCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Returns = () => {
   return (
-    <div className="bg-[#F8F6F1] min-h-[calc(100vh-80px)] py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="bg-[#c4c3b6] min-h-[calc(100vh-80px)] py-16 px-4 sm:px-6 font-helvetica text-[#000000]">
+      <div className="max-w-4xl mx-auto">
         
-        <div className="text-center mb-16">
-          <div className="w-20 h-20 bg-[#E9E9E0] shadow-sm border border-[#DCC6A8] text-[#344B38] font-bold rounded-2xl flex items-center justify-center mx-auto mb-8 rotate-3 hover:rotate-0 transition-transform">
-            <RefreshCcw size={40} />
+        <div className="text-center mb-14">
+          <div className="w-12 h-12 rounded-full border-[1.5px] border-[#000000] flex items-center justify-center font-davinci text-xl font-medium text-[#000000] mx-auto mb-5">
+            V
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#292923] mb-6 tracking-tight">Return Policy</h1>
-          <p className="text-lg text-[#829078] max-w-2xl mx-auto font-medium">We want you to love your purchase. If you're not completely satisfied, we've made our return process as simple and painless as possible.</p>
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#595855] block mb-2 font-mono">
+            SATISFACTION COVENANT
+          </span>
+          <h1 className="font-davinci text-4xl sm:text-5xl font-medium text-[#000000] mb-3">
+            Care & Replacement Policy
+          </h1>
+          <p className="text-xs sm:text-sm text-[#595855] max-w-xl mx-auto leading-relaxed">
+            We hold our botanical and artisanal pieces to Renaissance standards of perfection. If any arrangement arrives less than extraordinary, we make it right without delay.
+          </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#DCC6A8] overflow-hidden">
-          <div className="p-8 md:p-12 border-b border-[#E9E9E0]">
-            <h2 className="text-2xl font-extrabold text-[#292923] mb-4">30-Day Happiness Guarantee</h2>
-            <p className="text-[#292923]/80 leading-relaxed text-lg font-medium">
-              You have 30 days from the date of delivery to return any unworn, unwashed, or defective merchandise for a full refund. We believe in our products, but we believe in your happiness more.
-            </p>
-          </div>
+        <div className="bg-[#e7e5e4] rounded-[9px] border border-[#dfdcd5] overflow-hidden p-8 sm:p-12 mb-8">
+          <span className="text-[10px] uppercase tracking-wider text-[#595855] block mb-1">
+            BOTANICAL GUARANTEE
+          </span>
+          <h2 className="font-davinci text-2xl sm:text-3xl font-medium text-[#000000] mb-4">
+            7-Day Freshness Assurance
+          </h2>
+          <p className="text-xs sm:text-sm text-[#595855] leading-relaxed mb-8">
+            Living botanicals should bring sustained grace to your salon. Should any flower wilt prematurely within seven days despite fresh water replenishment, photograph the arrangement and dispatch it to our curators for an immediate replacement delivery.
+          </p>
 
-          <div className="p-8 md:p-12 bg-[#F8F6F1]/60">
-            <h2 className="text-2xl font-extrabold text-[#292923] mb-8">How to make a return</h2>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#DCC6A8] relative">
-                <div className="absolute -top-4 -left-4 w-10 h-10 bg-[#344B38] text-white font-bold rounded-full flex items-center justify-center shadow-md">1</div>
-                <div className="w-12 h-12 bg-[#E9E9E0] text-[#344B38] font-bold rounded-xl flex items-center justify-center mb-4">
-                  <HelpCircle size={24} />
-                </div>
-                <h3 className="font-bold text-lg mb-2 text-[#292923]">Request Return</h3>
-                <p className="text-[#829078] text-sm font-medium">Log into your account, go to "My Orders" and click on "Return Item".</p>
-              </div>
-
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#DCC6A8] relative">
-                <div className="absolute -top-4 -left-4 w-10 h-10 bg-[#344B38] text-white font-bold rounded-full flex items-center justify-center shadow-md">2</div>
-                <div className="w-12 h-12 bg-[#E9E9E0] text-[#344B38] font-bold rounded-xl flex items-center justify-center mb-4">
-                  <Truck size={24} />
-                </div>
-                <h3 className="font-bold text-lg mb-2 text-[#292923]">Pack & Ship</h3>
-                <p className="text-[#829078] text-sm font-medium">Print the provided prepaid shipping label and drop the package at any carrier location.</p>
-              </div>
-
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#DCC6A8] relative">
-                <div className="absolute -top-4 -left-4 w-10 h-10 bg-[#344B38] text-white font-bold rounded-full flex items-center justify-center shadow-md">3</div>
-                <div className="w-12 h-12 bg-[#E9E9E0] text-[#344B38] font-bold rounded-xl flex items-center justify-center mb-4">
-                  <CreditCard size={24} />
-                </div>
-                <h3 className="font-bold text-lg mb-2 text-[#292923]">Get Refunded</h3>
-                <p className="text-[#829078] text-sm font-medium">Once received, we process your refund within 3-5 business days to your original payment method.</p>
-              </div>
+          <div className="grid md:grid-cols-3 gap-6 pt-6 border-t border-[#dfdcd5]">
+            <div>
+              <span className="text-[10px] font-mono text-[#595855] block mb-2">STEP 01</span>
+              <h3 className="font-davinci text-lg font-medium text-[#000000] mb-1">Photograph the Piece</h3>
+              <p className="text-xs text-[#595855] leading-relaxed">Capture clear images of the arrangement and packaging.</p>
+            </div>
+            <div>
+              <span className="text-[10px] font-mono text-[#595855] block mb-2">STEP 02</span>
+              <h3 className="font-davinci text-lg font-medium text-[#000000] mb-1">Notify Concierge</h3>
+              <p className="text-xs text-[#595855] leading-relaxed">Send your folio order number to concierge@veltrix.com.</p>
+            </div>
+            <div>
+              <span className="text-[10px] font-mono text-[#595855] block mb-2">STEP 03</span>
+              <h3 className="font-davinci text-lg font-medium text-[#000000] mb-1">Priority Re-dispatch</h3>
+              <p className="text-xs text-[#595855] leading-relaxed">A freshly cut bespoke bouquet is couriered to your address.</p>
             </div>
           </div>
-          
-          <div className="p-8 md:p-12">
-            <h3 className="text-xl font-bold text-[#292923] mb-4">Important Exceptions</h3>
-            <ul className="list-disc pl-5 space-y-3 text-[#292923]/80 font-medium">
-              <li>Final sale items cannot be returned or exchanged.</li>
-              <li>Gift cards are non-refundable.</li>
-              <li>Items must be returned in their original packaging with all tags attached.</li>
-              <li>Original shipping fees (if any) are non-refundable.</li>
-            </ul>
-          </div>
         </div>
+
+        <div className="text-center">
+          <Link to="/contact" className="btn-pill-action py-3 px-8 text-xs uppercase tracking-widest">
+            <span>Contact Curatorial Concierge</span>
+            <ArrowRight size={13} />
+          </Link>
+        </div>
+
       </div>
     </div>
   );

@@ -1,80 +1,110 @@
 import React from 'react';
-import { Heart, Package, ShieldCheck, Star } from 'lucide-react';
+import { Heart, Package, ShieldCheck, Sparkles, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const About = () => {
   return (
-    <div className="bg-[#F8F6F1] min-h-[calc(100vh-80px)]">
-      {/* Hero Section */}
-      <div className="bg-[#344B38] text-white py-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#829078] opacity-20 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#DCC6A8] opacity-15 rounded-full translate-y-1/3 -translate-x-1/4 blur-3xl"></div>
-        <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight text-[#F8F6F1]">Our Story</h1>
-          <p className="text-lg md:text-xl max-w-2xl mx-auto text-[#E9E9E0]/90 leading-relaxed font-medium">
-            From a small boutique to your favorite online destination for premium fashion, unique gifts, and elegant furniture. We believe in bringing joy to your everyday life.
+    <div className="w-full bg-[#c4c3b6] text-[#000000] min-h-[calc(100vh-80px)] font-helvetica">
+      
+      {/* Editorial Ink Room Hero */}
+      <div className="bg-[#000000] text-[#ffffff] py-20 sm:py-28 px-4 sm:px-6 relative overflow-hidden border-b border-[#333333]">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#808080] block mb-3 font-helvetica">
+            THE SALON MANIFESTO • FLORENTINE HERITAGE
+          </span>
+          <h1 className="font-davinci text-4xl sm:text-6xl md:text-7xl font-medium mb-6 tracking-tight text-[#ffffff]">
+            The Art of Thoughtful Giving
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base max-w-2xl mx-auto text-[#808080] leading-relaxed font-helvetica">
+            Conceived as an exhibition of classical floristry, artisanal confections, and bespoke gift objects that reframe modern gifting as high art.
           </p>
         </div>
       </div>
 
-      {/* Content Section */}
-      <div className="max-w-7xl mx-auto px-4 py-20">
-        <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
+      {/* Main Content Exhibition Spread */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+        <div className="grid md:grid-cols-2 gap-12 sm:gap-16 items-center mb-24">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#292923] mb-6">More Than Just a Store</h2>
-            <p className="text-[#292923]/70 mb-6 leading-relaxed text-lg font-medium">
-              At Veltrix, we don't just sell products; we deliver experiences. What started in 2020 as a passion project for curating the perfect gifts has now blossomed into a full-scale lifestyle brand.
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-2 font-helvetica">
+              PROVENANCE
+            </span>
+            <h2 className="font-davinci text-3xl sm:text-5xl font-medium text-[#000000] mb-6 tracking-tight">
+              Curated as a Private Salon
+            </h2>
+            <p className="text-xs sm:text-sm text-[#595855] mb-5 leading-relaxed font-helvetica">
+              At Veltrix, we reject disposable convenience. Every floral arrangement is cut at dawn from legacy European and Himalayan farms, bound with raw silk ribbon, and accompanied by deckle-edge archival vellum note cards.
             </p>
-            <p className="text-[#292923]/70 leading-relaxed text-lg font-medium">
-              Every item in our collection is hand-picked by our dedicated team of designers and trend-spotters. Whether you're looking for that perfect dress for a special occasion, a thoughtful gift for a loved one, or a statement piece for your living room, we've got you covered.
+            <p className="text-xs sm:text-sm text-[#595855] leading-relaxed font-helvetica">
+              Our chocolatiers temper grand cru cocoa using 18th-century stone grinders, producing confections that serve as edible still-life studies. To receive a Veltrix delivery is to receive a museum-grade gesture of devotion.
             </p>
           </div>
+
           <div className="relative">
-            <div className="aspect-square md:aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden shadow-2xl border border-[#DCC6A8]/50">
-              <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Our Store" className="w-full h-full object-cover" />
+            <div className="aspect-[4/3] bg-[#e7e5e4] rounded-[9px] overflow-hidden border border-[#dfdcd5] shadow-xl">
+              <img 
+                src="/images/renaissance_flowers.jpg" 
+                alt="Florentine Floral Art" 
+                onError={(e) => { e.target.src = '/favicon.png'; }}
+                className="w-full h-full object-cover filter contrast-[1.05]" 
+              />
             </div>
-            <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-xl border border-[#DCC6A8]/60 hidden md:block">
-              <div className="flex items-center gap-5">
-                <div className="w-16 h-16 bg-[#DCC6A8]/40 text-[#344B38] rounded-full flex items-center justify-center">
-                  <Star size={32} fill="currentColor" />
+            <div className="absolute -bottom-6 -left-6 bg-[#e7e5e4] p-5 rounded-[9px] border border-[#dfdcd5] hidden md:block">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full border border-[#000000] flex items-center justify-center font-davinci text-lg text-[#000000]">
+                  V
                 </div>
                 <div>
-                  <p className="text-3xl font-extrabold text-[#292923]">50k+</p>
-                  <p className="text-sm font-bold text-[#829078] uppercase tracking-wider mt-1">Happy Customers</p>
+                  <p className="font-davinci text-2xl font-medium text-[#000000]">EST. 2026</p>
+                  <p className="text-[10px] text-[#595855] uppercase tracking-wider font-helvetica">FLORENCE & BEYOND</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Core Values */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#292923] mb-4">Our Core Values</h2>
-          <p className="text-[#829078] max-w-2xl mx-auto text-lg font-medium">The principles that guide everything we do and every product we ship.</p>
+        {/* Core Principles */}
+        <div className="text-center mb-16 border-t border-[#dfdcd5] pt-16">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-2 font-helvetica">
+            TENETS OF CURATION
+          </span>
+          <h2 className="font-davinci text-3xl sm:text-5xl font-medium text-[#000000] mb-3">
+            Our Triad of Standards
+          </h2>
         </div>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
-          <div className="bg-white p-8 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all border border-[#DCC6A8]/60 group">
-            <div className="w-16 h-16 bg-[#E9E9E0] shadow-sm border border-[#DCC6A8]/40 rounded-xl flex items-center justify-center text-[#344B38] mb-6 group-hover:bg-[#344B38] group-hover:text-white transition-colors">
-              <Heart size={32} />
-            </div>
-            <h3 className="text-xl font-bold text-[#292923] mb-3">Made with Love</h3>
-            <p className="text-[#292923]/70 leading-relaxed font-medium">We pour our hearts into selecting every single product, ensuring it meets our sky-high standards for quality and aesthetics.</p>
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="bg-[#e7e5e4] p-6 rounded-[9px] border border-[#dfdcd5]">
+            <span className="text-[10px] font-mono text-[#595855] block mb-4">TENET NO. 01</span>
+            <h3 className="font-davinci text-2xl font-medium text-[#000000] mb-2">Pristine Botanical Life</h3>
+            <p className="text-xs text-[#595855] leading-relaxed">
+              Every petal and stem is inspected for moisture retention and structural vigor before entering temperature-secured transport.
+            </p>
           </div>
-          <div className="bg-white p-8 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all border border-[#DCC6A8]/60 group">
-            <div className="w-16 h-16 bg-[#E9E9E0] shadow-sm border border-[#DCC6A8]/40 rounded-xl flex items-center justify-center text-[#344B38] mb-6 group-hover:bg-[#344B38] group-hover:text-white transition-colors">
-              <ShieldCheck size={32} />
-            </div>
-            <h3 className="text-xl font-bold text-[#292923] mb-3">Uncompromising Quality</h3>
-            <p className="text-[#292923]/70 leading-relaxed font-medium">We partner strictly with ethical manufacturers and artisans who share our commitment to true craftsmanship and extreme durability.</p>
+
+          <div className="bg-[#e7e5e4] p-6 rounded-[9px] border border-[#dfdcd5]">
+            <span className="text-[10px] font-mono text-[#595855] block mb-4">TENET NO. 02</span>
+            <h3 className="font-davinci text-2xl font-medium text-[#000000] mb-2">Uncompromising Packaging</h3>
+            <p className="text-xs text-[#595855] leading-relaxed">
+              Rigid handmade hatboxes, vellum envelopes, and custom-embossed gold and wax seals guarantee an unboxing ceremony without equal.
+            </p>
           </div>
-          <div className="bg-white p-8 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all border border-[#DCC6A8]/60 group">
-            <div className="w-16 h-16 bg-[#E9E9E0] shadow-sm border border-[#DCC6A8]/40 rounded-xl flex items-center justify-center text-[#344B38] mb-6 group-hover:bg-[#344B38] group-hover:text-white transition-colors">
-              <Package size={32} />
-            </div>
-            <h3 className="text-xl font-bold text-[#292923] mb-3">Delightful Unboxing</h3>
-            <p className="text-[#292923]/70 leading-relaxed font-medium">The experience doesn't end at checkout. We've designed our packaging to make every delivery feel like opening a precious gift.</p>
+
+          <div className="bg-[#e7e5e4] p-6 rounded-[9px] border border-[#dfdcd5]">
+            <span className="text-[10px] font-mono text-[#595855] block mb-4">TENET NO. 03</span>
+            <h3 className="font-davinci text-2xl font-medium text-[#000000] mb-2">White Glove Discretion</h3>
+            <p className="text-xs text-[#595855] leading-relaxed">
+              Our couriers handle each order with the discretion and elegance of private art curators delivering commissioned masterpieces.
+            </p>
           </div>
         </div>
+
+        <div className="mt-16 text-center">
+          <Link to="/products" className="btn-pill-action py-3 px-8 text-xs uppercase tracking-widest">
+            <span>Explore the Complete Archive</span>
+            <ArrowRight size={13} />
+          </Link>
+        </div>
+
       </div>
     </div>
   );

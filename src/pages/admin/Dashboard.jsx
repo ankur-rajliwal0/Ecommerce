@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { TableSkeleton } from '../../components/Skeletons';
 import { supabase } from '../../lib/supabase';
-import { DollarSign, ShoppingBag, Package, TrendingUp } from 'lucide-react';
+import { DollarSign, ShoppingBag, Package, TrendingUp, UserX } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({ revenue: 0, orders: 0, products: 0 });
   const [recentOrders, setRecentOrders] = useState([]);
+  const [profiles, setProfiles] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,8 +21,23 @@ const Dashboard = () => {
       // Products count
       const { count: productCount } = await supabase.from('products').select('*', { count: 'exact', head: true });
       
-      // Orders and Revenue
-      const { data: orders } = await supabase.from('orders').select('id, total_amount, order_status, created_at').order('created_at', { ascending: false });
+      // Orders, Profiles and Revenue
+      const { data: orders } = await supabase
+        .from('orders')
+        .select('id, total_amount, order_status, created_at, customer_name, user_id')
+        .order('created_at', { ascending: false });
+      
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('id, full_name');
+        
+      const profileMap = {};
+      if (profilesData) {
+        profilesData.forEach(p => {
+          profileMap[p.id] = p.full_name;
+        });
+      }
+      setProfiles(profileMap);
       
       let revenue = 0;
       if (orders) {
@@ -52,7 +68,7 @@ const Dashboard = () => {
       <div className="flex justify-between items-start mb-6 relative z-10">
         <div>
           <p className="text-white/90 font-bold mb-1 tracking-wider uppercase text-xs">{title}</p>
-          <h3 className="text-4xl font-black tracking-tight drop-shadow-sm">{value}</h3>
+          <h3 className="text-4xl font-black tracking-tight drop-shadow-sm !text-white">{value}</h3>
         </div>
         <div className="p-3 bg-white/20 backdrop-blur-md rounded-xl text-white shadow-inner group-hover:bg-white/30 transition-colors duration-300">
           <div className="transform group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500">
@@ -93,7 +109,7 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <StatCard 
               title="Total Revenue" 
-              value={`₹${stats.revenue.toFixed(2)}`} 
+              value={`₹${Number(stats?.revenue || 0).toFixed(2)}`} 
               icon={<DollarSign size={28} />} 
               gradientFrom="from-[#344B38]"
               gradientTo="to-[#202f23]"
@@ -136,21 +152,39 @@ const Dashboard = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="text-left text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest border-b border-[#E9E9E0] bg-[#E9E9E0]/40">
-                      <th className="px-4 md:px-8 py-5">Order ID</th>
-                      <th className="px-4 md:px-8 py-5">Date</th>
-                      <th className="px-4 md:px-8 py-5">Status</th>
-                      <th className="px-4 md:px-8 py-5 text-right">Amount</th>
+                      <th className="px-4 md:px-8 py-5 whitespace-nowrap">Order ID</th>
+                      <th className="px-4 md:px-8 py-5 whitespace-nowrap">Customer</th>
+                      <th className="px-4 md:px-8 py-5 whitespace-nowrap">Date</th>
+                      <th className="px-4 md:px-8 py-5 whitespace-nowrap">Status</th>
+                      <th className="px-4 md:px-8 py-5 text-right whitespace-nowrap">Amount</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E9E9E0]">
-                    {recentOrders.map((order, idx) => (
+                    {recentOrders.map((order, idx) => {
+                      const isUserDeleted = Boolean(order.user_id && !profiles[order.user_id]);
+
+                      return (
                       <tr 
                         key={order.id} 
-                        className="hover:bg-[#F8F6F1] hover:scale-[1.01] hover:shadow-lg relative hover:z-10 transition-all duration-300 group cursor-pointer"
+                        className="hover:bg-[#F8F6F1] transition-colors duration-200 group cursor-pointer"
                         style={{ animationDelay: `${idx * 100 + 400}ms` }}
                       >
                         <td className="px-4 md:px-8 py-5 text-sm font-bold text-[#292923] group-hover:text-[#344B38] transition-colors md:rounded-l-xl whitespace-nowrap">
-                          #{order.id.split('-')[0].toUpperCase()}
+                          #{String(order?.id || '').split('-')[0].toUpperCase()}
+                        </td>
+                        <td className="px-4 md:px-8 py-5 text-sm whitespace-nowrap">
+                          {isUserDeleted ? (
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-semibold text-[#292923]">{order.customer_name || 'Customer'}</span>
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded-full">
+                                <UserX size={10} className="text-rose-600" /> User Deleted
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="font-semibold text-[#292923]">
+                              {order.customer_name || profiles[order.user_id] || 'Guest Customer'}
+                            </span>
+                          )}
                         </td>
                         <td className="px-4 md:px-8 py-5 text-sm text-[#829078] font-medium group-hover:text-[#292923] transition-colors whitespace-nowrap">
                           {new Date(order.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
@@ -168,7 +202,8 @@ const Dashboard = () => {
                           ₹{Number(order.total_amount).toFixed(2)}
                         </td>
                       </tr>
-                    ))}
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
