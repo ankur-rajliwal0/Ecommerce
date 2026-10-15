@@ -201,7 +201,7 @@ const Shop = () => {
                           {product.category?.name || 'Artifact'}
                         </span>
                         <Link to={`/product/${product.id}`}>
-                          <h3 className="font-davinci text-base sm:text-xl font-medium text-[#000000] line-clamp-1 hover:underline mb-1.5 leading-snug">
+                          <h3 className="font-davinci text-base sm:text-xl font-medium text-[#000000] line-clamp-1 hover:text-[#344B38] transition-colors mb-1.5 leading-snug">
                             {product.name}
                           </h3>
                         </Link>

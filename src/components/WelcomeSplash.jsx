@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../assets/veltrix-logo.png';
-import { ArrowRight } from 'lucide-react';
 
 const WelcomeSplash = () => {
   const [show, setShow] = useState(true);
   const [phase, setPhase] = useState('active'); // 'active', 'exiting', 'hidden'
 
+  const handleSkip = (e) => {
+    if (e) {
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+    }
+    // Instantly skip the intro
+    setPhase('hidden');
+    setShow(false);
+  };
+
   useEffect(() => {
-    // Elegant theatrical timing: display for ~900ms then smoothly part curtains
+    // Original theatrical timing: display for ~900ms then smoothly part curtains
     const exitTimer = setTimeout(() => {
       setPhase('exiting');
     }, 900);
@@ -18,58 +26,67 @@ const WelcomeSplash = () => {
       setShow(false);
     }, 1600);
 
+    // Press Enter or Escape or Space to skip immediately
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') {
+        handleSkip(e);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       clearTimeout(exitTimer);
       clearTimeout(unmountTimer);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
-
-  const handleDismiss = (e) => {
-    if (e) e.stopPropagation();
-    if (phase === 'exiting' || phase === 'hidden') return;
-    setPhase('exiting');
-    setTimeout(() => {
-      setPhase('hidden');
-      setShow(false);
-    }, 500);
-  };
 
   if (!show || phase === 'hidden') return null;
 
   return (
     <div
       id="welcome-splash-overlay"
-      onClick={handleDismiss}
+      onClick={handleSkip}
       className="fixed inset-0 z-[999999] select-none overflow-hidden cursor-pointer"
-      title="Click anywhere to enter store"
+      title="Click anywhere or press Enter to skip"
+      style={{
+        pointerEvents: phase === 'exiting' ? 'none' : 'auto',
+      }}
     >
       {/* Top Curtain Panel (Slides Up) */}
       <div
-        className={`absolute top-0 left-0 right-0 h-1/2 z-10 transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
-          phase === 'exiting' ? '-translate-y-full' : 'translate-y-0'
-        }`}
+        className="absolute top-0 left-0 right-0 h-1/2 z-10"
         style={{
           background: '#000000',
           borderBottom: '1px solid #dfdcd5',
+          transform: phase === 'exiting' ? 'translateY(-100%)' : 'translateY(0)',
+          transition: 'transform 0.7s cubic-bezier(0.77, 0, 0.175, 1)',
+          willChange: 'transform',
         }}
       />
 
       {/* Bottom Curtain Panel (Slides Down) */}
       <div
-        className={`absolute bottom-0 left-0 right-0 h-1/2 z-10 transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
-          phase === 'exiting' ? 'translate-y-full' : 'translate-y-0'
-        }`}
+        className="absolute bottom-0 left-0 right-0 h-1/2 z-10"
         style={{
           background: '#000000',
           borderTop: '1px solid #dfdcd5',
+          transform: phase === 'exiting' ? 'translateY(100%)' : 'translateY(0)',
+          transition: 'transform 0.7s cubic-bezier(0.77, 0, 0.175, 1)',
+          willChange: 'transform',
         }}
       />
 
       {/* Center Stage Presentation Content */}
       <div
-        className={`absolute inset-0 z-20 flex flex-col items-center justify-center px-6 text-center transition-all duration-400 ease-out ${
-          phase === 'exiting' ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
-        }`}
+        className="absolute inset-0 z-20 flex flex-col items-center justify-center px-6 text-center"
+        style={{
+          opacity: phase === 'exiting' ? 0 : 1,
+          transform: phase === 'exiting' ? 'scale(0.96)' : 'scale(1)',
+          transition: 'opacity 0.4s ease-out, transform 0.4s ease-out',
+          pointerEvents: phase === 'exiting' ? 'none' : 'auto',
+        }}
       >
         {/* Circled Monogram Mark */}
         <div className="w-16 h-16 rounded-full border-[1.5px] border-[#ffffff] flex items-center justify-center font-davinci text-3xl font-medium text-[#ffffff] mb-5">
@@ -88,22 +105,6 @@ const WelcomeSplash = () => {
           Curated Botanicals • Living Artifacts
         </p>
 
-        <p className="text-[10px] text-[#595855] font-helvetica tracking-widest uppercase mt-4">
-          Click anywhere to enter the exhibition
-        </p>
-      </div>
-
-      {/* Top Right Subtle Skip Button */}
-      <div className="absolute top-6 right-6 z-30 pointer-events-auto">
-        <button
-          onClick={handleDismiss}
-          type="button"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-[28.8px] bg-[#000000] text-[#ffffff] text-xs font-helvetica uppercase tracking-wider border border-[#dfdcd5] transition-all hover:bg-[#dfdcd5] hover:text-[#000000] cursor-pointer"
-          aria-label="Skip Intro"
-        >
-          <span>Enter</span>
-          <ArrowRight size={12} />
-        </button>
       </div>
     </div>
   );

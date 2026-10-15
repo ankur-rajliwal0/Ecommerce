@@ -185,17 +185,20 @@ const ProductDetails = () => {
             
             {/* Rating Summary */}
             <div className="flex items-center gap-2 mb-6 font-helvetica text-xs">
-              <div className="flex items-center text-[#000000]">
+              <div className="flex items-center gap-0.5">
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star 
                     key={star} 
                     size={14} 
-                    fill={star <= Math.round(calculateAverageRating()) ? "currentColor" : "none"} 
-                    className={star <= Math.round(calculateAverageRating()) ? "text-[#000000]" : "text-[#dfdcd5]"} 
+                    className={
+                      star <= Math.round(calculateAverageRating()) 
+                        ? "text-amber-500 fill-amber-500" 
+                        : "text-[#595855] fill-none"
+                    } 
                   />
                 ))}
               </div>
-              <span className="font-medium text-[#000000]">{calculateAverageRating()}</span>
+              <span className="font-semibold text-[#000000]">{calculateAverageRating()}</span>
               <span className="text-[#595855]">({reviews.length} appraisals)</span>
             </div>
 
@@ -297,9 +300,17 @@ const ProductDetails = () => {
                           {new Date(review.created_at).toLocaleDateString()}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1 mb-2 text-[#000000]">
+                      <div className="flex items-center gap-0.5 mb-2">
                         {[1, 2, 3, 4, 5].map(star => (
-                           <Star key={star} size={11} fill={star <= review.rating ? "currentColor" : "none"} className={star <= review.rating ? "text-[#000000]" : "text-[#dfdcd5]"} />
+                           <Star 
+                             key={star} 
+                             size={11} 
+                             className={
+                               star <= review.rating 
+                                 ? "text-amber-500 fill-amber-500" 
+                                 : "text-[#595855] fill-none"
+                             } 
+                           />
                         ))}
                       </div>
                       <p className="text-xs text-[#595855] font-helvetica leading-relaxed">{review.review_text}</p>
@@ -329,10 +340,17 @@ const ProductDetails = () => {
                   <form onSubmit={submitReview} className="flex flex-col gap-4">
                     <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[#595855] mb-1.5">Rating</label>
-                      <div className="flex gap-1.5 text-[#000000]">
+                      <div className="flex gap-1.5">
                         {[1, 2, 3, 4, 5].map(star => (
-                          <button type="button" key={star} onClick={() => setRating(star)} className="focus:outline-none">
-                            <Star size={18} fill={star <= rating ? "currentColor" : "none"} className={star <= rating ? "text-[#000000]" : "text-[#dfdcd5]"} />
+                          <button type="button" key={star} onClick={() => setRating(star)} className="focus:outline-none transition-transform hover:scale-110">
+                            <Star 
+                              size={18} 
+                              className={
+                                star <= rating 
+                                  ? "text-amber-500 fill-amber-500" 
+                                  : "text-[#595855] fill-none"
+                              } 
+                            />
                           </button>
                         ))}
                       </div>

@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -50,23 +54,41 @@ const AppContent = () => {
     }
 
     const scrollToTop = () => {
+      // 1. Reset Lenis smooth scroll inertia and force to 0 immediately
       if (window.lenis) {
-        window.lenis.scrollTo(0, { immediate: true });
+        try {
+          window.lenis.stop();
+          window.lenis.scrollTo(0, { immediate: true, force: true });
+          window.lenis.start();
+        } catch {
+          // ignore
+        }
       }
+
+      // 2. Native window and document scroll reset
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+
+      // 3. Recalculate GSAP ScrollTrigger positions for new page view
+      ScrollTrigger.refresh();
     };
 
-    // Try immediately
+    // Immediate execution
     scrollToTop();
-    
-    // Try again after a short delay in case of async rendering/loading states
-    const timeoutId = setTimeout(scrollToTop, 100);
-    
-    return () => clearTimeout(timeoutId);
-  }, [location.pathname]);
+
+    // Single settled refresh after route transition & layout settles
+    const t1 = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 150);
+
+    return () => {
+      clearTimeout(t1);
+    };
+  }, [location.pathname, location.search]);
 
   return (
-    <div className="app-container flex flex-col min-h-screen">
+    <div className="app-container flex flex-col min-h-screen overflow-x-hidden">
       <Toaster 
         position="bottom-right"
         toastOptions={{
@@ -147,21 +169,26 @@ const AppContent = () => {
 function App() {
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.35,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
+      smoothWheel: true,
+      touchMultiplier: 1.25,
     });
 
     window.lenis = lenis;
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+    // Synchronize Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
 
-    requestAnimationFrame(raf);
-    
+    const tickerUpdate = (time) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(tickerUpdate);
+    gsap.ticker.lagSmoothing(500, 33);
+
     return () => {
+      gsap.ticker.remove(tickerUpdate);
       window.lenis = null;
       lenis.destroy();
     };

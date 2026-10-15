@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, ShoppingBag, User, LogOut, Menu, X, ChevronDown, Shield, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -13,14 +13,11 @@ const Navbar = () => {
   const location = useLocation();
 
   const [scrolled, setScrolled] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileProfileOpen, setIsMobileProfileOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,14 +25,6 @@ const Navbar = () => {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const { data } = await supabase.from('categories').select('*').order('name');
-      if (data) setCategories(data);
-    };
-    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -74,8 +63,6 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
     setShowSuggestions(false);
     setIsProfileOpen(false);
-    setIsMobileProfileOpen(false);
-    setIsSearchOpen(false);
   }, [location.pathname]);
 
   const handleLogout = async () => {
@@ -89,13 +76,12 @@ const Navbar = () => {
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
       setShowSuggestions(false);
-      setIsSearchOpen(false);
     }
   };
 
   return (
     <header 
-      className={`sticky top-0 z-50 w-full transition-all duration-300 bg-[#c4c3b6] ${
+      className={`sticky top-0 z-50 w-full transition-[background-color,box-shadow] duration-200 bg-[#c4c3b6] ${
         scrolled ? 'bg-[#c4c3b6]/95 backdrop-blur-md shadow-sm' : ''
       }`}
     >
@@ -116,23 +102,20 @@ const Navbar = () => {
         </div>
 
         {/* Center: Desktop Ghost Text Navigation Links (Centered in the viewport) */}
-        <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-8 flex-1 px-4">
-          <Link to="/products" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000]">
+        <nav className="hidden lg:flex items-center justify-center gap-5 xl:gap-8 flex-1 px-4">
+          <Link to="/products" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000] whitespace-nowrap">
             Collection
           </Link>
-          <Link to="/products?search=bouquet" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000]">
+          <Link to="/products?search=bouquet" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000] whitespace-nowrap">
             Botanicals
           </Link>
-          <Link to="/products?search=gift" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000]">
-            Hampers
-          </Link>
-          <Link to="/products?search=chocolate" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000]">
+          <Link to="/products?search=chocolate" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000] whitespace-nowrap">
             Confections
           </Link>
-          <Link to="/about" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000]">
+          <Link to="/about" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000] whitespace-nowrap">
             Exhibition
           </Link>
-          <Link to="/contact" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000]">
+          <Link to="/contact" className="ghost-link text-xs tracking-wider uppercase font-medium hover:underline text-[#000000] whitespace-nowrap">
             Concierge
           </Link>
         </nav>
@@ -201,51 +184,48 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Right: Search, Auth, and Bag Action */}
-        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        {/* Right: Search, Bag Action, and Profile (Aligned to the Right) */}
+        <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
           
-          {/* Integrated Minimal Search (Desktop) */}
+          {/* Desktop Search Bar (Always visible by default) */}
           <div className="hidden lg:block relative search-container">
-            {/* Desktop Search Input */}
-            {isSearchOpen ? (
-              <form onSubmit={handleSearchSubmit} className="hidden sm:flex items-center">
-                <input
-                  type="text"
-                  placeholder="Search catalog..."
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setShowSuggestions(true);
-                  }}
-                  autoFocus
-                  className="w-48 sm:w-64 bg-[#e7e5e4] text-[#000000] placeholder-[#595855] text-xs px-3 py-1.5 rounded-[9px] border border-[#dfdcd5] focus:outline-none focus:border-[#000000] font-helvetica"
-                />
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center">
+              <Search 
+                size={13} 
+                className="absolute left-2.5 text-[#595855] pointer-events-none" 
+                strokeWidth={2}
+              />
+              <input
+                type="text"
+                placeholder="Search catalog..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowSuggestions(true);
+                }}
+                onFocus={() => {
+                  if (suggestions.length > 0) setShowSuggestions(true);
+                }}
+                className="w-36 lg:w-40 xl:w-52 bg-[#e7e5e4] text-[#000000] placeholder-[#73726c] text-xs pl-7 pr-6 py-1.5 rounded-full border border-[#dfdcd5] focus:outline-none focus:border-[#000000] font-helvetica transition-all shadow-2xs"
+              />
+              {searchQuery && (
                 <button
                   type="button"
-                  onClick={() => setIsSearchOpen(false)}
-                  className="ml-1.5 text-[#595855] hover:text-[#000000] p-1"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setShowSuggestions(false);
+                  }}
+                  className="absolute right-2 text-[#595855] hover:text-[#000000] p-0.5 cursor-pointer"
+                  title="Clear search"
                 >
-                  <X size={14} />
+                  <X size={11} />
                 </button>
-              </form>
-            ) : null}
-
-            {/* Search Icon Trigger */}
-            {!isSearchOpen && (
-              <button 
-                onClick={() => setIsSearchOpen(true)}
-                className="text-[#000000] hover:text-[#595855] p-1.5 transition-colors flex items-center gap-1.5 text-xs font-helvetica"
-                title="Search"
-                aria-label="Search"
-              >
-                <Search size={17} strokeWidth={1.75} />
-                <span className="hidden lg:inline text-[12px] uppercase tracking-wider">Search</span>
-              </button>
-            )}
+              )}
+            </form>
 
             {/* Desktop Suggestions Dropdown */}
             {showSuggestions && suggestions.length > 0 && (
-              <div className="hidden sm:block absolute right-0 top-full mt-2 w-72 bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] shadow-none overflow-hidden z-50">
+              <div className="hidden sm:block absolute right-0 top-full mt-2 w-72 bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] shadow-lg overflow-hidden z-50">
                 <div className="p-2 border-b border-[#dfdcd5] text-[10px] uppercase tracking-wider text-[#595855] font-helvetica">
                   Catalog Results
                 </div>
@@ -271,8 +251,17 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Account Profile Dropdown (visible on desktop sm+) */}
-          <div className="relative profile-container hidden sm:block">
+          {/* Bag Action Pill Button */}
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="btn-pill-action py-1.5 px-3 sm:px-3.5 text-[11px] sm:text-xs shrink-0 cursor-pointer"
+          >
+            <ShoppingBag size={13} strokeWidth={2} />
+            <span className="uppercase tracking-wider">Bag [{itemCount}]</span>
+          </button>
+
+          {/* Account Profile Dropdown (Positioned on the RIGHT of Bag) */}
+          <div className="relative profile-container hidden sm:block shrink-0">
             {user ? (
               <div>
                 <button
@@ -287,7 +276,7 @@ const Navbar = () => {
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#000000] text-[#ffffff] flex items-center justify-center font-davinci text-xs sm:text-sm shrink-0">
                     {profile?.full_name ? profile.full_name[0].toUpperCase() : 'V'}
                   </div>
-                  <span className="text-xs font-medium uppercase tracking-wider hidden sm:inline">
+                  <span className="text-xs font-medium uppercase tracking-wider hidden sm:inline max-w-[85px] lg:max-w-[100px] truncate">
                     {profile?.full_name ? profile.full_name.split(' ')[0] : 'Account'}
                   </span>
                   <ChevronDown size={12} className={`transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`} />
@@ -359,7 +348,7 @@ const Navbar = () => {
             ) : (
               <Link 
                 to="/login"
-                className="ghost-link text-xs uppercase tracking-wider font-medium text-[#000000] flex items-center gap-1"
+                className="ghost-link text-xs uppercase tracking-wider font-medium text-[#000000] flex items-center gap-1.5 py-1"
               >
                 <User size={15} strokeWidth={1.75} />
                 <span className="hidden sm:inline">Sign In</span>
@@ -367,19 +356,10 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Bag Action Pill Button */}
-          <button
-            onClick={() => setIsCartOpen(true)}
-            className="btn-pill-action py-1.5 px-3 sm:px-4 text-[11px] sm:text-xs shrink-0"
-          >
-            <ShoppingBag size={13} strokeWidth={2} />
-            <span className="uppercase tracking-wider">Bag [{itemCount}]</span>
-          </button>
-
           {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden text-[#000000] p-1.5 rounded-md hover:bg-[#000000]/5 transition-colors"
+            className="lg:hidden text-[#000000] p-1.5 rounded-md hover:bg-[#000000]/5 transition-colors cursor-pointer"
             aria-label="Toggle navigation"
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -487,13 +467,6 @@ const Navbar = () => {
               className="text-sm font-medium text-[#000000] uppercase tracking-wider py-1.5 border-b border-[#dfdcd5]/50"
             >
               Botanicals & Bouquets
-            </Link>
-            <Link 
-              to="/products?search=gift" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm font-medium text-[#000000] uppercase tracking-wider py-1.5 border-b border-[#dfdcd5]/50"
-            >
-              Curated Hampers
             </Link>
             <Link 
               to="/products?search=chocolate" 

@@ -32,6 +32,26 @@ export const ProductGridSkeleton = ({ count = 8 }) => {
   );
 };
 
+// Pinterest Masonry Skeleton for dynamic height catalog
+export const MasonryProductGridSkeleton = ({ count = 8 }) => {
+  const heights = ['h-56', 'h-72', 'h-48', 'h-64', 'h-80', 'h-52', 'h-60', 'h-76'];
+  return (
+    <div className="columns-2 sm:columns-3 lg:columns-4 gap-4 sm:gap-6 [column-fill:_balance]">
+      {Array(count).fill(0).map((_, i) => (
+        <div key={i} className="break-inside-avoid mb-4 sm:mb-6 bg-[#e7e5e4] border border-[#dfdcd5] rounded-2xl p-3 sm:p-3.5 flex flex-col">
+          <div className={`w-full ${heights[i % heights.length]} skeleton-shimmer rounded-xl mb-3`} />
+          <div className="h-3 skeleton-shimmer rounded-[2px] w-1/3 mb-2" />
+          <div className="h-4 skeleton-shimmer rounded-[2px] w-4/5 mb-3" />
+          <div className="pt-2 border-t border-[#dfdcd5] flex justify-between">
+            <div className="h-3 skeleton-shimmer rounded-[2px] w-12" />
+            <div className="h-3 skeleton-shimmer rounded-[2px] w-10" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 // Category Card Skeleton matching Home category cards
 export const CategoryCardSkeleton = () => {
   return (
