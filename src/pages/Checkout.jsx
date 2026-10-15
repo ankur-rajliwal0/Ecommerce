@@ -112,11 +112,11 @@ const Checkout = () => {
   const handleCheckout = async (e) => {
     e.preventDefault();
     if (!user) {
-      toast.error('Please sign in to complete your acquisition');
+      toast.error('Please sign in to complete your order');
       navigate('/login?redirect=/checkout');
       return;
     }
-    if (cartItems.length === 0) return toast.error('Folio is empty');
+    if (cartItems.length === 0) return toast.error('Your cart is empty');
 
     const razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
     if (!razorpayKeyId) {
@@ -280,10 +280,10 @@ const Checkout = () => {
       <div className="w-full bg-[#c4c3b6] min-h-[calc(100vh-140px)] py-16 px-4 sm:px-6 font-helvetica">
         <div className="max-w-md mx-auto text-center p-8 bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px]">
           <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-2">
-            AUTHENTICATION REQUIRED
+            SIGN IN REQUIRED
           </span>
-          <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-3">Collector Sign In Required</h2>
-          <p className="text-xs text-[#595855] mb-6">Please sign in to your folio to confirm dispatch and complete acquisition.</p>
+          <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-3">Please Sign In to Continue</h2>
+          <p className="text-xs text-[#595855] mb-6">Please sign in to your account to confirm your delivery address and complete checkout.</p>
           <button 
             onClick={() => navigate('/login?redirect=/checkout')} 
             className="btn-pill-action py-3 px-8 text-xs uppercase tracking-wider"
@@ -300,15 +300,15 @@ const Checkout = () => {
       <div className="w-full bg-[#c4c3b6] min-h-[calc(100vh-140px)] py-16 px-4 sm:px-6 font-helvetica">
         <div className="max-w-md mx-auto text-center p-8 bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px]">
           <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-2">
-            EMPTY FOLIO
+            YOUR CART IS EMPTY
           </span>
           <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-3">Your Bag is Empty</h2>
-          <p className="text-xs text-[#595855] mb-6">Select pieces from our catalog before proceeding to dispatch.</p>
+          <p className="text-xs text-[#595855] mb-6">Please add items to your bag before proceeding to checkout.</p>
           <button 
             onClick={() => navigate('/')} 
             className="btn-pill-action py-3 px-8 text-xs uppercase tracking-wider"
           >
-            Explore Gallery
+            Start Shopping
           </button>
         </div>
       </div>
@@ -417,7 +417,7 @@ const Checkout = () => {
                     <div className="md:col-span-2 mt-2">
                       <label className="flex items-center cursor-pointer text-xs text-[#595855]">
                         <input type="checkbox" checked={saveNewAddress} onChange={(e) => setSaveNewAddress(e.target.checked)} className="mr-2 text-[#000000]" />
-                        <span>Preserve this address in your collector folio</span>
+                        <span>Save this address to my profile</span>
                       </label>
                     </div>
                   )}
@@ -427,10 +427,10 @@ const Checkout = () => {
               {/* Payment Method Card */}
               <div className="bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] p-6 sm:p-8 mb-6">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
-                  PAYMENT CLEARING
+                  PAYMENT METHOD
                 </span>
                 <h3 className="font-davinci text-2xl font-medium text-[#000000] mb-5 pb-3 border-b border-[#dfdcd5]">
-                  Instant & Encrypted Clearance
+                  Secure & Encrypted Payment
                 </h3>
                 <div className="border border-[#dfdcd5] rounded-[9px] bg-[#ffffff] p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
@@ -449,7 +449,7 @@ const Checkout = () => {
                   disabled={loading} 
                   className="btn-pill-action w-full py-4 text-xs uppercase tracking-widest disabled:opacity-50"
                 >
-                  {loading ? 'Clearing Acquisition...' : `Authorize & Acquire — ₹${Number(cartTotal || 0).toFixed(2)}`}
+                  {loading ? 'Processing Payment...' : `Pay Now — ₹${Number(cartTotal || 0).toFixed(2)}`}
                 </button>
               </div>
 
@@ -459,10 +459,10 @@ const Checkout = () => {
           {/* Right: In Your Bag Summary */}
           <div className="bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] p-6 sticky top-24">
             <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
-              FOLIO SUMMARY
+              ORDER SUMMARY
             </span>
             <h3 className="font-davinci text-2xl font-medium text-[#000000] mb-4 pb-3 border-b border-[#dfdcd5]">
-              Acquisitions ({cartItems.length})
+              Items in Order ({cartItems.length})
             </h3>
             
             <div className="flex flex-col gap-3 mb-6 max-h-[38vh] overflow-y-auto pr-1">

@@ -12,11 +12,11 @@ const CartPage = () => {
       <div className="w-full bg-[#c4c3b6] min-h-[calc(100vh-140px)] py-16 px-4 sm:px-6">
         <div className="max-w-md mx-auto text-center p-8 bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px]">
           <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] font-helvetica block mb-2">
-            EMPTY FOLIO
+            YOUR BAG IS EMPTY
           </span>
           <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-3">Your Bag is Empty</h2>
           <p className="text-xs text-[#595855] font-helvetica mb-6">
-            You have not selected any floral or artisanal acquisitions yet.
+            You haven't added any products to your bag yet.
           </p>
           <button 
             className="btn-pill-action py-3 px-6 text-xs uppercase tracking-wider" 
@@ -37,10 +37,10 @@ const CartPage = () => {
         {/* Header */}
         <div className="mb-8 border-b border-[#dfdcd5] pb-4">
           <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] font-helvetica block mb-1">
-            BAG REVIEW
+            SHOPPING BAG
           </span>
           <h1 className="font-davinci text-3xl sm:text-4xl font-medium text-[#000000]">
-            Acquisition Folio ({cartItems.length} items)
+            Shopping Bag ({cartItems.length} items)
           </h1>
         </div>
         
@@ -53,8 +53,8 @@ const CartPage = () => {
             <table className="w-full border-collapse hidden md:table">
               <thead>
                 <tr className="border-b border-[#dfdcd5] text-[10px] uppercase tracking-wider text-[#595855]">
-                  <th className="text-left py-3 font-medium">Acquisition</th>
-                  <th className="text-left py-3 font-medium">Unit Valuation</th>
+                  <th className="text-left py-3 font-medium">Product</th>
+                  <th className="text-left py-3 font-medium">Price</th>
                   <th className="text-left py-3 font-medium">Quantity</th>
                   <th className="text-right py-3 font-medium">Total</th>
                 </tr>

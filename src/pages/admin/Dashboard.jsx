@@ -68,7 +68,7 @@ const Dashboard = () => {
       <div className="flex justify-between items-start mb-6 relative z-10">
         <div>
           <p className="text-white/90 font-bold mb-1 tracking-wider uppercase text-xs">{title}</p>
-          <h3 className="text-4xl font-black tracking-tight drop-shadow-sm !text-white">{value}</h3>
+          <div className="text-3xl sm:text-4xl font-bold font-helvetica tracking-tight drop-shadow-xs text-white tabular-nums">{value}</div>
         </div>
         <div className="p-3 bg-white/20 backdrop-blur-md rounded-xl text-white shadow-inner group-hover:bg-white/30 transition-colors duration-300">
           <div className="transform group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500">

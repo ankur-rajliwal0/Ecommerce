@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 
 const CartSidebar = () => {
-  const { isCartOpen, setIsCartOpen, cartItems, updateQuantity, removeFromCart, cartTotal } = useCart();
+  const { isCartOpen, setIsCartOpen, cartItems, updateQuantity, removeFromCart, clearCart, cartTotal } = useCart();
   const navigate = useNavigate();
 
   if (!isCartOpen) return null;
@@ -24,11 +24,21 @@ const CartSidebar = () => {
           <div className="p-5 border-b border-[#dfdcd5] flex items-center justify-between">
             <div>
               <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block">
-                FOLIO REVIEW
+                MY BAG
               </span>
-              <h2 className="font-davinci text-2xl font-medium text-[#000000]">
-                Your Bag ({cartItems.length})
-              </h2>
+              <div className="flex items-baseline gap-3">
+                <h2 className="font-davinci text-2xl font-medium text-[#000000]">
+                  Your Bag ({cartItems.length})
+                </h2>
+                {cartItems.length > 0 && (
+                  <button
+                    onClick={clearCart}
+                    className="text-[11px] text-[#595855] hover:text-red-700 underline transition-colors"
+                  >
+                    Clear All
+                  </button>
+                )}
+              </div>
             </div>
             <button 
               className="text-[#595855] hover:text-[#000000] p-1.5 rounded-full hover:bg-[#dfdcd5]/60 transition-colors" 
@@ -97,7 +107,7 @@ const CartSidebar = () => {
           {cartItems.length > 0 && (
             <div className="p-5 border-t border-[#dfdcd5] bg-[#dfdcd5]/30">
               <div className="flex justify-between items-center mb-4 text-xs font-medium">
-                <span className="text-[#595855] uppercase tracking-wider text-[11px]">Subtotal Valuation</span>
+                <span className="text-[#595855] uppercase tracking-wider text-[11px]">Subtotal</span>
                 <span className="text-sm font-semibold text-[#000000]">₹{Number(cartTotal || 0).toFixed(2)}</span>
               </div>
               <button 
@@ -117,7 +127,7 @@ const CartSidebar = () => {
                   navigate('/cart');
                 }}
               >
-                View Detailed Folio
+                View Full Bag
               </button>
             </div>
           )}

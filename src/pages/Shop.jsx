@@ -111,7 +111,7 @@ const Shop = () => {
               </div>
 
               <h3 className="text-[10px] font-medium text-[#595855] uppercase tracking-[0.2em] mb-2.5">
-                Folio Disciplines
+                Categories
               </h3>
               <ul className="space-y-1">
                 <li>
@@ -123,7 +123,7 @@ const Shop = () => {
                         : 'text-[#000000] hover:bg-[#dfdcd5]/60'
                     }`}
                   >
-                    <span>Complete Archive</span>
+                    <span>All Products</span>
                   </button>
                 </li>
                 {categories.map(c => (
@@ -150,7 +150,7 @@ const Shop = () => {
           {/* Header */}
           <div className="mb-8 border-b border-[#dfdcd5] pb-5">
             <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] font-helvetica block mb-1">
-              CURRENT ARCHIVE ACQUISITIONS
+              OUR CATALOG
             </span>
             <h1 className="font-davinci text-3xl sm:text-5xl font-medium tracking-tight text-[#000000]">
               The Permanent Collection
@@ -163,7 +163,7 @@ const Shop = () => {
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredProducts.length === 0 ? (
                 <div className="col-span-full py-20 text-center text-[#595855] bg-[#e7e5e4] border border-[#dfdcd5] rounded-[9px] font-helvetica text-xs">
-                  No acquisitions found matching your query.
+                  No products found matching your search.
                 </div>
               ) : (
                 filteredProducts.map((product) => {

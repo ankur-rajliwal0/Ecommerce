@@ -109,6 +109,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = async () => {
+    localStorage.removeItem('cart_guest');
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   };

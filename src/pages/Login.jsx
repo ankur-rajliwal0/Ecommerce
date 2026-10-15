@@ -102,10 +102,10 @@ const Login = () => {
         <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-[#e7e5e4]">
           <div className="mb-8">
             <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
-              AUTHENTICATION
+              WELCOME BACK
             </span>
             <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-1">
-              Sign In to Your Folio
+              Sign In to Your Account
             </h2>
             <p className="text-xs text-[#595855]">Please enter your registered credentials.</p>
           </div>
@@ -157,17 +157,17 @@ const Login = () => {
               disabled={loading} 
               className="btn-pill-action w-full py-3 text-xs uppercase tracking-widest mt-2 disabled:opacity-50"
             >
-              {loading ? 'Authenticating...' : 'Sign In to Folio'}
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
           
           <p className="text-center mt-6 text-xs text-[#595855]">
-            New to the Salon?{' '}
+            New to Veltrix?{' '}
             <Link 
               to={redirectPath !== '/' ? `/signup?redirect=${encodeURIComponent(redirectPath)}` : '/signup'} 
               className="text-[#000000] underline font-medium"
             >
-              Create a collector account
+              Create an account
             </Link>
           </p>
         </div>

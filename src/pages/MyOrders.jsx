@@ -53,10 +53,10 @@ const MyOrders = () => {
       <div className="max-w-5xl mx-auto">
         <div className="mb-8 border-b border-[#dfdcd5] pb-4">
           <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
-            CLIENT ARCHIVE
+            ORDER HISTORY
           </span>
           <h1 className="font-davinci text-3xl sm:text-4xl font-medium text-[#000000]">
-            Acquisition History
+            My Orders
           </h1>
         </div>
         
@@ -65,10 +65,10 @@ const MyOrders = () => {
         ) : orders.length === 0 ? (
           <div className="bg-[#e7e5e4] border border-[#dfdcd5] p-10 rounded-[9px] text-center max-w-lg mx-auto">
             <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-2">
-              NO ACQUISITIONS FOUND
+              NO ORDERS FOUND
             </span>
-            <h2 className="font-davinci text-2xl font-medium text-[#000000] mb-2">Folio History Empty</h2>
-            <p className="text-xs text-[#595855] mb-6 font-helvetica">You have not completed any acquisitions from our collections yet.</p>
+            <h2 className="font-davinci text-2xl font-medium text-[#000000] mb-2">You Have No Orders Yet</h2>
+            <p className="text-xs text-[#595855] mb-6 font-helvetica">You haven't placed any orders with us yet. Start shopping to fill your bag!</p>
             <Link to="/products" className="btn-pill-action py-3 px-6 text-xs uppercase tracking-wider">
               <span>Explore Collection</span>
               <ArrowRight size={12} />
@@ -82,15 +82,15 @@ const MyOrders = () => {
                 <div className="bg-[#dfdcd5]/40 px-6 py-3.5 border-b border-[#dfdcd5] flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex flex-wrap gap-8 text-xs">
                     <div>
-                      <p className="text-[10px] text-[#595855] uppercase tracking-wider mb-0.5">Recorded On</p>
+                      <p className="text-[10px] text-[#595855] uppercase tracking-wider mb-0.5">Order Date</p>
                       <p className="text-xs font-medium text-[#000000]">{new Date(order.created_at).toLocaleDateString()}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-[#595855] uppercase tracking-wider mb-0.5">Valuation</p>
+                      <p className="text-[10px] text-[#595855] uppercase tracking-wider mb-0.5">Total Amount</p>
                       <p className="text-xs font-medium text-[#000000]">₹{Number(order.total_amount || 0).toFixed(2)}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-[#595855] uppercase tracking-wider mb-0.5">Folio Number</p>
+                      <p className="text-[10px] text-[#595855] uppercase tracking-wider mb-0.5">Order ID</p>
                       <p className="text-xs font-medium text-[#000000]">#{String(order?.id || '').split('-')[0].toUpperCase()}</p>
                     </div>
                   </div>
@@ -111,14 +111,14 @@ const MyOrders = () => {
                         />
                         <div className="flex-1">
                           <Link to={`/product/${item.product_id}`} className="font-davinci text-lg font-medium text-[#000000] hover:underline line-clamp-1">
-                            {item.product?.name || 'Curated Piece'}
+                            {item.product?.name || 'Product'}
                           </Link>
                           <p className="text-xs text-[#595855] mt-0.5">Quantity: {item.quantity}</p>
                           <p className="text-xs font-medium text-[#000000]">₹{Number(item.price || 0).toFixed(2)}</p>
                         </div>
                         <div className="hidden sm:block text-right">
                           <Link to={`/product/${item.product_id}`} className="btn-pill-action py-1.5 px-3.5 text-[11px]">
-                            Inspect Item
+                            View Product
                           </Link>
                         </div>
                       </div>

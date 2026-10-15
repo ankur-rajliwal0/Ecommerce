@@ -97,9 +97,9 @@ const Signup = () => {
               REGISTRATION
             </span>
             <h2 className="font-davinci text-3xl font-medium text-[#000000] mb-1">
-              Create Patron Account
+              Create Your Account
             </h2>
-            <p className="text-xs text-[#595855]">Enter your identity to join our private salon.</p>
+            <p className="text-xs text-[#595855]">Enter your details to create your account.</p>
           </div>
           
           {error && (
@@ -110,7 +110,7 @@ const Signup = () => {
           
           <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
             <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] uppercase tracking-wider text-[#595855]">Full Legal Name</label>
+              <label className="text-[11px] uppercase tracking-wider text-[#595855]">Full Name</label>
               <input 
                 type="text" 
                 required 
@@ -159,17 +159,17 @@ const Signup = () => {
               disabled={loading} 
               className="btn-pill-action w-full py-3 text-xs uppercase tracking-widest mt-2 disabled:opacity-50"
             >
-              {loading ? 'Registering...' : 'Complete Enrollment'}
+              {loading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
           
           <p className="text-center mt-5 text-xs text-[#595855]">
-            Already enrolled?{' '}
+            Already have an account?{' '}
             <Link 
               to={redirectPath !== '/' ? `/login?redirect=${encodeURIComponent(redirectPath)}` : '/login'} 
               className="text-[#000000] underline font-medium"
             >
-              Sign in to your folio
+              Sign in to your account
             </Link>
           </p>
         </div>

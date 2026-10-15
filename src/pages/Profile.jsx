@@ -102,7 +102,7 @@ const Profile = () => {
         .eq('id', user.id);
 
       if (error) throw error;
-      toast.success('Patron folio updated successfully');
+      toast.success('Profile updated successfully');
       setIsEditing(false);
     } catch (err) {
       toast.error(err.message);
@@ -119,7 +119,7 @@ const Profile = () => {
   if (!user) {
     return (
       <div className="w-full bg-[#c4c3b6] min-h-[calc(100vh-80px)] py-20 px-4 text-center font-helvetica text-sm text-[#595855]">
-        Please sign in to view your collector folio.
+        Please sign in to view your profile.
       </div>
     );
   }
@@ -139,9 +139,9 @@ const Profile = () => {
             
             {isEditing ? (
               <form onSubmit={handleUpdateProfile} className="flex flex-col gap-3 w-full max-w-md bg-[#ffffff] p-5 rounded-[9px] border border-[#dfdcd5]">
-                <span className="text-[10px] uppercase tracking-wider text-[#595855]">Edit Collector Folio</span>
-                <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full px-3 py-2 text-xs border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] bg-[#ffffff] text-[#000000]" placeholder="Full Legal Name" />
-                <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full px-3 py-2 text-xs border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] bg-[#ffffff] text-[#000000]" placeholder="Contact Phone" />
+                <span className="text-[10px] uppercase tracking-wider text-[#595855]">Edit Profile & Address</span>
+                <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full px-3 py-2 text-xs border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] bg-[#ffffff] text-[#000000]" placeholder="Full Name" />
+                <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full px-3 py-2 text-xs border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] bg-[#ffffff] text-[#000000]" placeholder="Phone Number" />
                 
                 <input type="text" value={zip} onChange={handlePincodeChange} className="w-full px-3 py-2 text-xs border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] bg-[#ffffff] text-[#000000]" placeholder="6-Digit PIN Code" />
                 
@@ -150,10 +150,10 @@ const Profile = () => {
                   <input type="text" value={stateValue} onChange={(e) => setStateValue(e.target.value)} className="w-full px-3 py-2 text-xs border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] bg-[#ffffff] text-[#000000]" placeholder="State" />
                 </div>
                 
-                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full px-3 py-2 text-xs border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] bg-[#ffffff] text-[#000000]" placeholder="Street Address, House No" />
+                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full px-3 py-2 text-xs border border-[#dfdcd5] rounded-[9px] outline-none focus:border-[#000000] bg-[#ffffff] text-[#000000]" placeholder="Street Address, House / Flat No" />
                 <div className="flex gap-2 mt-2">
                   <button type="submit" disabled={loading} className="btn-pill-action flex-1 py-2 text-xs">
-                    {loading ? 'Preserving...' : 'Save Folio'}
+                    {loading ? 'Saving...' : 'Save Profile'}
                   </button>
                   <button type="button" onClick={() => setIsEditing(false)} className="px-4 py-2 border border-[#dfdcd5] text-xs text-[#000000] rounded-[28.8px] hover:bg-[#dfdcd5]/60 transition-colors">
                     Cancel
@@ -163,10 +163,10 @@ const Profile = () => {
             ) : (
               <div className="flex-1">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-[#595855] block mb-1">
-                  PATRON IDENTITY
+                  MY PROFILE
                 </span>
                 <h1 className="font-davinci text-2xl md:text-3xl font-medium text-[#000000] mb-2">
-                  {fullName || 'Honored Collector'}
+                  {fullName || 'Customer'}
                 </h1>
                 <div className="flex flex-col gap-1 text-xs text-[#595855]">
                   <p className="flex items-center gap-2"><Mail size={13} /> {user.email}</p>
@@ -177,11 +177,11 @@ const Profile = () => {
                       <span className="max-w-sm">{address}{address && ','} {city}{city && ','} {stateValue} {zip}</span>
                     </p>
                   ) : (
-                    <p className="text-[#808080] italic mt-0.5">No dispatch address recorded</p>
+                    <p className="text-[#808080] italic mt-0.5">No delivery address added yet</p>
                   )}
                 </div>
                 <button onClick={() => setIsEditing(true)} className="mt-3 text-xs text-[#000000] flex items-center gap-1.5 hover:underline font-medium">
-                  <Edit size={12} /> Edit Folio Credentials
+                  <Edit size={12} /> Edit Profile Details
                 </button>
               </div>
             )}
@@ -210,32 +210,51 @@ const Profile = () => {
           {/* Left: Quick Stats */}
           <div className="flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-[#e7e5e4] p-5 rounded-[9px] border border-[#dfdcd5] text-center">
-                <span className="text-[10px] uppercase tracking-wider text-[#595855] block mb-1">Acquisitions</span>
-                <h3 className="font-davinci text-3xl font-medium text-[#000000]">{orders.length}</h3>
-              </div>
-              <div className="bg-[#e7e5e4] p-5 rounded-[9px] border border-[#dfdcd5] text-center">
-                <span className="text-[10px] uppercase tracking-wider text-[#595855] block mb-1">In Current Bag</span>
-                <h3 className="font-davinci text-3xl font-medium text-[#000000]">{itemCount}</h3>
-              </div>
+              <Link 
+                to="/my-orders"
+                className="bg-[#e7e5e4] hover:bg-[#dfdcd5]/70 active:scale-[0.98] transition-all p-5 rounded-[9px] border border-[#dfdcd5] hover:border-[#000000]/40 text-center block group cursor-pointer shadow-xs"
+                title="View your orders"
+              >
+                <span className="text-[10px] uppercase tracking-wider text-[#595855] block mb-1 group-hover:text-[#000000] transition-colors">
+                  Total Orders
+                </span>
+                <h3 className="font-davinci text-3xl font-medium text-[#000000] mb-1">{orders.length}</h3>
+                <span className="text-[10px] text-[#595855] group-hover:underline inline-flex items-center gap-0.5">
+                  View Orders &rarr;
+                </span>
+              </Link>
+
+              <Link 
+                to="/cart"
+                className="bg-[#e7e5e4] hover:bg-[#dfdcd5]/70 active:scale-[0.98] transition-all p-5 rounded-[9px] border border-[#dfdcd5] hover:border-[#000000]/40 text-center block group cursor-pointer shadow-xs"
+                title="View your shopping cart"
+              >
+                <span className="text-[10px] uppercase tracking-wider text-[#595855] block mb-1 group-hover:text-[#000000] transition-colors">
+                  Items in Cart
+                </span>
+                <h3 className="font-davinci text-3xl font-medium text-[#000000] mb-1">{itemCount}</h3>
+                <span className="text-[10px] text-[#595855] group-hover:underline inline-flex items-center gap-0.5">
+                  View Cart &rarr;
+                </span>
+              </Link>
             </div>
 
             <div className="bg-[#e7e5e4] p-5 rounded-[9px] border border-[#dfdcd5]">
               <span className="text-[10px] uppercase tracking-widest text-[#595855] block mb-2 font-mono">
-                MEMBERSHIP TIER
+                MEMBERSHIP STATUS
               </span>
-              <h4 className="font-davinci text-xl font-medium text-[#000000] mb-1">Patron of the Arts</h4>
+              <h4 className="font-davinci text-xl font-medium text-[#000000] mb-1">Privilege Club Member</h4>
               <p className="text-xs text-[#595855] leading-relaxed">
-                Enjoy priority access to limited seasonal botanical releases and wax-sealed calligraphy card upgrades.
+                Enjoy priority shipping, exclusive seasonal floral releases, and dedicated support.
               </p>
             </div>
           </div>
 
-          {/* Right: Recent Acquisitions */}
+          {/* Right: Recent Orders */}
           <div className="bg-[#e7e5e4] rounded-[9px] border border-[#dfdcd5] p-6">
             <div className="flex items-center justify-between mb-5 pb-3 border-b border-[#dfdcd5]">
               <h2 className="font-davinci text-2xl font-medium text-[#000000]">
-                Recent Folio Activity
+                Recent Orders
               </h2>
               <Link to="/my-orders" className="ghost-link text-xs uppercase tracking-wider flex items-center gap-1">
                 All Orders <ArrowRight size={12} />
@@ -246,7 +265,7 @@ const Profile = () => {
               <OrderCardSkeleton count={2} />
             ) : orders.length === 0 ? (
               <div className="py-12 text-center text-xs text-[#595855]">
-                No recent acquisitions recorded in this folio.
+                No orders placed yet.
               </div>
             ) : (
               <div className="space-y-4">

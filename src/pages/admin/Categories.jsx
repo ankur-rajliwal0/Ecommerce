@@ -339,14 +339,14 @@ const Categories = () => {
       ) : (
         <div className="bg-white rounded-2xl shadow-sm border border-[#DCC6A8] overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
+            <table className="w-full min-w-[560px] border-collapse">
               <thead>
                 <tr className="bg-[#E9E9E0]/40 border-b border-[#E9E9E0]">
-                  <th className="text-left px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest w-[12%]">Image</th>
-                  <th className="text-left px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest w-[33%]">Name</th>
-                  <th className="text-left px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest w-[25%]">Slug</th>
-                  <th className="text-center px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest w-[15%]">Featured</th>
-                  <th className="text-right px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest w-[15%]">Actions</th>
+                  <th className="text-left px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest whitespace-nowrap">Image</th>
+                  <th className="text-left px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest whitespace-nowrap">Name</th>
+                  <th className="text-left px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest whitespace-nowrap">Slug</th>
+                  <th className="text-center px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest whitespace-nowrap">Featured</th>
+                  <th className="text-right px-4 md:px-6 py-4 text-[10px] md:text-xs font-extrabold text-[#292923]/60 uppercase tracking-widest whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E9E9E0]">
@@ -360,7 +360,7 @@ const Categories = () => {
                     return (
                       <tr key={c.id} className="hover:bg-[#E9E9E0]/20 transition-colors group">
                         {/* Image Thumbnail */}
-                        <td className="px-4 md:px-6 py-4 align-middle">
+                        <td className="px-4 md:px-6 py-4 align-middle whitespace-nowrap">
                           {displayImg ? (
                             <img 
                               src={displayImg} 
@@ -378,13 +378,13 @@ const Categories = () => {
                         </td>
 
                         {/* Category Name */}
-                        <td className="px-4 md:px-6 py-4 align-middle">
-                          <p className="font-bold text-[#292923] group-hover:text-[#344B38] transition-colors text-sm break-words capitalize">{c.name}</p>
+                        <td className="px-4 md:px-6 py-4 align-middle whitespace-nowrap">
+                          <p className="font-bold text-[#292923] group-hover:text-[#344B38] transition-colors text-sm capitalize">{c.name}</p>
                         </td>
 
                         {/* Slug */}
-                        <td className="px-4 md:px-6 py-4 align-middle">
-                          <span className="inline-block bg-[#E9E9E0] text-[#344B38] px-2.5 py-1 rounded-xl text-xs font-mono border border-[#DCC6A8] break-all">
+                        <td className="px-4 md:px-6 py-4 align-middle whitespace-nowrap">
+                          <span className="inline-block bg-[#E9E9E0] text-[#344B38] px-2.5 py-1 rounded-xl text-xs font-mono border border-[#DCC6A8] whitespace-nowrap">
                             /{c.slug}
                           </span>
                         </td>

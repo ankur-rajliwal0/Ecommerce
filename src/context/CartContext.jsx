@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useAuth } from './AuthContext';
 import { supabase } from '../lib/supabase';
@@ -10,97 +10,127 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  // Load cart from DB and LocalStorage on mount/user change
+  // Track which user ID the current cartItems in memory belongs to ('guest' or user.id)
+  const currentCartUserIdRef = useRef(null);
+  // Track whether loading for the current user is complete
+  const isLoadedRef = useRef(false);
+
+  // 1. Load cart whenever user changes (login, logout, or account switch)
   useEffect(() => {
+    let isCancelled = false;
+    const targetUserId = user ? user.id : 'guest';
+
+    // Immediately stop saving stale items and clear previous cart from UI during transition
+    isLoadedRef.current = false;
+    currentCartUserIdRef.current = targetUserId;
+    setCartItems([]);
+
     const fetchCart = async () => {
       try {
         if (user) {
           const userKey = `cart_${user.id}`;
-          const saved = localStorage.getItem(userKey);
-          let initialItems = saved ? JSON.parse(saved) : [];
+          let loadedItems = [];
 
-          // Also check for guest cart items to merge
-          const guestSaved = localStorage.getItem('cart_guest');
-          if (guestSaved) {
+          // First: read user-specific localStorage for instant display
+          const saved = localStorage.getItem(userKey);
+          if (saved) {
             try {
-              const guestItems = JSON.parse(guestSaved);
-              if (Array.isArray(guestItems) && guestItems.length > 0) {
-                guestItems.forEach(gItem => {
-                  if (gItem && gItem.id) {
-                    const match = initialItems.find(i => i.id === gItem.id);
-                    if (match) {
-                      match.quantity += (gItem.quantity || 1);
-                    } else {
-                      initialItems.push(gItem);
-                    }
-                  }
-                });
-                localStorage.removeItem('cart_guest');
+              const parsed = JSON.parse(saved);
+              if (Array.isArray(parsed)) {
+                loadedItems = parsed.filter(i => i && i.id);
               }
             } catch (err) {}
           }
 
-          if (initialItems.length > 0) {
-            setCartItems(initialItems.filter(i => i && i.id));
+          if (!isCancelled && currentCartUserIdRef.current === user.id) {
+            setCartItems(loadedItems);
           }
 
-          // Fetch latest from DB
-          const { data } = await supabase
+          // Second: fetch authoritative cart from Supabase
+          const { data, error } = await supabase
             .from('user_carts')
             .select('cart_items')
             .eq('user_id', user.id)
-            .single();
+            .maybeSingle();
 
-          if (data && Array.isArray(data.cart_items) && data.cart_items.length > 0) {
-            setCartItems(data.cart_items.filter(i => i && i.id));
-            localStorage.setItem(userKey, JSON.stringify(data.cart_items));
+          if (isCancelled || currentCartUserIdRef.current !== user.id) return;
+
+          if (!error && data && Array.isArray(data.cart_items)) {
+            const dbItems = data.cart_items.filter(i => i && i.id);
+            setCartItems(dbItems);
+            localStorage.setItem(userKey, JSON.stringify(dbItems));
+          } else if (loadedItems.length > 0) {
+            // If user has local items but no DB row yet, create it
+            await supabase
+              .from('user_carts')
+              .upsert({
+                user_id: user.id,
+                cart_items: loadedItems,
+                updated_at: new Date().toISOString(),
+              }, { onConflict: 'user_id' });
           }
         } else {
-          // Guest mode: load from localStorage
+          // Guest mode (logged out)
+          let guestItems = [];
           const guestSaved = localStorage.getItem('cart_guest');
           if (guestSaved) {
-            const parsed = JSON.parse(guestSaved);
-            if (Array.isArray(parsed)) {
-              setCartItems(parsed.filter(i => i && i.id));
-            }
+            try {
+              const parsed = JSON.parse(guestSaved);
+              if (Array.isArray(parsed)) {
+                guestItems = parsed.filter(i => i && i.id);
+              }
+            } catch (err) {}
           }
+
+          if (isCancelled || currentCartUserIdRef.current !== 'guest') return;
+          setCartItems(guestItems);
         }
       } catch (err) {
-        console.warn('Error loading cart:', err);
+        console.warn('Error loading user cart:', err);
+      } finally {
+        if (!isCancelled && currentCartUserIdRef.current === targetUserId) {
+          isLoadedRef.current = true;
+        }
       }
-      setIsInitialLoad(false);
     };
 
     fetchCart();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [user]);
 
-  // Save cart to DB and LocalStorage when cartItems change
+  // 2. Save cart ONLY when cartItems change (user adds, modifies, or clears cart)
   useEffect(() => {
-    const saveCart = async () => {
-      if (isInitialLoad) return;
-      const cleanItems = cartItems.filter(i => i && i.id);
+    // DO NOT save if cart has not loaded yet, or if user is in transition
+    if (!isLoadedRef.current) return;
+    const expectedUserId = user ? user.id : 'guest';
+    if (currentCartUserIdRef.current !== expectedUserId) return;
 
-      if (user) {
-        localStorage.setItem(`cart_${user.id}`, JSON.stringify(cleanItems));
+    const cleanItems = cartItems.filter(i => i && i.id);
 
-        await supabase
-          .from('user_carts')
-          .upsert({
-            user_id: user.id,
-            cart_items: cleanItems,
-            updated_at: new Date().toISOString(),
-          }, {
-            onConflict: 'user_id'
-          });
-      } else {
-        localStorage.setItem('cart_guest', JSON.stringify(cleanItems));
-      }
-    };
+    if (user) {
+      const userKey = `cart_${user.id}`;
+      localStorage.setItem(userKey, JSON.stringify(cleanItems));
 
-    saveCart();
-  }, [cartItems, user, isInitialLoad]);
+      supabase
+        .from('user_carts')
+        .upsert({
+          user_id: user.id,
+          cart_items: cleanItems,
+          updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'user_id'
+        })
+        .then(({ error }) => {
+          if (error) console.warn('Error syncing cart with database:', error);
+        });
+    } else {
+      localStorage.setItem('cart_guest', JSON.stringify(cleanItems));
+    }
+  }, [cartItems]);
 
   const addToCart = (product, quantity = 1) => {
     if (!product || !product.id) {
@@ -129,7 +159,7 @@ export const CartProvider = ({ children }) => {
       return [...cleanPrev, { ...product, quantity }];
     });
 
-    toast.success('Acquisition added to bag', {
+    toast.success('Item added to bag', {
       style: {
         background: '#000000',
         color: '#ffffff',
@@ -157,6 +187,20 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    if (user) {
+      localStorage.setItem(`cart_${user.id}`, '[]');
+      supabase
+        .from('user_carts')
+        .upsert({
+          user_id: user.id,
+          cart_items: [],
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'user_id' })
+        .then(() => {});
+    } else {
+      localStorage.setItem('cart_guest', '[]');
+    }
+
     toast('Bag cleared', {
       icon: '🗑️',
       style: { background: '#000000', color: '#ffffff', borderRadius: '28.8px', fontSize: '12px', fontFamily: 'Inter, sans-serif' }
